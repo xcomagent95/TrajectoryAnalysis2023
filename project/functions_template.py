@@ -88,8 +88,19 @@ def slidingWindow_iter(traj, epsilon):
     return resultList
 
 
+
+#Implements the closest pair distance algorithm from the lecture
+# Todo: Verify i work correctly! (I think i do)
+# Todo: Test me!
+# Todo: Document me!
 def closestPairDistance(traj0:trajectory,traj1:trajectory) -> float:
-    return None
+    min_distance = float('inf')
+    for p0 in traj0:
+        for p1 in traj1:
+            distance = utils.euclideanDistance(p0, p1)
+            if distance < min_distance:
+                min_distance = distance
+    return min_distance
 
 def dynamicTimeWarping(traj0:trajectory,traj1:trajectory) -> float:
     return None
