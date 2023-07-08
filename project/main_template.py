@@ -10,9 +10,11 @@ print(listOfTrajectories)
 
 # Visualize trajectories
 utils.visualizeTrajectories(listOfTrajectories)
-utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
+#utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
 
 # Simplify at least one of the trajectories with Douglas Peucker and/or Sliding Window Algorithm
+d = functions.douglasPeucker(listOfTrajectories[1], 0.00003)
+utils.visualizeTrajectories([listOfTrajectories[1], d])
 
 # Visualize original trajectory and its two simplifications
 
@@ -22,10 +24,10 @@ utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
 
 # Query the trajectories using the built R-tree and the region. Which trajectories lie in the given region?
 # This query should return the trajectories with ids 43, 45, 50, 71, 83
-queryRegion = region.region(point.point(0.0012601754558545508,0.0027251228043638775,0.0),0.00003)
-foundTrajectories = functions.solveQueryWithRTree(queryRegion,listOfTrajectories)
+queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+foundTrajectories = functions.solveQueryWithRTree(queryRegion, listOfTrajectories)
 if foundTrajectories != None:
-    if len(foundTrajectories)==0:
+    if len(foundTrajectories) == 0:
         print("No trajectories match the query.")
     for t in foundTrajectories:
         print(t)

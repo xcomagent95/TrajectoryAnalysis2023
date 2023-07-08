@@ -63,6 +63,7 @@ def pointDistance(p0:point,p1:point) -> float:
 
 #The following Section adds the visualization of trajectories to the project
 #Either use the plotly or the pyplot version
+#Todo: Talk to Seep which Library are allowed
 
 #This function visualizes the trajectories in a plotly graph
 def visualizeTrajectories(listOfTrajectories: list):
@@ -87,3 +88,6 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
             y.append(p.Y)
         plt.plot(x, y)
     plt.show()
+
+perpendicularDistance = calculateDistance
+euclideanDistance = pointDistance
