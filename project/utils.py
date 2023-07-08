@@ -4,6 +4,11 @@ import point
 import trajectory
 import math
 from glob import glob
+import matplotlib.pyplot as plt
+import plotly.graph_objs as go
+import plotly.io as pio
+import point
+
 
 """Import a single trajectory from a file with the file format 
 xCoordinate yCoordinate day hour ... (other attributes will not be imported).
@@ -55,3 +60,30 @@ def calculateDistance(point:point,p1:point,p2:point):
 def pointDistance(p0:point,p1:point) -> float:
     dist = math.sqrt((p0.X-p1.X)**2+(p0.Y-p1.Y)**2)
     return dist
+
+#The following Section adds the visualization of trajectories to the project
+#Either use the plotly or the pyplot version
+
+#This function visualizes the trajectories in a plotly graph
+def visualizeTrajectories(listOfTrajectories: list):
+    fig = go.Figure()
+    for t in listOfTrajectories:
+        x = []
+        y = []
+        for p in t.points:
+            x.append(p.X)
+            y.append(p.Y)
+        fig.add_trace(
+            go.Scatter(x=x, y=y, mode='lines', visible='legendonly', name=t.unique_id if t.unique_id else t.number))
+    pio.show(fig)
+
+#This function visualizes the trajectories in a pyplot graph
+def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
+    for t in listOfTrajectories:
+        x = []
+        y = []
+        for p in t.points:
+            x.append(p.X)
+            y.append(p.Y)
+        plt.plot(x, y)
+    plt.show()

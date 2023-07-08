@@ -2,9 +2,10 @@
 import point
 class trajectory():
     # Initialization method of trajectory with an unique id
-    def __init__(self,number) -> None:
+    def __init__(self,number, unique_id = None) -> None:
         self.number = number
         self.points = []
+        self.unique_id = unique_id
 
     def __repr__(self) -> str:
         # Nice printing of trajectory
@@ -16,3 +17,11 @@ class trajectory():
     # Adds a point to the list of points of the trajectory
     def addPoint(self,p:point) -> None:
         self.points.append(p)
+
+    # Returns the number of points in the trajectory
+    def __len__(self) -> int:
+        return len(self.points)
+
+    # Returns the point at the given index
+    def __getitem__(self, index: int):
+        return self.points[index]
