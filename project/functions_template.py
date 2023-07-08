@@ -3,6 +3,9 @@ import trajectory
 import point
 import region
 import utils
+from tqdm import tqdm
+import sys
+import numpy as np
 
 
 #Todo: Test me!
@@ -34,8 +37,56 @@ def douglasPeucker_intern(traj, epsilon):
     else:
         return [traj[0], traj[-1]]
 
-def slidingWindow(traj:trajectory,epsilon) -> trajectory:
-    return None
+
+#Todo: Test me!
+#Todo: Document me!
+#Todo: Verify i work correctly!
+# I implemented this on the base of me remembering the algorithm from the lecture. So it may (or may not) be totally wrong..
+#Todo: Fix me! I run way to long!
+def slidingWindow(traj, epsilon,recursive=False, rec_limit=999999):
+    if recursive:
+        sys.setrecursionlimit(rec_limit)
+        result_list = slidingWindow_recursive(traj, epsilon, 0, [])
+    else:
+        result_list = slidingWindow_iter(traj, epsilon)
+    return trajectory.trajectory(-1, result_list, unique_id=f"Sliding Window for Trajectory {traj.number}")
+
+
+def slidingWindow_recursive(traj, epsilon, start_index, result_list):
+    result_list.append(traj[start_index])
+    if start_index == len(traj) - 1:
+        return result_list
+    for end_index in range(start_index + 1, len(traj)):
+        d = utils.perpendicularDistance(traj[end_index], traj[start_index], traj[end_index - 1])
+        if d > epsilon:
+            return slidingWindow_recursive(traj, epsilon, end_index - 1, result_list)
+        elif end_index == len(traj) - 1:
+            result_list.append(traj[end_index])
+            return result_list
+
+def slidingWindow_iter(traj, epsilon):
+    # Initialize variables
+    i = 0
+    resultList = [traj[i]]
+
+    # Loop through trajectory
+    while i < len(traj) - 1:
+        j = i + 1
+        while j < len(traj):
+
+            d = utils.perpendicularDistance(traj[j], traj[i], traj[j - 1])
+
+            if d > epsilon:
+
+                resultList.append(traj[j - 1])
+                i = j - 1
+                break
+            elif j == len(traj) - 1:
+                resultList.append(traj[j])
+                i = j
+            j += 1
+    return resultList
+
 
 def closestPairDistance(traj0:trajectory,traj1:trajectory) -> float:
     return None

@@ -47,19 +47,30 @@ def importTrajectories(foldername:str) -> list:
 
 """Method to calculate the perpendicular distance between one point
 and a segment defined by two points"""
-def calculateDistance(point:point,p1:point,p2:point):
-    m = (p2.Y - p1.Y)/(p2.X - p1.X)
-    a = m
-    b = -1
-    c = - (m*p1.X - p1.Y)
-    d = abs((a * point.X + b * point.Y + c)) / (math.sqrt(a * a + b * b))
-    print("Perpendicular distance is"),d
-    return d
+#Modified to avoid divion by zero error.
+#Todo: Verify i work!
+def calculateDistance(point, p1, p2):
+    if p2.X == p1.X:
+        return abs(point.Y - p1.Y)
+    else:
+        m = (p2.Y - p1.Y) / (p2.X - p1.X)
+        a = m
+        b = -1
+        c = - (m * p1.X - p1.Y)
+        d = abs((a * point.X + b * point.Y + c)) / (math.sqrt(a * a + b * b))
+        # print("Perpendicular distance is", d)
+        return d
+
 
 """Calculate euclidean distance between two given points"""
 def pointDistance(p0:point,p1:point) -> float:
     dist = math.sqrt((p0.X-p1.X)**2+(p0.Y-p1.Y)**2)
     return dist
+
+
+perpendicularDistance = calculateDistance
+euclideanDistance = pointDistance
+
 
 #The following Section adds the visualization of trajectories to the project
 #Either use the plotly or the pyplot version
@@ -89,5 +100,3 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
         plt.plot(x, y)
     plt.show()
 
-perpendicularDistance = calculateDistance
-euclideanDistance = pointDistance

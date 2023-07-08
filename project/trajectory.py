@@ -25,3 +25,7 @@ class trajectory():
     # Returns the point at the given index
     def __getitem__(self, index: int):
         return self.points[index]
+
+    #Helper Funbction to get points if needed
+    def getPoints(self):
+        return self.points
