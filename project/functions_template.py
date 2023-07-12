@@ -8,13 +8,30 @@ import sys
 import numpy as np
 
 
-#Todo: Test me!
-#Todo: Document me!
-#Todo: Verify i work correctly! (I think i do)
 def douglasPeucker(traj:trajectory,epsilon) -> trajectory:
+    """Function to execute Douglas-Peucker simplification on a trajectory
+
+     Parameters:
+     traj (trajectory): Trajectory to be simplified
+     epsilon (float): Distance threshold to be applied during simplification
+    
+     Returns:
+     trajectory: Simplified trajectory
+    
+    """
     return trajectory.trajectory(-1, douglasPeucker_intern(traj,epsilon), unique_id=f"Douglas Peucker for Trajectory {traj.number}")
 
 def douglasPeucker_intern(traj, epsilon):
+    """Function facilitating Douglas-Peucker simplification on a trajectory
+
+     Parameters:
+     traj (trajectory): Trajectory to be simplified
+     epsilon (float): Distance threshold to be applied during simplification
+    
+     Returns:
+     trajectory: Simplified trajectory
+    
+    """
     # Base case: if trajectory only has two points, return it
     if len(traj) <= 2:
         return traj
@@ -87,13 +104,17 @@ def slidingWindow_iter(traj, epsilon):
             j += 1
     return resultList
 
-
-
-#Implements the closest pair distance algorithm from the lecture
-# Todo: Verify i work correctly! (I think i do)
-# Todo: Test me!
-# Todo: Document me!
 def closestPairDistance(traj0:trajectory,traj1:trajectory) -> float:
+    """Function to compute closest pair difference between two trajectories
+
+     Parameters:
+     traj0 (trajectory): First trajectory of the trajectory pair
+     traj1 (trajectory): Second trajectory of the trajectory pair
+    
+     Returns:
+     float: Closest pair distance between first and second trajectory of the trajectory pair
+    
+    """
     min_distance = float('inf')
     for p0 in traj0:
         for p1 in traj1:
