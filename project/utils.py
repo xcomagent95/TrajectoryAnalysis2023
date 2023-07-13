@@ -51,7 +51,7 @@ and a segment defined by two points"""
 #Todo: Verify i work!
 def calculateDistance(point, p1, p2):
     if p2.X == p1.X:
-        return abs(point.Y - p1.Y)
+        return abs(point.X - p1.X)
     else:
         m = (p2.Y - p1.Y) / (p2.X - p1.X)
         a = m

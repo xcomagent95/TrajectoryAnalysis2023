@@ -99,6 +99,31 @@ class DouglasPeuckerTest(unittest.TestCase):
         traj = trajectory.trajectory(1, points=points)
         self.assertRaises(ValueError, functions.douglasPeucker, traj, -1)
 
+    def test6(self):
+        traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
+        points = []
+        for idx, p in enumerate(traj_points):
+            points.append(point.point(p[0], p[1], idx))
+        traj = trajectory.trajectory(1, points=points)
+        d = functions.douglasPeucker(traj, 0)
+        self.assertIsInstance(d, trajectory.trajectory)
+
+    def test7(self):
+        traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
+        points = []
+        for idx, p in enumerate(traj_points):
+            points.append(point.point(p[0], p[1], idx))
+        traj = trajectory.trajectory(1, points=points)
+        d = functions.douglasPeucker(traj, 0)
+        for p in d.getPoints():
+            self.assertIsInstance(p, point.point)
+
+
+
+class SlidingWindowTest(unittest.TestCase):
+    pass
+
+
 
 if __name__ == "__main__":
     unittest.main()
