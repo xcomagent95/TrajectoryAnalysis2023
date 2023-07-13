@@ -75,6 +75,29 @@ class DouglasPeuckerTest(unittest.TestCase):
             res_pojnts_array,
             [[0.0, 0.0], [2.0, 2.0], [4.0, 0.0], [6.0, 2.0], [8.0, 0.0]]
         )
+    #Edgecase Testing
+    def test4(self):
+        t = trajectory.trajectory(1, points=[])
+        d = functions.douglasPeucker(t, 1)
+        self.assertEqual(d,t)
+
+    def test5(self):
+        traj_points = [
+            (0.0, 0.0),
+            (1.0, 1.0),
+            (2.0, 2.0),
+            (3.0, 1.0),
+            (4.0, 0.0),
+            (5.0, 1.0),
+            (6.0, 2.0),
+            (7.0, 1.0),
+            (8.0, 0.0),
+        ]
+        points = []
+        for idx, p in enumerate(traj_points):
+            points.append(point.point(p[0], p[1], idx))
+        traj = trajectory.trajectory(1, points=points)
+        self.assertRaises(ValueError, functions.douglasPeucker, traj, -1)
 
 
 if __name__ == "__main__":
