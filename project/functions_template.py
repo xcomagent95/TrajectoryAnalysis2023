@@ -60,7 +60,7 @@ def douglasPeucker_intern(traj, epsilon):
 #Todo: Verify i work correctly!
 # I implemented this on the base of me remembering the algorithm from the lecture. So it may (or may not) be totally wrong..
 #Todo: Fix me! I run way to long!
-def slidingWindow(traj, epsilon,recursive=False, rec_limit=999999):
+def slidingWindow(traj, epsilon, recursive=False, rec_limit=999999):
     if recursive:
         sys.setrecursionlimit(rec_limit)
         result_list = slidingWindow_recursive(traj, epsilon, 0, [])
