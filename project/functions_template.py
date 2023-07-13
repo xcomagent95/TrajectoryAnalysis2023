@@ -160,4 +160,10 @@ def solveQueryWithoutRTree(r:region,trajectories:list) -> list:
      list(trajectories): List of trajectories returned by the region query
     
     """
-    return None
+    res = []
+    for t in trajectories:
+        for p in t.points:
+            if r.pointInRegion(p):
+                res.append(t)
+                break
+    return res
