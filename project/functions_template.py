@@ -19,6 +19,10 @@ def douglasPeucker(traj,epsilon):
      trajectory: Simplified trajectory
     
     """
+    if len(traj) <= 2:
+        return traj
+    if epsilon < 0:
+        raise ValueError("Epsilon must be greater than 0")
     return trajectory.trajectory(-1, douglasPeucker_intern(traj,epsilon), unique_id=f"Douglas Peucker for Trajectory {traj.number}")
 
 def douglasPeucker_intern(traj, epsilon):
