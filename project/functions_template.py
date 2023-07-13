@@ -8,7 +8,7 @@ import sys
 import numpy as np
 
 
-def douglasPeucker(traj:trajectory,epsilon) -> trajectory:
+def douglasPeucker(traj,epsilon):
     """Function to execute Douglas-Peucker simplification on a trajectory
 
      Parameters:
