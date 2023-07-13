@@ -11,7 +11,7 @@ import numpy as np
 def douglasPeucker(traj,epsilon):
     """Function to execute Douglas-Peucker simplification on a trajectory
 
-     Parameters:
+     Parameters: 
      traj (trajectory): Trajectory to be simplified
      epsilon (float): Distance threshold to be applied during simplification
     
@@ -128,10 +128,40 @@ def closestPairDistance(traj0,traj1) -> float:
     return min_distance
 
 def dynamicTimeWarping(traj0:trajectory,traj1:trajectory) -> float:
+    """Function to execute dynamic time warping on two trajectories
+
+     Parameters: 
+     traj0 (trajectory): First trajectory 
+     traj1 (trajectory): Second trajectory
+    
+     Returns:
+     float: ?
+    
+    """
     return None
 
 def solveQueryWithRTree(r:region,trajectories:list) -> list:
+    """Function to execute a region query on RTree containing trajectories
+
+     Parameters: 
+     r (region): Region for which to query trajectory 
+     trajectories (list(trajectories)): List of trajectories from which to build Rtree to answer region query
+    
+     Returns:
+     list(trajectories): List of trajectories returned by the region query
+    
+    """
     return None
 
 def solveQueryWithoutRTree(r:region,trajectories:list) -> list:
+    """Function to execute a region query on list containing trajectories
+
+     Parameters: 
+     r (region): Region for which to query trajectory 
+     trajectories (list(trajectories)): List of trajectories from which to answer region query
+    
+     Returns:
+     list(trajectories): List of trajectories returned by the region query
+    
+    """
     return None
