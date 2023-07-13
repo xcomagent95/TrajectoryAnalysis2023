@@ -8,7 +8,7 @@ import sys
 import numpy as np
 
 
-def douglasPeucker(traj:trajectory,epsilon) -> trajectory:
+def douglasPeucker(traj,epsilon):
     """Function to execute Douglas-Peucker simplification on a trajectory
 
      Parameters: 
@@ -104,7 +104,7 @@ def slidingWindow_iter(traj, epsilon):
             j += 1
     return resultList
 
-def closestPairDistance(traj0:trajectory,traj1:trajectory) -> float:
+def closestPairDistance(traj0,traj1) -> float:
     """Function to compute closest pair difference between two trajectories
 
      Parameters:
