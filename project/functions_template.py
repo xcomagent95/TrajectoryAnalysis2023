@@ -104,7 +104,7 @@ def slidingWindow_iter(traj, epsilon):
             j += 1
     return resultList
 
-def closestPairDistance(traj0:trajectory,traj1:trajectory) -> float:
+def closestPairDistance(traj0,traj1) -> float:
     """Function to compute closest pair difference between two trajectories
 
      Parameters:
