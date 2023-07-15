@@ -119,13 +119,44 @@ class DouglasPeuckerTest(unittest.TestCase):
             self.assertIsInstance(p, point.point)
 
 
+# not done yet
+# TODO: 
+# check if result is correct
+# check epsilon input (0<, 1?)
 
 class SlidingWindowTest(unittest.TestCase):
-    
-    def testEpsilon(self):
-        traj = []
+
+   
+    def testLength0(self):
+        traj = [] 
+        epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon),[])
+
+    def testLength1(self):
+        traj = [[0,0]] 
+        epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+
+    def testLength2(self):
+        traj = [[0,0],[1,1]] 
+        epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+
+    def testEpsilonNegativ(self):
+        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
         epsilon = -1
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
+
+    def testEpsilon0(self):
+        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        epsilon = 0
+        self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
+    
+   # def testIfCorrect(self):
+    #    traj = [] 
+     #   epsilon = 1
+      #  self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+
 
 class solveQueryWithoutRTree(unittest.TestCase): 
     
