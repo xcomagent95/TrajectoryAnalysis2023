@@ -10,7 +10,7 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 
 # Visualize trajectories
 utils.visualizeTrajectories(listOfTrajectories)
-#utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
+#utils.visualizeTrajectoriesPyPlot(listOfTrajectories)
 
 # Simplify at least one of the trajectories with Douglas Peucker and/or Sliding Window Algorithm
 #douglas_peucker_simp = functions.douglasPeucker(listOfTrajectories[1], 0.00003)

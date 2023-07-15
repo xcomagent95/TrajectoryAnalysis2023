@@ -92,7 +92,7 @@ def visualizeTrajectories(listOfTrajectories: list):
     pio.show(fig)
 
 # This function visualizes the trajectories in a pyplot graph
-def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
+def visualizeTrajectoriesPyPlot(listOfTrajectories: list):
     for t in listOfTrajectories:
         x = []
         y = []
@@ -103,3 +103,8 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
     plt.show()
 # ---------------------------------------------------
 
+# ---------------------- 3.2) -----------------------
+
+def buildRTree(listOfTrajectories: list):
+    return None
+# ---------------------------------------------------
