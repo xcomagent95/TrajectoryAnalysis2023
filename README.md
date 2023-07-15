@@ -3,16 +3,16 @@
 ### Tasks
 
 1. Visualize (basic function): Visualize the imported trajectories. Here you can be creative. There should be at least a visualization of all trajectories imported as a set. Possible add-ons could be:
-   - Different colors of different trajectories (feature)
-   - Setting up a complete GUI with possibility to choose a set of trajectories to be displayed or even use the functionalities provided by the methods of the other upcoming tasks (feature)
+   - ~~Different colors of different trajectories (feature)~~
+   - Setting up a complete GUI with possibility to choose a set of trajectories to be displayed or even use the functionalities provided by the methods of the other upcoming tasks (feature) (Partially Implemented)
    - Whatever functionality you can think of... (feature)
 2. Preprocessing - Data Reduction:
-   - Implement the Douglas-Peucker algorithm to simplify a given trajectory (basic function)
-   - Implement the Sliding-Window-Algorithm (feature)
-   - Visualize one original and one simplified trajectory using the implemented methods (feature)
+   - ~~Implement the Douglas-Peucker algorithm to simplify a given trajectory (basic function)~~
+   - ~~Implement the Sliding-Window-Algorithm (feature)~~ (Needs to be tested)
+   - ~~Visualize one original and one simplified trajectory using the implemented methods (feature)~~
 3. Indexing
    - Distance Measures: Implement distance measures for trajectories
-     - Closest-Pair-Distance (basic function)
+     - ~~Closest-Pair-Distance (basic function)~~
      - Dynamic-Time-Warping (feature)
    - R-tree: Implement a R-tree for a set of trajectories. Here each point is a single spatial object and the nodes should hold a minimal number of two points/MBBs and a maximal number of 5 points/MBBs. (basic function)
 4. Querying: Regard a R-query for a set of trajectories.
