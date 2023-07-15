@@ -12,7 +12,7 @@
    - ~~Visualize one original and one simplified trajectory using the implemented methods (feature)~~
 3. Indexing
    - Distance Measures: Implement distance measures for trajectories
-     - ~~Closest-Pair-Distance (basic function)~~
+     - ~~Closest-Pair-Distance (basic function)~~ (needs to be tested)
      - Dynamic-Time-Warping (feature)
    - R-tree: Implement a R-tree for a set of trajectories. Here each point is a single spatial object and the nodes should hold a minimal number of two points/MBBs and a maximal number of 5 points/MBBs. (basic function)
 4. Querying: Regard a R-query for a set of trajectories.
