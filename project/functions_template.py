@@ -8,6 +8,7 @@ import sys
 import numpy as np
 
 
+# ---------------------- 2.1) -----------------------
 def douglasPeucker(traj,epsilon):
     """Function to execute Douglas-Peucker simplification on a trajectory
 
@@ -57,8 +58,9 @@ def douglasPeucker_intern(traj, epsilon):
         return resultList
     else:
         return [traj[0], traj[-1]]
+# ---------------------------------------------------
 
-
+# ---------------------- 2.2) -----------------------
 #Todo: Test me!
 #Todo: Document me!
 #Todo: Verify i work correctly!
@@ -105,8 +107,9 @@ def slidingWindow_recursive(traj, epsilon, start_index, result_list):
         elif end_index == len(traj) - 1:
             result_list.append(traj[end_index])
             return result_list
+# ---------------------------------------------------
 
-
+# ---------------------- 3.1.1) -----------------------
 def closestPairDistance(traj0,traj1) -> float:
     """Function to compute closest pair difference between two trajectories
 
@@ -125,7 +128,9 @@ def closestPairDistance(traj0,traj1) -> float:
             if distance < min_distance:
                 min_distance = distance
     return min_distance
+# -----------------------------------------------------
 
+# ---------------------- 3.1.2) -----------------------
 def dynamicTimeWarping(traj0:trajectory,traj1:trajectory) -> float:
     """Function to execute dynamic time warping on two trajectories
 
@@ -138,7 +143,9 @@ def dynamicTimeWarping(traj0:trajectory,traj1:trajectory) -> float:
     
     """
     return None
+# -----------------------------------------------------
 
+# ---------------------- 4.1) -----------------------
 def solveQueryWithRTree(r:region,trajectories:list) -> list:
     """Function to execute a region query on RTree containing trajectories
 
@@ -151,7 +158,9 @@ def solveQueryWithRTree(r:region,trajectories:list) -> list:
     
     """
     return None
+# ---------------------------------------------------
 
+# ---------------------- 4.2) -----------------------
 def solveQueryWithoutRTree(r:region,trajectories:list) -> list:
     """Function to execute a region query on list containing trajectories
 
