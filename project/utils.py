@@ -76,7 +76,8 @@ euclideanDistance = pointDistance
 #Either use the plotly or the pyplot version
 #Todo: Talk to Seep which Library are allowed
 
-#This function visualizes the trajectories in a plotly graph
+# ---------------------- 1.1) -----------------------
+# This function visualizes the trajectories in a plotly graph
 def visualizeTrajectories(listOfTrajectories: list):
     fig = go.Figure()
     for t in listOfTrajectories:
@@ -89,7 +90,7 @@ def visualizeTrajectories(listOfTrajectories: list):
             go.Scatter(x=x, y=y, mode='lines', visible='legendonly', name=t.unique_id if t.unique_id else t.number))
     pio.show(fig)
 
-#This function visualizes the trajectories in a pyplot graph
+# This function visualizes the trajectories in a pyplot graph
 def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
     for t in listOfTrajectories:
         x = []
@@ -99,4 +100,5 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
             y.append(p.Y)
         plt.plot(x, y)
     plt.show()
+# ---------------------------------------------------
 
