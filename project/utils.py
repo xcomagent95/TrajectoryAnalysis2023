@@ -9,7 +9,7 @@ import plotly.graph_objs as go
 import plotly.io as pio
 import point
 
-
+# ---------------------- GIVEN -----------------------
 """Import a single trajectory from a file with the file format 
 xCoordinate yCoordinate day hour ... (other attributes will not be imported).
 Each trajectory should hold an unique number (id)."""
@@ -66,6 +66,7 @@ def calculateDistance(point, p1, p2):
 def pointDistance(p0:point,p1:point) -> float:
     dist = math.sqrt((p0.X-p1.X)**2+(p0.Y-p1.Y)**2)
     return dist
+# --------------------------------------------------
 
 
 perpendicularDistance = calculateDistance
@@ -76,7 +77,8 @@ euclideanDistance = pointDistance
 #Either use the plotly or the pyplot version
 #Todo: Talk to Seep which Library are allowed
 
-#This function visualizes the trajectories in a plotly graph
+# ---------------------- 1.1) -----------------------
+# This function visualizes the trajectories in a plotly graph
 def visualizeTrajectories(listOfTrajectories: list):
     fig = go.Figure()
     for t in listOfTrajectories:
@@ -89,7 +91,7 @@ def visualizeTrajectories(listOfTrajectories: list):
             go.Scatter(x=x, y=y, mode='lines', visible='legendonly', name=t.unique_id if t.unique_id else t.number))
     pio.show(fig)
 
-#This function visualizes the trajectories in a pyplot graph
+# This function visualizes the trajectories in a pyplot graph
 def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
     for t in listOfTrajectories:
         x = []
@@ -99,4 +101,5 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
             y.append(p.Y)
         plt.plot(x, y)
     plt.show()
+# ---------------------------------------------------
 

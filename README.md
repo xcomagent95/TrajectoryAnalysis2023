@@ -2,7 +2,8 @@
 
 ### Tasks
 
-1. Visualize (basic function): Visualize the imported trajectories. Here you can be creative. There should be at least a visualization of all trajectories imported as a set. Possible add-ons could be:
+1. Visualize (basic function): Visualize the imported trajectories. Here you can be creative. There should be at least a visualization of all trajectories imported as a set. (DONE)
+   Possible add-ons could be:
    - ~~Different colors of different trajectories (feature)~~
    - Setting up a complete GUI with possibility to choose a set of trajectories to be displayed or even use the functionalities provided by the methods of the other upcoming tasks (feature) (Partially Implemented)
    - Whatever functionality you can think of... (feature)
