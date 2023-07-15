@@ -121,7 +121,11 @@ class DouglasPeuckerTest(unittest.TestCase):
 
 
 class SlidingWindowTest(unittest.TestCase):
-    pass
+    
+    def testEpsilon(self):
+        traj = []
+        epsilon = -1
+        self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
 class solveQueryWithoutRTree(unittest.TestCase): 
     
