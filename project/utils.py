@@ -37,7 +37,7 @@ def importTrajectory(filename:str,number:int) -> trajectory:
 """Import the given set of 62 with indexes between 1 and 96 trajectories"""
 def importTrajectories(foldername:str) -> list:
     listOfTrajectories = []
-    for i in range(1,96):
+    for i in range(1,97): # Josefina: Increased this by 1 to also get index 96
         filename = foldername + '/extractedTrace' + str(i) + '.txt'
 
         if glob(filename):
