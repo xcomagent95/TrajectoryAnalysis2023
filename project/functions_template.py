@@ -131,18 +131,52 @@ def closestPairDistance(traj0,traj1) -> float:
 # -----------------------------------------------------
 
 # ---------------------- 3.1.2) -----------------------
-def dynamicTimeWarping(traj0:trajectory,traj1:trajectory) -> float:
+def dynamicTimeWarping(firstTrajectory:trajectory,secondTrajectory:trajectory) -> float:
     """Function to execute dynamic time warping on two trajectories
 
      Parameters: 
-     traj0 (trajectory): First trajectory 
-     traj1 (trajectory): Second trajectory
+     firstTrajectory (trajectory): First trajectory 
+     secondTrajectory (trajectory): Second trajectory
     
      Returns:
      float: ?
     
     """
-    return None
+    # Compute the distance matrix
+    distance_matrix = [[utils.euclideanDistance(point0, point1) for point1 in secondTrajectory] for point0 in firstTrajectory]
+
+    # Initialize the cost matrix
+    cost_matrix = [[float('inf')] * len(secondTrajectory) for _ in range(len(firstTrajectory))]
+    cost_matrix[0][0] = distance_matrix[0][0]
+
+    # Compute the cost matrix
+    for i in range(1, len(firstTrajectory)):
+        for j in range(1, len(secondTrajectory)):
+            cost_matrix[i][j] = distance_matrix[i][j] + min(cost_matrix[i-1][j], cost_matrix[i][j-1], cost_matrix[i-1][j-1])
+
+    # Calculate the optimal path
+    i, j = len(firstTrajectory) - 1, len(secondTrajectory) - 1
+    path = [(i, j)]
+    while i > 0 or j > 0:
+        if i == 0:
+            j -= 1
+        elif j == 0:
+            i -= 1
+        else:
+            min_cost = min(cost_matrix[i-1][j], cost_matrix[i][j-1], cost_matrix[i-1][j-1])
+            if min_cost == cost_matrix[i-1][j]:
+                i -= 1
+            elif min_cost == cost_matrix[i][j-1]:
+                j -= 1
+            else:
+                i -= 1
+                j -= 1
+        path.append((i, j))
+
+    # Compute the distance
+    dtw_distance = cost_matrix[-1][-1]
+
+    return dtw_distance
 # -----------------------------------------------------
 
 # ---------------------- 4.1) -----------------------

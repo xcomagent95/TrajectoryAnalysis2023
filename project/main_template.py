@@ -6,7 +6,7 @@ import functions_template as functions
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
-#print(listOfTrajectories)
+# print(listOfTrajectories)
 
 # Visualize trajectories
 #utils.visualizeTrajectories(listOfTrajectories)
@@ -21,6 +21,22 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 # Visualize original trajectory and its two simplifications
 
 # Calculate the distance between at least two trajectories with Closest-Pair-Distance and/or Dynamic Time Warping
+
+## Calculate the distance between two trajectories with Closest Pair Distance
+dist_calc_with_closest_pair = functions.closestPairDistance(listOfTrajectories[0], listOfTrajectories[1])
+print(f'The minimum as calculated by applying Closest Pair Distance is {dist_calc_with_closest_pair}')
+
+## Calculate the distance between two trajectories with Dynamic Time Warping
+dist_calc_with_dynamic_time_warping = functions.dynamicTimeWarping(listOfTrajectories[0], listOfTrajectories[1])
+print(f'The minimum as calculated by applying Dynamic Time Warping is {dist_calc_with_dynamic_time_warping}')
+
+## Perform Dynamic Time Warping on pairs of trajectories
+for i in range(len(listOfTrajectories) - 1):
+    for j in range(i + 1, len(listOfTrajectories)):
+        firstTrajectory = listOfTrajectories[i]
+        secondTrajectory = listOfTrajectories[j]
+        dynamic_time_warping_distance = functions.dynamicTimeWarping(firstTrajectory, secondTrajectory)
+        print(f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
 
 # Build R-tree with all given 62 trajectories
 
