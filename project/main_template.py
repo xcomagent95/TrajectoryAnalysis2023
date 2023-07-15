@@ -6,10 +6,10 @@ import functions_template as functions
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
-print(listOfTrajectories)
+# print(listOfTrajectories) # The resulting list is quiet long
 
 # Visualize trajectories
-#utils.visualizeTrajectories(listOfTrajectories)
+utils.visualizeTrajectories(listOfTrajectories)
 #utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
 
 # Simplify at least one of the trajectories with Douglas Peucker and/or Sliding Window Algorithm
