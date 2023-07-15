@@ -2,10 +2,11 @@
 import point
 class trajectory():
     # Initialization method of trajectory with an unique id
-    def __init__(self,number, points = [], unique_id = None) -> None:
+    def __init__(self,number, points = None, unique_id = None) -> None:
         self.number = number
-        self.points = points
         self.unique_id = unique_id
+        self.points = [] if points is None else points
+
 
     def __repr__(self) -> str:
         # Nice printing of trajectory
