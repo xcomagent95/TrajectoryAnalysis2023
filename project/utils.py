@@ -9,7 +9,7 @@ import plotly.graph_objs as go
 import plotly.io as pio
 import point
 
-
+# ---------------------- GIVEN -----------------------
 """Import a single trajectory from a file with the file format 
 xCoordinate yCoordinate day hour ... (other attributes will not be imported).
 Each trajectory should hold an unique number (id)."""
@@ -66,6 +66,7 @@ def calculateDistance(point, p1, p2):
 def pointDistance(p0:point,p1:point) -> float:
     dist = math.sqrt((p0.X-p1.X)**2+(p0.Y-p1.Y)**2)
     return dist
+# --------------------------------------------------
 
 
 perpendicularDistance = calculateDistance
