@@ -123,6 +123,21 @@ class DouglasPeuckerTest(unittest.TestCase):
 class SlidingWindowTest(unittest.TestCase):
     pass
 
+class solveQueryWithoutRTree(unittest.TestCase): 
+    
+    def test1(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+        
+        foundTrajectories = functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+        
+        self.assertEqual(len(foundTrajectories), 5)
+        
+        self.assertEqual(any(x.number == 43 for x in foundTrajectories), True)
+        self.assertEqual(any(x.number == 45 for x in foundTrajectories), True)
+        self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
+        self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
+        self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
 
 
 if __name__ == "__main__":
