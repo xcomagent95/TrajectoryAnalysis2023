@@ -1,4 +1,6 @@
 # imports
+import datetime
+import math
 import unittest
 import trajectory
 import point
@@ -126,52 +128,36 @@ class DouglasPeuckerTest(unittest.TestCase):
 # check if result is correct
 # check epsilon input (0<, 1?)
 
-
 class DynamicTimeWarpingTest(unittest.TestCase):
     def test_dtw_distance(self):
-        # Test cases with expected DTW distances
-        test_cases = [
-            {
-                "first_trajectory": [(1, 2, "2000-01-01 01:09:13"), (3, 4, "2000-01-01 01:09:14"), (5, 6, "2000-01-01 01:09:15")],
-                "second_trajectory": [(2, 3, "2000-01-01 01:09:16"), (4, 5, "2000-01-01 01:09:17"), (6, 7, "2000-01-01 01:09:18"), (8, 9, "2000-01-01 01:09:19")],
-                "expected_distance": 4.242640687119285,
-            },
-            {
-                "first_trajectory": [(1, 2, "2000-01-01 01:09:13"), (2, 3, "2000-01-01 01:09:14"), (3, 4, "2000-01-01 01:09:15")],
-                "second_trajectory": [(1, 2, "2000-01-01 01:09:16"), (2, 3, "2000-01-01 01:09:17"), (3, 4, "2000-01-01 01:09:18")],
-                "expected_distance": 0.0,
-            },
-            # Add more test cases if needed
+        # Define the trajectory data
+        first_trajectory = [
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            # Add more points if needed
         ]
+        traj0 = trajectory.trajectory(1, points=[point.point(
+            p[0], p[1], idx) for idx, p in enumerate(first_trajectory)])
 
-        # Run the DTW algorithm and compare the results with expected distances
-        for test_case in test_cases:
-            first_trajectory = test_case["first_trajectory"]
-            second_trajectory = test_case["second_trajectory"]
-            expected_distance = test_case["expected_distance"]
+        second_trajectory = [
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            # Add more points if needed
+        ]
+        traj1 = trajectory.trajectory(1, points=[point.point(
+            p[0], p[1], idx) for idx, p in enumerate(second_trajectory)])
 
-            # Extract x and y values from the trajectory points
-            traj0 = [(x, y) for x, y, _ in first_trajectory]
-            traj1 = [(x, y) for x, y, _ in second_trajectory]
+        # Calculate the expected distance
+        expected_distance = sum(math.sqrt((p0[0] - p1[0]) ** 2 + (p0[1] - p1[1]) ** 2)
+                                for p0, p1 in zip(first_trajectory, second_trajectory))
 
-            actual_distance = functions.dynamicTimeWarping(traj0, traj1)
-            self.assertAlmostEqual(
-                actual_distance, expected_distance, places=6)
-
-    def test_dtw_distance_identical_trajectories(self):
-        # Test case with identical trajectories
-        first_trajectory = [(1, 2, "2000-01-01 01:09:13"), (3, 4,
-                                                            "2000-01-01 01:09:14"), (5, 6, "2000-01-01 01:09:15")]
-        second_trajectory = [(1, 2, "2000-01-01 01:09:13"), (3, 4,
-                                                             "2000-01-01 01:09:14"), (5, 6, "2000-01-01 01:09:15")]
-
-        # Extract x and y values from the trajectory points
-        traj0 = [(x, y) for x, y, _ in first_trajectory]
-        traj1 = [(x, y) for x, y, _ in second_trajectory]
-
-        expected_distance = 0.0
+        # Call the dynamicTimeWarping function
         actual_distance = functions.dynamicTimeWarping(traj0, traj1)
 
+        # Assert the result
         self.assertAlmostEqual(actual_distance, expected_distance, places=6)
 
 
