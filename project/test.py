@@ -47,7 +47,8 @@ class DouglasPeuckerTest(unittest.TestCase):
             res_pojnts_array.append([p.X, p.Y])
         self.assertEqual(
             res_pojnts_array,
-            [[0.0, 0.0], [3.0, 8.0], [5.0, 2.0], [7.0, 25.0], [11.0, 5.5], [27.8, 0.1]],
+            [[0.0, 0.0], [3.0, 8.0], [5.0, 2.0], [
+                7.0, 25.0], [11.0, 5.5], [27.8, 0.1]],
         )
 
     def test3(self):
@@ -75,11 +76,12 @@ class DouglasPeuckerTest(unittest.TestCase):
             res_pojnts_array,
             [[0.0, 0.0], [2.0, 2.0], [4.0, 0.0], [6.0, 2.0], [8.0, 0.0]]
         )
-    #Edgecase Testing
+    # Edgecase Testing
+
     def test4(self):
         t = trajectory.trajectory(1, points=[])
         d = functions.douglasPeucker(t, 1)
-        self.assertEqual(d,t)
+        self.assertEqual(d, t)
 
     def test5(self):
         traj_points = [
@@ -120,54 +122,104 @@ class DouglasPeuckerTest(unittest.TestCase):
 
 
 # not done yet
-# TODO: 
+# TODO:
 # check if result is correct
 # check epsilon input (0<, 1?)
 
+
+class DynamicTimeWarpingTest(unittest.TestCase):
+    def test_dtw_distance(self):
+        # Test cases with expected DTW distances
+        test_cases = [
+            {
+                "first_trajectory": [(1, 2, "2000-01-01 01:09:13"), (3, 4, "2000-01-01 01:09:14"), (5, 6, "2000-01-01 01:09:15")],
+                "second_trajectory": [(2, 3, "2000-01-01 01:09:16"), (4, 5, "2000-01-01 01:09:17"), (6, 7, "2000-01-01 01:09:18"), (8, 9, "2000-01-01 01:09:19")],
+                "expected_distance": 4.242640687119285,
+            },
+            {
+                "first_trajectory": [(1, 2, "2000-01-01 01:09:13"), (2, 3, "2000-01-01 01:09:14"), (3, 4, "2000-01-01 01:09:15")],
+                "second_trajectory": [(1, 2, "2000-01-01 01:09:16"), (2, 3, "2000-01-01 01:09:17"), (3, 4, "2000-01-01 01:09:18")],
+                "expected_distance": 0.0,
+            },
+            # Add more test cases if needed
+        ]
+
+        # Run the DTW algorithm and compare the results with expected distances
+        for test_case in test_cases:
+            first_trajectory = test_case["first_trajectory"]
+            second_trajectory = test_case["second_trajectory"]
+            expected_distance = test_case["expected_distance"]
+
+            # Extract x and y values from the trajectory points
+            traj0 = [(x, y) for x, y, _ in first_trajectory]
+            traj1 = [(x, y) for x, y, _ in second_trajectory]
+
+            actual_distance = functions.dynamicTimeWarping(traj0, traj1)
+            self.assertAlmostEqual(
+                actual_distance, expected_distance, places=6)
+
+    def test_dtw_distance_identical_trajectories(self):
+        # Test case with identical trajectories
+        first_trajectory = [(1, 2, "2000-01-01 01:09:13"), (3, 4,
+                                                            "2000-01-01 01:09:14"), (5, 6, "2000-01-01 01:09:15")]
+        second_trajectory = [(1, 2, "2000-01-01 01:09:13"), (3, 4,
+                                                             "2000-01-01 01:09:14"), (5, 6, "2000-01-01 01:09:15")]
+
+        # Extract x and y values from the trajectory points
+        traj0 = [(x, y) for x, y, _ in first_trajectory]
+        traj1 = [(x, y) for x, y, _ in second_trajectory]
+
+        expected_distance = 0.0
+        actual_distance = functions.dynamicTimeWarping(traj0, traj1)
+
+        self.assertAlmostEqual(actual_distance, expected_distance, places=6)
+
+
 class SlidingWindowTest(unittest.TestCase):
 
-   
     def testLength0(self):
-        traj = [] 
+        traj = []
         epsilon = 1
-        self.assertEqual(functions.slidingWindow(traj, epsilon),[])
+        self.assertEqual(functions.slidingWindow(traj, epsilon), [])
 
     def testLength1(self):
-        traj = [[0,0]] 
+        traj = [[0, 0]]
         epsilon = 1
-        self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+        self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
     def testLength2(self):
-        traj = [[0,0],[1,1]] 
+        traj = [[0, 0], [1, 1]]
         epsilon = 1
-        self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+        self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
     def testEpsilonNegativ(self):
-        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        traj = [[1, 1], [2, 2], [3, 3], [4, 4]]
         epsilon = -1
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
     def testEpsilon0(self):
-        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        traj = [[1, 1], [2, 2], [3, 3], [4, 4]]
         epsilon = 0
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
-    
+
    # def testIfCorrect(self):
-    #    traj = [] 
+    #    traj = []
      #   epsilon = 1
       #  self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
 
 
-class solveQueryWithoutRTree(unittest.TestCase): 
-    
+class solveQueryWithoutRTree(unittest.TestCase):
+
     def test1(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
-        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
-        
-        foundTrajectories = functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
-        
+        queryRegion = region.region(point.point(
+            0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+
+        foundTrajectories = functions.solveQueryWithoutRTree(
+            queryRegion, listOfTrajectories)
+
         self.assertEqual(len(foundTrajectories), 5)
-        
+
         self.assertEqual(any(x.number == 43 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 45 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
