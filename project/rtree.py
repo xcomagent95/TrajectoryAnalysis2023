@@ -14,6 +14,9 @@ class node:
 	def __init__(self, value, parent=None, children=None, root:bool=False, leaf:bool=False) -> None:
 		self.leaf = leaf
 		self.root = root
+		self.parent = parent
+		self.children = children
+		self.value = value
 
 		if self.leaf == True:
 			if self.children != None:
@@ -25,15 +28,23 @@ class node:
 			else: 
 				self.value = value
 
-		if root == False:
+		'''if root == False:
 			if parent == None or type(parent) != node:
 				raise ValueError("This node needs a Parent node!")
 			else: 
-				self.parent = parent
-	
-		self.value = value
-		self.parent = parent
-		self.children = children
+				self.parent = parent'''
+
+
+def calculateSmallestRegion(leaf1:node, leaf2:node) -> region.region:
+	if not (isinstance(leaf1.value, point.point) and isinstance(leaf2.value, point.point)):
+		raise ValueError("calculateSmallestRegion could also be used for two leaf nodes!")
+	else: 
+		distance = utils.pointDistance(leaf1.value, leaf2.value)
+		centerPointX = leaf1.value.X + (leaf2.value.X - leaf1.value.X) / 2
+		centerPointY = leaf1.value.Y + (leaf2.value.Y - leaf1.value.Y) / 2
+		centerPoint = point.point(centerPointX, centerPointY, 0.0)
+		resultRegion = region.region(center=centerPoint, radius=distance/2)
+		return resultRegion
 
 class rTree:
 	def __init__(self, root:node=None, children=None) -> None:
@@ -52,33 +63,43 @@ class rTree:
 				for col in range(0,5):
 					distanceArray[row][col] = utils.pointDistance(currentNode.children.value) # TO CONTINUE
 			
-	def calculateSmallestRegion(self, leaf1:node, leaf2:node) -> region.region:
-		if not (isinstance(leaf1.value, point.point) and isinstance(leaf2.value, point.point)):
-			raise ValueError("calculateSmallestRegion could also be used for two leaf nodes!")
-		else: 
-			distance = utils.pointDistance(leaf1.value, leaf2.value)
-			centerPointX = leaf1.value.X + (leaf2.value.X - leaf1.value.X) / 2
-			centerPointY = leaf1.value.Y + (leaf2.value.Y - leaf1.value.Y) / 2
-			centerPoint = point.point(centerPointX, centerPointY, 0.0)
-			region = region.region(center=centerPoint, radius=distance/2)
-			return region
 
 
-	def insertPoint(self, point:point.point) -> None:
+	def findLeaf(node:node, point:point.point) -> node:
+		currentNode = node
+		while currentNode.leaf == False:
+			for child in currentNode.children:
+				if child.value.pointInRegion(point):
+					currentNode = child
+		return currentNode
+
+	def insertPoint(self, point:point.point) -> None: # Die idee ist ein rekursiver ansatz an dieser stelle
 		newNode = node(value=point, parent=currentNode, root=False, leaf=True)
+		
 		# If the tree got no root so far, the inserted point becomes the root
 		if self.root == None:
 			newNode.root = True
 			self.root = newNode
+
 		# If root got no children so far, this is the first child
 		if self.children is None: 
-			self.children = []
-			newNode.parent = self.root
+			rootThatBecomesChild = self.root
+			newRoot = node(value=self.calculateSmallestRegion(leaf1=rootThatBecomesChild, leaf2=newNode), children=[], root=True)
+			self.root = newRoot
+			rootThatBecomesChild.parent = newRoot
+			rootThatBecomesChild.root = False
+			newNode.parent = newRoot
+
+			self.children.append(rootThatBecomesChild)
 			self.children.append(newNode)
 		
 		else:
 			for child in self.children:
 				currentNode = child
+				if currentNode.leaf == False:
+					if currentNode.value.pointInRegion(point):
+						return
+
 				# Loops down until the node is found which is the parent of a leaf and the region covers the new point
 				while currentNode.leaf != True:
 					if isinstance(currentNode.value, region.region):
