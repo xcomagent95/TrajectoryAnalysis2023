@@ -104,7 +104,26 @@ def visualizeTrajectoriesPyPlot(listOfTrajectories: list):
 # ---------------------------------------------------
 
 # ---------------------- 3.2) -----------------------
-
+"""
+1. Calculating distances from one point to every other point of all other trajectories
+    --> Maybe with hash table 
+2. Sort this distances lists and group 5 points together
+"""
 def buildRTree(listOfTrajectories: list):
+    '''
+    #### This version works with the package rtree
+    idx = index.Index()
+    i = 0
+    tmp = listOfTrajectories[i]
+    #print(i, tmp.points[0].X, tmp.points[0].Y)
+    for pt in tmp.points:
+        idx.insert(i, (pt.X, pt.Y))
+    #(idx.insert(i, (pt.X, pt.Y)) for pt in tmp.points)
+    #print(idx)
+    print(list(idx.intersection((0,0,1,1))))
+    '''
+    tmp = listOfTrajectories[0]
+    #print(tmp.points)
+
     return None
 # ---------------------------------------------------

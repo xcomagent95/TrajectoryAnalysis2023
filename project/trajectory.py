@@ -24,9 +24,9 @@ class trajectory():
         return len(self.points)
 
     # Returns the point at the given index
-    def __getitem__(self, index: int):
+    def __getitem__(self, index: int) -> point:
         return self.points[index]
 
-    #Helper Funbction to get points if needed
-    def getPoints(self):
+    #Helper function to get points if needed # Maybe not use this? Only in case this was added by our group
+    def getPoints(self) -> list:
         return self.points

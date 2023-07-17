@@ -6,7 +6,14 @@ import functions_template as functions
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
-print(utils.pointDistance(listOfTrajectories[0][0], listOfTrajectories[0][2]))
+#print(utils.pointDistance(listOfTrajectories[0][0], listOfTrajectories[0][2]))
+
+#print(listOfTrajectories[0][0])
+tmp = listOfTrajectories[0]
+#print(tmp.points)
+#print([[pt.X, pt.Y] for pt in tmp.points])
+utils.buildRTree(listOfTrajectories)
+
 '''
 counter = 0
 for object in listOfTrajectories:
