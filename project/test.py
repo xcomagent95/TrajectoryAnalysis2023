@@ -123,10 +123,8 @@ class DouglasPeuckerTest(unittest.TestCase):
             self.assertIsInstance(p, point.point)
 
 
-# not done yet
-# TODO:
-# check if result is correct
-# check epsilon input (0<, 1?)
+
+
 
 class DynamicTimeWarpingTest(unittest.TestCase):
     def test_dtw_distance(self):
@@ -161,9 +159,13 @@ class DynamicTimeWarpingTest(unittest.TestCase):
         self.assertAlmostEqual(actual_distance, expected_distance, places=6)
 
 
+# TODo:
+# check if result is correct
+# check correct epsilon input (0<, 1?)
+# 
 class SlidingWindowTest(unittest.TestCase):
 
-    def test_length0(self):
+    def test_length0(self):   # fails as traj with 0 points is not created
         points = []
         traj = trajectory.trajectory(1, points=points)
         epsilon = 1
@@ -180,8 +182,16 @@ class SlidingWindowTest(unittest.TestCase):
         self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
     def test_length2(self):
-        traj = [[0,0],[1,1]] 
+        #build trajectory
+        traj_points = [[1, 1], [2, 2]]
+        points = []
+        for idx, p in enumerate(traj_points):
+            points.append(point.point(p[0], p[1], idx))
+        traj = trajectory.trajectory(1, points=points)
         epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
+        #traj = [[0,0],[1,1]] 
+        #epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
     def test_epsilonNegativ(self):
@@ -194,10 +204,29 @@ class SlidingWindowTest(unittest.TestCase):
         epsilon = 0
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
     
-   # def test_ifCorrect(self):
-    #    traj = [] 
-     #   epsilon = 1
-      #  self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+    def test_ifCorrect(self):
+        points = [
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            # Add more points if needed
+        ]
+        traj = trajectory.trajectory(1, points=[point.point(
+            p[0], p[1], idx) for idx, p in enumerate(points)])
+
+        controlPoints = [
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            (0.0014788576577, 0.0037183030576),
+            # Add more points if needed    # switch to correct trajectory
+        ]
+        controlTraj = trajectory.trajectory(1, points=[point.point(
+            p[0], p[1], idx) for idx, p in enumerate(controlPoints)])
+    
+        epsilon = 1
+
+        self.assertEqual(functions.slidingWindow(traj, epsilon),controlTraj)
+
 
 
 class solveQueryWithoutRTree(unittest.TestCase):
@@ -209,8 +238,7 @@ class solveQueryWithoutRTree(unittest.TestCase):
 
         foundTrajectories = functions.solveQueryWithoutRTree(
             queryRegion, listOfTrajectories)
-
-        self.assertEqual(len(foundTrajectories), 5)
+        self.assertEqual(len(foundTrajectories), 5)  # fails
 
         self.assertEqual(any(x.number == 43 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 45 for x in foundTrajectories), True)

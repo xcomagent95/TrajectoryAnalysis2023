@@ -56,7 +56,7 @@ queryRegion = region.region(point.point(
 # foundTrajectories = functions.solveQueryWithRTree(queryRegion, listOfTrajectories)
 foundTrajectories = functions.solveQueryWithoutRTree(
     queryRegion, listOfTrajectories)
-if foundTrajectories != None:
+if foundTrajectories != None:   # is not None:
     if len(foundTrajectories) == 0:
         print("No trajectories match the query.")
     for t in foundTrajectories:
