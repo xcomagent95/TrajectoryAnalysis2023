@@ -11,7 +11,7 @@ class node:
 	# value (region OR point)
 	# children (None OR list)
 	# leaf (boolean)
-	def __init__(self, value, parent=None, children=None, root:bool=False, leaf:bool=True) -> None:
+	def __init__(self, value, parent=None, children=None, root:bool=False, leaf:bool=False) -> None:
 		self.leaf = leaf
 		self.root = root
 
@@ -36,9 +36,9 @@ class node:
 		self.children = children
 
 class rTree:
-	def __init__(self) -> None:
-		self.root = None
-		self.children = None
+	def __init__(self, root:node=None, children=None) -> None:
+		self.root = root
+		self.children = children
 
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
@@ -52,9 +52,31 @@ class rTree:
 				for col in range(0,5):
 					distanceArray[row][col] = utils.pointDistance(currentNode.children.value) # TO CONTINUE
 			
+	def calculateSmallestRegion(self, leaf1:node, leaf2:node) -> region.region:
+		if not (isinstance(leaf1.value, point.point) and isinstance(leaf2.value, point.point)):
+			raise ValueError("calculateSmallestRegion could also be used for two leaf nodes!")
+		else: 
+			distance = utils.pointDistance(leaf1.value, leaf2.value)
+			centerPointX = leaf1.value.X + (leaf2.value.X - leaf1.value.X) / 2
+			centerPointY = leaf1.value.Y + (leaf2.value.Y - leaf1.value.Y) / 2
+			centerPoint = point.point(centerPointX, centerPointY, 0.0)
+			region = region.region(center=centerPoint, radius=distance/2)
+			return region
+
 
 	def insertPoint(self, point:point.point) -> None:
-		if type(self.children) is not None: 
+		newNode = node(value=point, parent=currentNode, root=False, leaf=True)
+		# If the tree got no root so far, the inserted point becomes the root
+		if self.root == None:
+			newNode.root = True
+			self.root = newNode
+		# If root got no children so far, this is the first child
+		if self.children is None: 
+			self.children = []
+			newNode.parent = self.root
+			self.children.append(newNode)
+		
+		else:
 			for child in self.children:
 				currentNode = child
 				# Loops down until the node is found which is the parent of a leaf and the region covers the new point
@@ -73,6 +95,4 @@ class rTree:
 					self.children.append(newNode)
 				else:
 					self.splitNode(self, currentNode, point)
-		else:
-			self.children = []
-			self.children.append()
+			

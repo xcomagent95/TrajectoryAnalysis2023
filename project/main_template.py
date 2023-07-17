@@ -3,14 +3,20 @@ import point
 import region
 import utils
 import functions_template as functions
+import rtree
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
 #print(utils.pointDistance(listOfTrajectories[0][0], listOfTrajectories[0][2]))
 
 #print(listOfTrajectories[0][0])
-tmp = listOfTrajectories[0]
-print(type(tmp.points[0]))
+tree = rtree.rTree()
+pointA = listOfTrajectories[0][0]
+pointB = listOfTrajectories[0][20]
+#node1 = rtree.node(pointA, root=True)
+print(type(tree.children))
+
+#print(type(tmp.points[0]))
 #print([[pt.X, pt.Y] for pt in tmp.points])
 #utils.buildRTree(listOfTrajectories)
 
