@@ -28,7 +28,7 @@ def importTrajectory(filename:str,number:int) -> trajectory:
         day = entry[2]
         hour = entry[3]
         timestamp = day + ':' + hour
-        newPoint = point.point(x,y,timestamp)
+        newPoint = point.point(x,y,timestamp,trajectoryID=number)
         currTrajectory.addPoint(newPoint)
 
     # Return trajectory
@@ -110,20 +110,10 @@ def visualizeTrajectoriesPyPlot(listOfTrajectories: list):
 2. Sort this distances lists and group 5 points together
 """
 def buildRTree(listOfTrajectories: list):
-    '''
-    #### This version works with the package rtree
-    idx = index.Index()
-    i = 0
-    tmp = listOfTrajectories[i]
-    #print(i, tmp.points[0].X, tmp.points[0].Y)
-    for pt in tmp.points:
-        idx.insert(i, (pt.X, pt.Y))
-    #(idx.insert(i, (pt.X, pt.Y)) for pt in tmp.points)
-    #print(idx)
-    print(list(idx.intersection((0,0,1,1))))
-    '''
-    tmp = listOfTrajectories[0]
+    
+    #tmp = listOfTrajectories[0]
     #print(tmp.points)
+
 
     return None
 # ---------------------------------------------------

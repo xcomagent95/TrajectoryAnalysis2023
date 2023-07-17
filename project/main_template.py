@@ -10,9 +10,9 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 
 #print(listOfTrajectories[0][0])
 tmp = listOfTrajectories[0]
-#print(tmp.points)
+print(type(tmp.points[0]))
 #print([[pt.X, pt.Y] for pt in tmp.points])
-utils.buildRTree(listOfTrajectories)
+#utils.buildRTree(listOfTrajectories)
 
 '''
 counter = 0

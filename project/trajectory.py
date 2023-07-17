@@ -27,6 +27,6 @@ class trajectory():
     def __getitem__(self, index: int) -> point:
         return self.points[index]
 
-    #Helper function to get points if needed # Maybe not use this? Only in case this was added by our group
+    # Helper function to get points if needed 
     def getPoints(self) -> list:
         return self.points
