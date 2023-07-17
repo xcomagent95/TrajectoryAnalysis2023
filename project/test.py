@@ -8,7 +8,7 @@ import functions_template as functions
 
 
 class DouglasPeuckerTest(unittest.TestCase):
-    def test1(self):
+    def test1(self):#add better name
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
         points = []
         for idx, p in enumerate(traj_points):
@@ -21,7 +21,7 @@ class DouglasPeuckerTest(unittest.TestCase):
             res_pojnts_array.append([p.X, p.Y])
         self.assertEqual(res_pojnts_array, [[1, 1], [4, 4]])
 
-    def test2(self):
+    def test2(self):  #add better name
         traj_points = [
             [0.0, 0.0],
             [3.0, 8.0],
@@ -50,7 +50,7 @@ class DouglasPeuckerTest(unittest.TestCase):
             [[0.0, 0.0], [3.0, 8.0], [5.0, 2.0], [7.0, 25.0], [11.0, 5.5], [27.8, 0.1]],
         )
 
-    def test3(self):
+    def test3(self):#add better name
         traj_points = [
             (0.0, 0.0),
             (1.0, 1.0),
@@ -76,12 +76,12 @@ class DouglasPeuckerTest(unittest.TestCase):
             [[0.0, 0.0], [2.0, 2.0], [4.0, 0.0], [6.0, 2.0], [8.0, 0.0]]
         )
     #Edgecase Testing
-    def test4(self):
+    def test4(self):#add better name
         t = trajectory.trajectory(1, points=[])
         d = functions.douglasPeucker(t, 1)
         self.assertEqual(d,t)
 
-    def test5(self):
+    def test5(self):#add better name
         traj_points = [
             (0.0, 0.0),
             (1.0, 1.0),
@@ -99,7 +99,7 @@ class DouglasPeuckerTest(unittest.TestCase):
         traj = trajectory.trajectory(1, points=points)
         self.assertRaises(ValueError, functions.douglasPeucker, traj, -1)
 
-    def test6(self):
+    def test6(self):#add better name
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
         points = []
         for idx, p in enumerate(traj_points):
@@ -108,7 +108,7 @@ class DouglasPeuckerTest(unittest.TestCase):
         d = functions.douglasPeucker(traj, 0)
         self.assertIsInstance(d, trajectory.trajectory)
 
-    def test7(self):
+    def test7(self):#add better name
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
         points = []
         for idx, p in enumerate(traj_points):
@@ -127,32 +127,39 @@ class DouglasPeuckerTest(unittest.TestCase):
 class SlidingWindowTest(unittest.TestCase):
 
    
-    def testLength0(self):
-        traj = [] 
+    def test_length0(self):
+        points = []
+        traj = trajectory.trajectory(1, points=points)
         epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon),[])
 
-    def testLength1(self):
-        traj = [[0,0]] 
+    def test_length1(self):
+        #build trajectory
+        traj_points = [[1, 1]]
+        points = []
+        for idx, p in enumerate(traj_points):
+            points.append(point.point(p[0], p[1], idx))
+        traj = trajectory.trajectory(1, points=points)
+
         epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
 
-    def testLength2(self):
+    def test_length2(self):
         traj = [[0,0],[1,1]] 
         epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
 
-    def testEpsilonNegativ(self):
+    def test_epsilonNegativ(self):
         traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
         epsilon = -1
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
-    def testEpsilon0(self):
+    def test_epsilon0(self):
         traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
         epsilon = 0
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
     
-   # def testIfCorrect(self):
+   # def test_ifCorrect(self):
     #    traj = [] 
      #   epsilon = 1
       #  self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
