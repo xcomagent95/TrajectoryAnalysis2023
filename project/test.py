@@ -160,7 +160,7 @@ class SlidingWindowTest(unittest.TestCase):
 
 class solveQueryWithoutRTree(unittest.TestCase): 
     
-    def test1(self):
+    def examplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
         
@@ -173,6 +173,20 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
+        
+    def emptyTrajectoryList(self):
+        listOfTrajectories = []
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+        with self.assertRaises(TypeError):
+            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+            
+    def malformedRegion(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
+        with self.assertRaises(TypeError):
+            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+            
+    
 
 
 if __name__ == "__main__":
