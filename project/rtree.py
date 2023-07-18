@@ -37,7 +37,7 @@ class mbb:
 '''
 '''
 class node:
-	# value (region OR point)
+	# value (mbb OR point)
 	# children (None OR list)
 	# leaf (boolean)
 	def __init__(self, value, parent=None, children=None, root:bool=False, leaf:bool=False) -> None:
@@ -53,11 +53,11 @@ class node:
 			else: 
 				self.children = children
 			if type(self.value) != point.point:
-				raise ValueError("Leafs has to be Points not Regions!")
+				raise ValueError("Leafs has to be Points not Minimal Bounding Boxes!")
 			else: 
 				self.value = value
 
-
+'''
 def calculateSmallestRegion(leaf1:node, leaf2:node) -> region.region:
 	if not (isinstance(leaf1.value, point.point) and isinstance(leaf2.value, point.point)):
 		raise ValueError("calculateSmallestRegion could also be used for two leaf nodes!")
@@ -68,6 +68,12 @@ def calculateSmallestRegion(leaf1:node, leaf2:node) -> region.region:
 		centerPoint = point.point(centerPointX, centerPointY, 0.0)
 		resultRegion = region.region(center=centerPoint, radius=distance/2)
 		return resultRegion
+'''
+def calculateSmallestMBB(leaf1:node, leaf2:node) -> mbb:
+	smallestMBB_X = min(leaf1.X, leaf2.X)
+	smallestMBB_Y = min(leaf1.Y, leaf2.Y)
+	smallestMBB = mbb(lowerLeft=smallestMBB_X, upperRight=smallestMBB_Y)
+	return smallestMBB
 
 class rTree:
 	def __init__(self, root:node=None, children=None) -> None:
