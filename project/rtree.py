@@ -19,11 +19,12 @@ class mbb:
 		Returns:
 		None: 
 		"""
-		if(lowerLeft.X >= upperRight.X):
-			raise ValueError("X coordinate of upper right corner must be greater that X coordinate of the lower left corner")
-		elif(lowerLeft.Y >= upperRight.Y):
-			raise ValueError("Y coordinate of upper right corner must be greater that Y coordinate of the lower left corner")
-
+		''' Removed exception for the reason, that to points, that are identical in the coordinates but not in timestamps are also possible
+		if lowerLeft.X >= upperRight.X:
+			raise ValueError("X coordinate of upper right corner must be greater than X coordinate of the lower left corner!")
+		elif lowerLeft.Y >= upperRight.Y:
+			raise ValueError("Y coordinate of upper right corner must be greater than Y coordinate of the lower left corner!")
+		'''
 		self.lowerLeft = lowerLeft
 		self.upperRight = upperRight
 	
@@ -77,6 +78,13 @@ class node:
 				raise ValueError("Leafs has to be Points not Minimal Bounding Boxes!")
 			else: 
 				self.value = value
+
+	def __str__(self) -> str:
+		if self.leaf == True:
+			string = f"({self.value.X},{self.value.Y})"
+		else: 
+			string = f"({self.value})"
+		return string
 
 def calculateSmallestMBB(leafsList:list) -> mbb:
 	# Test if leafsList contains only leaf nodes. If not, it throws an error
@@ -151,24 +159,38 @@ class rTree:
 		self.root = root
 		self.children = children
 
+	def __str__(self) -> str:
+		string = ""
+		if self.root != None:
+			if self.root.leaf == True:
+				string += f"Root: ({self.root.value.X}, {self.root.value.Y})\n"
+			else:
+				string += f"Root: ({self.root.value})\n"
+			if self.children != None:
+				print('len list', len(self.children))
+				for child in self.children:
+					if child.leaf == True:
+						string += f"Children: {child.value.X}, {child.value.Y}, "
+		return string
+
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
 
 	# This function iterates down to the leaf in whose region the given point falls
 	def findLeaf(self, node:node, point:point.point) -> node:
 		currentNode = node
-		print("l.70")
+		#print("l.70")
 		for child in currentNode.children:
-			print("l.73")
+			#print("l.73")
 			if child.leaf == False:
-				print("l.75 child.leaf == False")
+			#	print("l.75 child.leaf == False")
 				if child.value.isPointInMbb(point):
-					print("l.77 child.value.pointInRegion == True")
+			#		print("l.77 child.value.pointInRegion == True")
 					currentNode = child
 			else: 
-				print("l.80 child.leaf == True")
+			#	print("l.80 child.leaf == True")
 				return currentNode
-		print("l.82 for loop left")
+		#print("l.82 for loop left")
 		return currentNode
 
 	# This function inserts a given point
@@ -179,9 +201,11 @@ class rTree:
 		if self.root == None:
 			newNode.root = True
 			self.root = newNode
+			return
 
 		# If root got no children so far, this is the first child
 		if self.children is None: 
+			print('self.children is None')
 			# In this case, the current root node has to become a children node, a leaf
 			rootThatBecomesChild = self.root
 			# and a new root node gets initialized.
@@ -198,15 +222,25 @@ class rTree:
 			self.children = []
 			self.children.append(rootThatBecomesChild)
 			self.children.append(newNode)
+			return
 		
 		# If the tree has already more than 1 level:
 		else:
+			print('Children list not NONE')
 			nodeWherePointShouldBeInserted = self.findLeaf(self.root, point)
+			print('l.231',len(nodeWherePointShouldBeInserted.children))
+			print('nodeWherePointShouldBeInserted',nodeWherePointShouldBeInserted)
 			# After finding the node where the new point fits in spatially, the point can be added as a new node to the childrens list or the current node has to be splitted
 			if len(nodeWherePointShouldBeInserted.children) < 5:
+				print('len < 5')
+				print(newNode)
+
+				print('child list',nodeWherePointShouldBeInserted.children)
 				newNode.parent = nodeWherePointShouldBeInserted
 				nodeWherePointShouldBeInserted.children.append(newNode) 
+				nodeWherePointShouldBeInserted.value = calculateSmallestMBB(nodeWherePointShouldBeInserted.children)
 			else: 
+				print('len >= 5')
 				(part1, part2, total_area) = splitNodeTo2Parts(currentNode=nodeWherePointShouldBeInserted, point=point)
 				# If parental node got enough space for another child node:
 				if len(nodeWherePointShouldBeInserted.parent.children) < 5:

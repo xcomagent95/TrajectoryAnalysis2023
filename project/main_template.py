@@ -10,7 +10,21 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 #print(utils.pointDistance(listOfTrajectories[0][0], listOfTrajectories[0][2]))
 
 tree = rtree.rTree()
-pointA = listOfTrajectories[0][0]
+print('l.13',tree)
+nodes = [rtree.node(pointX, root=False, leaf=True) for pointX in listOfTrajectories[0]]
+tree.insertPoint(listOfTrajectories[0][0])
+print('l.16',tree)
+tree.insertPoint(listOfTrajectories[0][1])
+print('l.18',tree)
+tree.insertPoint(listOfTrajectories[0][10])
+print('l.20',tree)
+tree.insertPoint(listOfTrajectories[0][15])
+print('l.22',tree)
+tree.insertPoint(listOfTrajectories[0][20])
+print('l.24',tree)
+tree.insertPoint(listOfTrajectories[0][25])
+print('l.26',tree)
+'''pointA = listOfTrajectories[0][0]
 pointB = listOfTrajectories[0][20]
 pointC = listOfTrajectories[0][30]
 pointD = listOfTrajectories[0][40]
@@ -24,9 +38,9 @@ node5 = rtree.node(pointE, root=False, leaf=True)
 node6 = rtree.node(pointF, root=False, leaf=True)
 childrensList = [node1, node2, node3, node4, node5]
 node7 = rtree.node(rtree.calculateSmallestMBB(childrensList), children=childrensList, root=False, leaf=False)
-
+'''
 #print(rtree.splitNode(node7, pointF))
-print(rtree.splitNode(node7, pointF))
+#print(rtree.splitNode(node7, pointF))
 
 #print(rtree.calculateSmallestMBB([node1, node2]).lowerLeft)
 #print(rtree.calculateSmallestMBB(leafsList=[node1, node2]).upperRight)
