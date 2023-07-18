@@ -97,9 +97,10 @@ class rTree:
 		if len(currentNode.children) != 5:
 			raise ValueError("Here is a mistake!")
 		else: 
-			distanceArray = np.zeros([5,5])
-			for row in range(0,5):	
-				for col in range(0,5):
+			amountOfChildren = len(currentNode.children)
+			distanceArray = np.zeros([amountOfChildren,amountOfChildren])
+			for row in range(0,amountOfChildren):	
+				for col in range(0,amountOfChildren):
 					distanceArray[row][col] = utils.pointDistance(currentNode.children.value) # TO CONTINUE
 					# TBC
 
