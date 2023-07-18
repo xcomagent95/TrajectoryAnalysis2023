@@ -78,7 +78,7 @@ def slidingWindow(traj, epsilon):
         """
     if len(traj) <= 2:
         return traj
-    if epsilon < 0:
+    if epsilon <= 0:
         raise ValueError("Epsilon must be greater than 0")
     result_list = slidingWindow_recursive(traj, epsilon, 0, [])
     return trajectory.trajectory(-1, result_list, unique_id=f"Sliding Window for Trajectory {traj.number}")
