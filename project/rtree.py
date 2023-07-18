@@ -93,13 +93,19 @@ class rTree:
 
 		# If root got no children so far, this is the first child
 		if self.children is None: 
+			# In this case, the current root node has to become a children node, a leaf
 			rootThatBecomesChild = self.root
+			# and a new root node gets initialized.
 			newRoot = node(value=self.calculateSmallestRegion(leaf1=rootThatBecomesChild, leaf2=newNode), children=[], root=True)
+			# The new root node gets referenced as the tree's root.
 			self.root = newRoot
+			# Since the old root is now a children of the new root, the old root's parent is the new root.
 			rootThatBecomesChild.parent = newRoot
+			# The old root is now no root anymore.
 			rootThatBecomesChild.root = False
+			# Also new node, that will be added to the tree gets the root as its parent.
 			newNode.parent = newRoot
-
+			# The trees children are the old root and the newly inserted node.
 			self.children.append(rootThatBecomesChild)
 			self.children.append(newNode)
 		
