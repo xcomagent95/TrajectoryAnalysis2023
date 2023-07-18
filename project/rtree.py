@@ -3,7 +3,17 @@ import trajectory
 import region
 import numpy as np 
 import utils
+
+
+class mbb: 
+	def __init__(self, lowerLeft:point.point, upperRight:point.point) -> None:
+		self.lowerLeft = lowerLeft
+		self.upperRight = upperRight
 	
+	def isPointInMbb(self, point:point.point) -> bool:
+		
+		return 
+
 # Nodes have 2 - 5 children, which can be Nodes or Leafs. 
 '''
 '''
@@ -28,12 +38,6 @@ class node:
 			else: 
 				self.value = value
 
-		'''if root == False:
-			if parent == None or type(parent) != node:
-				raise ValueError("This node needs a Parent node!")
-			else: 
-				self.parent = parent'''
-
 
 def calculateSmallestRegion(leaf1:node, leaf2:node) -> region.region:
 	if not (isinstance(leaf1.value, point.point) and isinstance(leaf2.value, point.point)):
@@ -56,6 +60,7 @@ class rTree:
 
 	# This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
 	def splitNode(self, currentNode:node, point:point.point) -> None:
+		# In case an error occurs and the children list ist unequal to length 5
 		if len(currentNode.children) != 5:
 			raise ValueError("Here is a mistake!")
 		else: 
