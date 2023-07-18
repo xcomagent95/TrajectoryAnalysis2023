@@ -16,12 +16,14 @@ pointB = listOfTrajectories[0][20]
 pointC = listOfTrajectories[0][30]
 node1 = rtree.node(pointA, root=False, leaf=True)
 node2 = rtree.node(pointB, root=False, leaf=True)
-root = rtree.node(rtree.calculateSmallestRegion(node1, node2), children=[node1, node2], root=True, leaf=False)
-tree.root = root
-tree.children = tree.root.children # GESTOPPT hier evtl noch was anpassen, damit die tree root children automatisch die tree children snd oder auf tree children verzichten
+print(rtree.calculateSmallestMBB(leafsList=[node1, node2]).lowerLeft)
+print(rtree.calculateSmallestMBB(leafsList=[node1, node2]).upperRight)
+#root = rtree.node(rtree.calculateSmallestRegion(node1, node2), children=[node1, node2], root=True, leaf=False)
+#tree.root = root
+#tree.children = tree.root.children # GESTOPPT hier evtl noch was anpassen, damit die tree root children automatisch die tree children snd oder auf tree children verzichten
 #print(tree)
 #print(tree.children)
-print(tree.findLeaf(root, pointC).leaf)
+#print(tree.findLeaf(root, pointC).leaf)
 
 #print(type(tmp.points[0]))
 #print([[pt.X, pt.Y] for pt in tmp.points])
