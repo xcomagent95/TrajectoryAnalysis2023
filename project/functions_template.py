@@ -18,7 +18,6 @@ def douglasPeucker(traj,epsilon):
     
      Returns:
      trajectory: Simplified trajectory
-    
     """
     if len(traj) <= 2:
         return traj

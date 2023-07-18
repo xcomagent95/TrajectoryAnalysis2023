@@ -7,12 +7,31 @@ import utils
 
 class mbb: 
 	def __init__(self, lowerLeft:point.point, upperRight:point.point) -> None:
+		"""Constructor for minimal bounding box (mbb)
+
+		Parameters: 
+		lowerLeft (point): Point at the lower left corner of the minimal bounding box
+		upperRight (point): Point at the upper right corner of the minimal bounding box
+		
+		Returns:
+		None: 
+		"""
 		self.lowerLeft = lowerLeft
 		self.upperRight = upperRight
 	
 	def isPointInMbb(self, point:point.point) -> bool:
-		
-		return 
+		"""Function to test if a point is inside a minimal bounding box
+
+		Parameters: 
+		point (point): point for which to test inclusion in the minimal bounding box
+
+		Returns:
+		bool: Boolean signifying inclusion of point in the minimal bounding box
+		"""
+		if(point.X >= self.lowerLeft.X and point.X <= self.upperRight.X and point.Y >= self.lowerLeft.Y and point.Y <= self.upperRight.Y):
+			return True
+		else:
+			return False
 
 # Nodes have 2 - 5 children, which can be Nodes or Leafs. 
 '''
@@ -148,4 +167,3 @@ class rTree:
 				else:
 					self.splitNode(self, currentNode, point)
 			'''
-			
