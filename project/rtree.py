@@ -54,6 +54,7 @@ class rTree:
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
 
+	# This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
 	def splitNode(self, currentNode:node, point:point.point) -> None:
 		if len(currentNode.children) != 5:
 			raise ValueError("Here is a mistake!")
@@ -62,19 +63,28 @@ class rTree:
 			for row in range(0,5):	
 				for col in range(0,5):
 					distanceArray[row][col] = utils.pointDistance(currentNode.children.value) # TO CONTINUE
-			
+					# TBC
 
-
-	def findLeaf(node:node, point:point.point) -> node:
+	# This function iterates down to the leaf in whose region the given point falls
+	def findLeaf(self, node:node, point:point.point) -> node:
 		currentNode = node
-		while currentNode.leaf == False:
-			for child in currentNode.children:
+		print("l.70")
+		for child in currentNode.children:
+			print("l.73")
+			if child.leaf == False:
+				print("l.75 child.leaf == False")
 				if child.value.pointInRegion(point):
+					print("l.77 child.value.pointInRegion == True")
 					currentNode = child
+			else: 
+				print("l.80 child.leaf == True")
+				return currentNode
+		print("l.82 for loop left")
 		return currentNode
 
+	# This function inserts a given point
 	def insertPoint(self, point:point.point) -> None: # Die idee ist ein rekursiver ansatz an dieser stelle
-		newNode = node(value=point, parent=currentNode, root=False, leaf=True)
+		newNode = node(value=point, parent=None, root=False, leaf=True)
 		
 		# If the tree got no root so far, the inserted point becomes the root
 		if self.root == None:
@@ -93,7 +103,17 @@ class rTree:
 			self.children.append(rootThatBecomesChild)
 			self.children.append(newNode)
 		
+		# If the tree has already more than 1 level:
 		else:
+			nodeWherePointShouldBeInserted = self.findLeaf(self.root, point)
+			# After finding the node where the new point fits in spatially, the point can be added as a new node to the childrens list or the current node has to be splitted
+			if len(nodeWherePointShouldBeInserted.children) < 5:
+				newNode.parent = nodeWherePointShouldBeInserted
+				nodeWherePointShouldBeInserted.children.append(newNode) 
+			else: 
+				self.splitNode(currentNode=nodeWherePointShouldBeInserted, point=point)
+
+			'''
 			for child in self.children:
 				currentNode = child
 				if currentNode.leaf == False:
@@ -116,4 +136,5 @@ class rTree:
 					self.children.append(newNode)
 				else:
 					self.splitNode(self, currentNode, point)
+			'''
 			
