@@ -101,6 +101,34 @@ def calculateSmallestMBB(leafsList:list) -> mbb:
 	
 	return smallestMBB
 
+# This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
+def splitNode(self, currentNode:node, point:point.point) -> None:
+	# In case an error occurs and the children list ist unequal to length 5
+	if len(currentNode.children) <= 5:
+		raise ValueError("Here is a mistake!")
+	else: 
+		# Build node out of new point and add it to the children nodes list
+		newNode = node(value=point, leaf=True) 
+		childrensList = currentNode.children
+		childrensList.append(newNode)
+		
+		partitionsAndAreaSizes = [] # Will contain tuples (group1, group2, total_area)
+
+		subpartitions = it.combinations(childrensList, 3)
+		for partition in subpartitions:
+
+			mbb1 = calculateSmallestMBB(list(partition))
+			mbb1_size = mbb1.getArea()
+
+			remaining_points = [childNode for childNode in childrensList if childNode not in partition]
+			mbb2 = calculateSmallestMBB(list(remaining_points))
+			mbb2_size = mbb2.getArea()
+
+			total_area = mbb1_size + mbb2_size
+
+			partitionsAndAreaSizes.append((partition, remaining_points, total_area))
+
+
 class rTree:
 	def __init__(self, root:node=None, children=None) -> None:
 		self.root = root
@@ -109,22 +137,9 @@ class rTree:
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
 
-	# This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
-	def splitNode(self, currentNode:node, point:point.point) -> None:
-		# In case an error occurs and the children list ist unequal to length 5
-		if len(currentNode.children) <= 5:
-			raise ValueError("Here is a mistake!")
-		else: 
-			# Build node out of new point and add it to the children nodes list
-			newNode = node(value=point, leaf=True) 
-			childrensList = currentNode.children
-			childrensList.append(newNode)
-			# utils.pointDistance(p1, p2)
 
-			subpartitions = it.combinations(childrensList, 3)
-			for partition in subpartitions:
 
-				self.calculateSmallestMBB(partition)
+
 
 	'''
 	import math
