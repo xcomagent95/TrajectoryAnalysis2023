@@ -8,7 +8,6 @@ import region
 import utils
 import functions_template as functions
 
-
 class DouglasPeuckerTest(unittest.TestCase):
     def test1(self):#add better name
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
@@ -224,16 +223,13 @@ class SlidingWindowTest(unittest.TestCase):
         ]
         controlTraj = trajectory.trajectory(1, points=[point.point(
             p[0], p[1], idx) for idx, p in enumerate(controlPoints)])
-    
-        epsilon = 1
 
         self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
 
 
 
 class solveQueryWithoutRTree(unittest.TestCase):
-
-    def test1(self):
+    def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(
             0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
@@ -247,7 +243,18 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
-
-
+        
+    def testEmptyTrajectoryList(self):
+        listOfTrajectories = []
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+        with self.assertRaises(TypeError):
+            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+            
+    def testMalformedRegion(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
+        with self.assertRaises(TypeError):
+            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+            
 if __name__ == "__main__":
     unittest.main()
