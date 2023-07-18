@@ -97,6 +97,8 @@ def slidingWindow_recursive(traj, epsilon, start_index, result_list):
          trajectory: Array of points
 
         """
+    if(epsilon <= 0):
+        raise ValueError("Epsilon must be greater than 0")
     result_list.append(traj[start_index])
     if start_index == len(traj) - 1:
         return result_list
