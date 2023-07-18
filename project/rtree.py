@@ -162,7 +162,7 @@ class rTree:
 			print("l.73")
 			if child.leaf == False:
 				print("l.75 child.leaf == False")
-				if child.value.pointInRegion(point):
+				if child.value.isPointInMbb(point):
 					print("l.77 child.value.pointInRegion == True")
 					currentNode = child
 			else: 
@@ -195,6 +195,7 @@ class rTree:
 			# Also new node, that will be added to the tree gets the root as its parent.
 			newNode.parent = newRoot
 			# The trees children are the old root and the newly inserted node.
+			self.children = []
 			self.children.append(rootThatBecomesChild)
 			self.children.append(newNode)
 		
