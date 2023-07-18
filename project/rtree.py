@@ -16,6 +16,11 @@ class mbb:
 		Returns:
 		None: 
 		"""
+		if(lowerLeft.X >= upperRight.X):
+			raise ValueError("X coordinate of upper right corner must be greater that X coordinate of the lower left corner")
+		elif(lowerLeft.Y >= upperRight.Y):
+			raise ValueError("Y coordinate of upper right corner must be greater that Y coordinate of the lower left corner")
+
 		self.lowerLeft = lowerLeft
 		self.upperRight = upperRight
 	
@@ -28,7 +33,10 @@ class mbb:
 		Returns:
 		bool: Boolean signifying inclusion of point in the minimal bounding box
 		"""
-		if(point.X >= self.lowerLeft.X and point.X <= self.upperRight.X and point.Y >= self.lowerLeft.Y and point.Y <= self.upperRight.Y):
+		if(point.X >= self.lowerLeft.X and
+     point.X <= self.upperRight.X and
+	 point.Y >= self.lowerLeft.Y and
+	 point.Y <= self.upperRight.Y):
 			return True
 		else:
 			return False
@@ -69,22 +77,10 @@ def calculateSmallestRegion(leaf1:node, leaf2:node) -> region.region:
 		resultRegion = region.region(center=centerPoint, radius=distance/2)
 		return resultRegion
 '''
-# Calculates a MBB for 2-5 nodes.
-def calculateSmallestMBB(leafsList:list) -> mbb:
-	# Test if leafsList contains only leaf nodes. If not, it throws an error
-	for leaf in leafsList:
-		if not (isinstance(leaf, node) and leaf.leaf == True):
-			raise ValueError("Here is a mistake, the calculateSmallestMBB function only takes a list of leaf nodes!")
-	
-	smallestMBB_lowerLeft_X = min([leaf.value.X for leaf in leafsList])
-	smallestMBB_lowerLeft_Y = min([leaf.value.Y for leaf in leafsList])
-	smallestMBB_upperRight_X = max([leaf.value.X for leaf in leafsList])
-	smallestMBB_upperRight_Y = max([leaf.value.Y for leaf in leafsList])
-
-	smallestMBB_lowerLeft = point.point(x=smallestMBB_lowerLeft_X, y=smallestMBB_lowerLeft_Y, timestamp=0.0)
-	smallestMBB_upperRight = point.point(x=smallestMBB_upperRight_X, y=smallestMBB_upperRight_Y, timestamp=0.0)
-	smallestMBB = mbb(lowerLeft=smallestMBB_lowerLeft, upperRight=smallestMBB_upperRight)
-	
+def calculateSmallestMBB(leaf1:node, leaf2:node) -> mbb:
+	smallestMBB_X = min(leaf1.X, leaf2.X)
+	smallestMBB_Y = min(leaf1.Y, leaf2.Y)
+	smallestMBB = mbb(lowerLeft=smallestMBB_X, upperRight=smallestMBB_Y)
 	return smallestMBB
 
 class rTree:

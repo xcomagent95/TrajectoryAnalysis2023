@@ -4,6 +4,7 @@ import trajectory
 import point
 import region
 import utils
+import rtree
 import functions_template as functions
 
 
@@ -139,6 +140,31 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
 
+class minimlaBoundingBox(unittest.TestCase):
+
+    def testCreationMBB(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+
+        self.assertRaises(ValueError, rtree.mbb, p1, p1)
+        self.assertRaises(ValueError, rtree.mbb, p2, p1)
+
+        self.assertIs(type(rtree.mbb(p1, p2)), rtree.mbb)
+
+    def testInclusionOfPointInMBB(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        p3 = point.point(1, 1, None)
+        p4 = point.point(0, 1, None)
+        p5 = point.point(1, 0, None)
+        p6 = point.point(3, 3, None)
+
+        self.assertEqual(mbb.isPointInMbb(p3), True)
+        self.assertEqual(mbb.isPointInMbb(p4), True)
+        self.assertEqual(mbb.isPointInMbb(p5), True)
+        self.assertEqual(mbb.isPointInMbb(p6), False)
 
 if __name__ == "__main__":
     unittest.main()
