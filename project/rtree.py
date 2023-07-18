@@ -4,6 +4,8 @@ import region
 import numpy as np 
 import utils
 import itertools as it
+import plotly.express as px # remove
+import plotly.graph_objects as go # remove
 
 
 class mbb: 
@@ -49,7 +51,7 @@ class mbb:
 		float: area of the minimal bounding box
 		"""
 		width = self.upperRight.X - self.lowerLeft.X
-		height = self.upperRight.Y - self.upperRight.Y
+		height = self.upperRight.Y - self.lowerLeft.Y
 		return width * height
 
 # Nodes have 2 - 5 children, which can be Nodes or Leafs. 
@@ -102,9 +104,10 @@ def calculateSmallestMBB(leafsList:list) -> mbb:
 	return smallestMBB
 
 # This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
-def splitNode(self, currentNode:node, point:point.point) -> None:
+def splitNodeTo2Parts(currentNode:node, point:point.point) -> tuple:
+	#minPartition = ()
 	# In case an error occurs and the children list ist unequal to length 5
-	if len(currentNode.children) <= 5:
+	if len(currentNode.children) < 5:
 		raise ValueError("Here is a mistake!")
 	else: 
 		# Build node out of new point and add it to the children nodes list
@@ -125,9 +128,23 @@ def splitNode(self, currentNode:node, point:point.point) -> None:
 			mbb2_size = mbb2.getArea()
 
 			total_area = mbb1_size + mbb2_size
+			partitionsAndAreaSizes.append((list(partition), remaining_points, total_area))
 
-			partitionsAndAreaSizes.append((partition, remaining_points, total_area))
-
+		minPartition = min(partitionsAndAreaSizes, key = lambda partition: partition[2])
+		'''
+		# FOR VISUALIZATION
+		fig = px.scatter(x=[child.value.X for child in childrensList], y=[child.value.Y for child in childrensList])
+		bbox1 = calculateSmallestMBB(minPartition[0])
+		bbox2 = calculateSmallestMBB(minPartition[1])
+		fig.add_shape(type="rect",
+			x0=bbox1.lowerLeft.X, y0=bbox1.lowerLeft.Y, x1=bbox1.upperRight.X, y1=bbox1.upperRight.Y, 
+		)
+		fig.add_shape(type="rect",
+			x0=bbox2.lowerLeft.X, y0=bbox2.lowerLeft.Y, x1=bbox2.upperRight.X, y1=bbox2.upperRight.Y, 
+		)
+		fig.show()
+		'''
+		return minPartition
 
 class rTree:
 	def __init__(self, root:node=None, children=None) -> None:
@@ -136,31 +153,6 @@ class rTree:
 
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
-
-
-
-
-
-	'''
-	import math
-
-	# Function to calculate the Euclidean distance between two points (x1, y1) and (x2, y2)
-	def euclidean_distance(point1, point2):
-		x1, y1 = point1
-		x2, y2 = point2
-		return math.sqrt((x2 - x1)*2 + (y2 - y1)*2)
-
-	# Sample list of trajectory points
-	trajectory_points = [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (3.0, 3.0)]
-
-	# Sort the trajectory points based on their Euclidean distance from the origin (0, 0)
-	sorted_points = sorted(trajectory_points, key=lambda point: euclidean_distance(point, (0.0, 0.0)))
-
-	print("Sorted Trajectory Points based on Euclidean Distance:")
-	for point in sorted_points:
-		print(point)
-	'''
-
 
 	# This function iterates down to the leaf in whose region the given point falls
 	def findLeaf(self, node:node, point:point.point) -> node:

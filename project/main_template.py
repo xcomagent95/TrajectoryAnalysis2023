@@ -9,7 +9,6 @@ import rtree
 listOfTrajectories = utils.importTrajectories("Trajectories")
 #print(utils.pointDistance(listOfTrajectories[0][0], listOfTrajectories[0][2]))
 
-print(listOfTrajectories[0][0])
 tree = rtree.rTree()
 pointA = listOfTrajectories[0][0]
 pointB = listOfTrajectories[0][20]
@@ -23,7 +22,11 @@ node3 = rtree.node(pointC, root=False, leaf=True)
 node4 = rtree.node(pointD, root=False, leaf=True)
 node5 = rtree.node(pointE, root=False, leaf=True)
 node6 = rtree.node(pointF, root=False, leaf=True)
-childrensList = [node1, node2, node3, node4, node5, node6]
+childrensList = [node1, node2, node3, node4, node5]
+node7 = rtree.node(rtree.calculateSmallestMBB(childrensList), children=childrensList, root=False, leaf=False)
+
+#print(rtree.splitNode(node7, pointF))
+print(rtree.splitNode(node7, pointF))
 
 #print(rtree.calculateSmallestMBB([node1, node2]).lowerLeft)
 #print(rtree.calculateSmallestMBB(leafsList=[node1, node2]).upperRight)
