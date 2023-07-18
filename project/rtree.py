@@ -207,7 +207,7 @@ class rTree:
 				nodeWherePointShouldBeInserted.children.append(newNode) 
 			else: 
 				(part1, part2, total_area) = splitNodeTo2Parts(currentNode=nodeWherePointShouldBeInserted, point=point)
-				# Ff parental node got enough space for another child node:
+				# If parental node got enough space for another child node:
 				if len(nodeWherePointShouldBeInserted.parent.children) < 5:
 					newNodeFor1stPart = nodeWherePointShouldBeInserted
 					newNodeFor1stPart.children = part1
@@ -220,3 +220,8 @@ class rTree:
 					for child in newNodeFor2ndPart:
 						child.parent = newNodeFor2ndPart
 						child.leaf = True
+				
+				else:
+					# WHAT TO DO, IF PARENTAL NODE HAS NOT ENOUGH SPACE FOR ANOTHER CHILD NODE?
+					# HOW TO NOW FIND THE CORRECT PLACE?
+					pass
