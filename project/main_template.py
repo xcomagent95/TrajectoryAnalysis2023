@@ -14,9 +14,18 @@ tree = rtree.rTree()
 pointA = listOfTrajectories[0][0]
 pointB = listOfTrajectories[0][20]
 pointC = listOfTrajectories[0][30]
+pointD = listOfTrajectories[0][40]
+pointE = listOfTrajectories[0][45]
+pointF = listOfTrajectories[0][50]
 node1 = rtree.node(pointA, root=False, leaf=True)
 node2 = rtree.node(pointB, root=False, leaf=True)
-print(rtree.calculateSmallestMBB([node1, node2]).lowerLeft)
+node3 = rtree.node(pointC, root=False, leaf=True)
+node4 = rtree.node(pointD, root=False, leaf=True)
+node5 = rtree.node(pointE, root=False, leaf=True)
+node6 = rtree.node(pointF, root=False, leaf=True)
+childrensList = [node1, node2, node3, node4, node5, node6]
+
+#print(rtree.calculateSmallestMBB([node1, node2]).lowerLeft)
 #print(rtree.calculateSmallestMBB(leafsList=[node1, node2]).upperRight)
 #root = rtree.node(rtree.calculateSmallestRegion(node1, node2), children=[node1, node2], root=True, leaf=False)
 #tree.root = root

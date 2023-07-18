@@ -3,6 +3,7 @@ import trajectory
 import region
 import numpy as np 
 import utils
+import math 
 
 
 class mbb: 
@@ -94,15 +95,42 @@ class rTree:
 	# This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
 	def splitNode(self, currentNode:node, point:point.point) -> None:
 		# In case an error occurs and the children list ist unequal to length 5
-		if len(currentNode.children) != 5:
+		if len(currentNode.children) <= 5:
 			raise ValueError("Here is a mistake!")
 		else: 
+			# Build node out of new point and add it to the children nodes list
+			newNode = node(value=point, leaf=True) 
+			childrensList = currentNode.children
+			childrensList.append(newNode)
+
+
+
 			amountOfChildren = len(currentNode.children)
 			distanceArray = np.zeros([amountOfChildren,amountOfChildren])
 			for row in range(0,amountOfChildren):	
 				for col in range(0,amountOfChildren):
-					distanceArray[row][col] = utils.pointDistance(currentNode.children.value) # TO CONTINUE
-					# TBC
+					distanceArray[row][col] = utils.pointDistance(currentNode.children[row].value, currentNode.children[col].value) 
+			
+	'''
+	import math
+
+	# Function to calculate the Euclidean distance between two points (x1, y1) and (x2, y2)
+	def euclidean_distance(point1, point2):
+		x1, y1 = point1
+		x2, y2 = point2
+		return math.sqrt((x2 - x1)*2 + (y2 - y1)*2)
+
+	# Sample list of trajectory points
+	trajectory_points = [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (3.0, 3.0)]
+
+	# Sort the trajectory points based on their Euclidean distance from the origin (0, 0)
+	sorted_points = sorted(trajectory_points, key=lambda point: euclidean_distance(point, (0.0, 0.0)))
+
+	print("Sorted Trajectory Points based on Euclidean Distance:")
+	for point in sorted_points:
+		print(point)
+	'''
+
 
 	# This function iterates down to the leaf in whose region the given point falls
 	def findLeaf(self, node:node, point:point.point) -> node:
