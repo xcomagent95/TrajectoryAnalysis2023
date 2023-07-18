@@ -34,7 +34,6 @@ class mbb:
 		Returns:
 		bool: Boolean signifying inclusion of point in the minimal bounding box
 		"""
-
 		if(point.X >= self.lowerLeft.X and
 			point.X <= self.upperRight.X and
 			point.Y >= self.lowerLeft.Y and
@@ -44,6 +43,11 @@ class mbb:
 			return False
 		
 	def getArea(self) -> float:
+		"""Function to compute the area of a minimal bounding box
+
+		Returns:
+		float: area of the minimal bounding box
+		"""
 		width = self.upperRight.X - self.lowerLeft.X
 		height = self.upperRight.Y - self.upperRight.Y
 		return width * height
@@ -74,6 +78,14 @@ class node:
 
 def calculateSmallestMBB(leafsList:list) -> mbb:
 	# Test if leafsList contains only leaf nodes. If not, it throws an error
+	"""Function to calculate the minimal bounding box for a list of leafs
+
+	Parameters: 
+	leafsList (list(node)): List of nodes from which to compute a minimal bounding box
+
+	Returns:
+	mbb: Minimal bounding box of a set of leafs
+	"""
 	for leaf in leafsList:
 		if not (isinstance(leaf, node) and leaf.leaf == True):
 			raise ValueError("Here is a mistake, the calculateSmallestMBB function only takes a list of leaf nodes!")

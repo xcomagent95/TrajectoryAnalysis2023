@@ -4,6 +4,7 @@ import trajectory
 import point
 import region
 import utils
+import rtree
 import functions_template as functions
 
 class DouglasPeuckerTest(unittest.TestCase):
@@ -157,16 +158,16 @@ class SlidingWindowTest(unittest.TestCase):
       #  self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
 
 
-class solveQueryWithoutRTree(unittest.TestCase): 
-    
+class solveQueryWithoutRTree(unittest.TestCase):
     def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
-        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
-        
-        foundTrajectories = functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
-        
+        queryRegion = region.region(point.point(
+            0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+
+        foundTrajectories = functions.solveQueryWithoutRTree(
+            queryRegion, listOfTrajectories)
         self.assertEqual(len(foundTrajectories), 5)
-        
+
         self.assertEqual(any(x.number == 43 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 45 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
@@ -176,14 +177,12 @@ class solveQueryWithoutRTree(unittest.TestCase):
     def testEmptyTrajectoryList(self):
         listOfTrajectories = []
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
-        with self.assertRaises(TypeError):
-            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
             
     def testMalformedRegion(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
-        with self.assertRaises(TypeError):
-            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
 
 
 class minimlaBoundingBox(unittest.TestCase):
@@ -210,6 +209,14 @@ class minimlaBoundingBox(unittest.TestCase):
         self.assertEqual(mbb.isPointInMbb(p4), True)
         self.assertEqual(mbb.isPointInMbb(p5), True)
         self.assertEqual(mbb.isPointInMbb(p6), False)
-        
+
+    def getAreaofMinimalBoundingBox(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        self.assertEqual(mbb.getArea(), 4.0)
+
+
 if __name__ == "__main__":
     unittest.main()
