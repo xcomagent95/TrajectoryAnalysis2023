@@ -3,7 +3,7 @@ import trajectory
 import region
 import numpy as np 
 import utils
-import math 
+import itertools as it
 
 
 class mbb: 
@@ -13,6 +13,9 @@ class mbb:
 		Parameters: 
 		lowerLeft (point): Point at the lower left corner of the minimal bounding box
 		upperRight (point): Point at the upper right corner of the minimal bounding box
+		
+		Returns:
+		None: 
 		"""
 		if(lowerLeft.X >= upperRight.X):
 			raise ValueError("X coordinate of upper right corner must be greater that X coordinate of the lower left corner")
@@ -32,9 +35,9 @@ class mbb:
 		bool: Boolean signifying inclusion of point in the minimal bounding box
 		"""
 		if(point.X >= self.lowerLeft.X and
-           point.X <= self.upperRight.X and
-	       point.Y >= self.lowerLeft.Y and
-	       point.Y <= self.upperRight.Y):
+     point.X <= self.upperRight.X and
+	 point.Y >= self.lowerLeft.Y and
+	 point.Y <= self.upperRight.Y):
 			return True
 		else:
 			return False
@@ -63,22 +66,21 @@ class node:
 			else: 
 				self.value = value
 
-'''
-def calculateSmallestRegion(leaf1:node, leaf2:node) -> region.region:
-	if not (isinstance(leaf1.value, point.point) and isinstance(leaf2.value, point.point)):
-		raise ValueError("calculateSmallestRegion could also be used for two leaf nodes!")
-	else: 
-		distance = utils.pointDistance(leaf1.value, leaf2.value)
-		centerPointX = leaf1.value.X + (leaf2.value.X - leaf1.value.X) / 2
-		centerPointY = leaf1.value.Y + (leaf2.value.Y - leaf1.value.Y) / 2
-		centerPoint = point.point(centerPointX, centerPointY, 0.0)
-		resultRegion = region.region(center=centerPoint, radius=distance/2)
-		return resultRegion
-'''
-def calculateSmallestMBB(leaf1:node, leaf2:node) -> mbb:
-	smallestMBB_X = min(leaf1.X, leaf2.X)
-	smallestMBB_Y = min(leaf1.Y, leaf2.Y)
-	smallestMBB = mbb(lowerLeft=smallestMBB_X, upperRight=smallestMBB_Y)
+def calculateSmallestMBB(leafsList:list) -> mbb:
+	# Test if leafsList contains only leaf nodes. If not, it throws an error
+	for leaf in leafsList:
+		if not (isinstance(leaf, node) and leaf.leaf == True):
+			raise ValueError("Here is a mistake, the calculateSmallestMBB function only takes a list of leaf nodes!")
+	
+	smallestMBB_lowerLeft_X = min([leaf.value.X for leaf in leafsList])
+	smallestMBB_lowerLeft_Y = min([leaf.value.Y for leaf in leafsList])
+	smallestMBB_upperRight_X = max([leaf.value.X for leaf in leafsList])
+	smallestMBB_upperRight_Y = max([leaf.value.Y for leaf in leafsList])
+
+	smallestMBB_lowerLeft = point.point(x=smallestMBB_lowerLeft_X, y=smallestMBB_lowerLeft_Y, timestamp=0.0)
+	smallestMBB_upperRight = point.point(x=smallestMBB_upperRight_X, y=smallestMBB_upperRight_Y, timestamp=0.0)
+	smallestMBB = mbb(lowerLeft=smallestMBB_lowerLeft, upperRight=smallestMBB_upperRight)
+	
 	return smallestMBB
 
 class rTree:
@@ -99,15 +101,12 @@ class rTree:
 			newNode = node(value=point, leaf=True) 
 			childrensList = currentNode.children
 			childrensList.append(newNode)
+			# utils.pointDistance(p1, p2)
+
+			subpartitions = it.combinations(childrensList, 3)
+			for partition in subpartitions:
 
 
-
-			amountOfChildren = len(currentNode.children)
-			distanceArray = np.zeros([amountOfChildren,amountOfChildren])
-			for row in range(0,amountOfChildren):	
-				for col in range(0,amountOfChildren):
-					distanceArray[row][col] = utils.pointDistance(currentNode.children[row].value, currentNode.children[col].value) 
-			
 	'''
 	import math
 
