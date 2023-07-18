@@ -223,7 +223,9 @@ class SlidingWindowTest(unittest.TestCase):
         ]
         controlTraj = trajectory.trajectory(1, points=[point.point(
             p[0], p[1], idx) for idx, p in enumerate(controlPoints)])
-
+        
+        epsilon = 0
+        
         self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
 
 
@@ -236,7 +238,7 @@ class solveQueryWithoutRTree(unittest.TestCase):
 
         foundTrajectories = functions.solveQueryWithoutRTree(
             queryRegion, listOfTrajectories)
-        self.assertEqual(len(foundTrajectories), 5)  # fails
+        self.assertEqual(len(foundTrajectories), 5)
 
         self.assertEqual(any(x.number == 43 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 45 for x in foundTrajectories), True)
@@ -247,14 +249,12 @@ class solveQueryWithoutRTree(unittest.TestCase):
     def testEmptyTrajectoryList(self):
         listOfTrajectories = []
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
-        with self.assertRaises(TypeError):
-            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
             
     def testMalformedRegion(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
-        with self.assertRaises(TypeError):
-            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
             
 if __name__ == "__main__":
     unittest.main()

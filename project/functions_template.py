@@ -209,7 +209,7 @@ def solveQueryWithoutRTree(r:region,trajectories:list) -> list:
     
     """
     if not len(trajectories) > 0:
-        raise ValueError("List of trajectories is emmpty.")
+        raise ValueError("List of trajectories is empty.")
     elif r.radius <= 0:
         raise ValueError("Region is malformed.")
     result = []
