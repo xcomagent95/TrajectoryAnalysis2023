@@ -6,7 +6,6 @@ import region
 import utils
 import functions_template as functions
 
-
 class DouglasPeuckerTest(unittest.TestCase):
     def test1(self):
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
@@ -160,7 +159,7 @@ class SlidingWindowTest(unittest.TestCase):
 
 class solveQueryWithoutRTree(unittest.TestCase): 
     
-    def examplaryQuery(self):
+    def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
         
@@ -174,20 +173,17 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
         
-    def emptyTrajectoryList(self):
+    def testEmptyTrajectoryList(self):
         listOfTrajectories = []
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
         with self.assertRaises(TypeError):
             self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
             
-    def malformedRegion(self):
+    def testMalformedRegion(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
         with self.assertRaises(TypeError):
             self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
             
-    
-
-
 if __name__ == "__main__":
     unittest.main()
