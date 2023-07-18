@@ -31,9 +31,9 @@ class mbb:
 		bool: Boolean signifying inclusion of point in the minimal bounding box
 		"""
 		if(point.X >= self.lowerLeft.X and
-     point.X <= self.upperRight.X and
-	 point.Y >= self.lowerLeft.Y and
-	 point.Y <= self.upperRight.Y):
+           point.X <= self.upperRight.X and
+	       point.Y >= self.lowerLeft.Y and
+	       point.Y <= self.upperRight.Y):
 			return True
 		else:
 			return False
