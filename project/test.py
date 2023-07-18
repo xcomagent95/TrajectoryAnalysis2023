@@ -166,10 +166,10 @@ class DynamicTimeWarpingTest(unittest.TestCase):
 class SlidingWindowTest(unittest.TestCase):
 
     def test_length0(self):   # fails as traj with 0 points is not created
-        points = []
+        points = None
         traj = trajectory.trajectory(1, points=points)
         epsilon = 1
-        self.assertEqual(functions.slidingWindow(traj, epsilon), [])
+        self.assertEqual(functions.slidingWindow(traj, epsilon).points, [])
 
     def test_length1(self):
         #build trajectory
@@ -195,12 +195,14 @@ class SlidingWindowTest(unittest.TestCase):
         self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
     def test_epsilonNegativ(self):
-        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        traj = listOfTrajectories[0]
         epsilon = -1
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
     def test_epsilon0(self):
-        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        traj = listOfTrajectories[0]
         epsilon = 0
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
     
@@ -225,7 +227,7 @@ class SlidingWindowTest(unittest.TestCase):
     
         epsilon = 1
 
-        self.assertEqual(functions.slidingWindow(traj, epsilon),controlTraj)
+        self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
 
 
 
