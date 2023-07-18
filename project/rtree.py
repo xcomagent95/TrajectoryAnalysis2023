@@ -34,7 +34,7 @@ class mbb:
 		Returns:
 		bool: Boolean signifying inclusion of point in the minimal bounding box
 		"""
-		if(point.X >= self.lowerLeft.X and
+		if(point.X >= self.lowerLeft.X and 
      point.X <= self.upperRight.X and
 	 point.Y >= self.lowerLeft.Y and
 	 point.Y <= self.upperRight.Y):
@@ -105,7 +105,7 @@ class rTree:
 
 			subpartitions = it.combinations(childrensList, 3)
 			for partition in subpartitions:
-
+				pass
 
 	'''
 	import math

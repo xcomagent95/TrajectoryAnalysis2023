@@ -4,9 +4,7 @@ import trajectory
 import point
 import region
 import utils
-import rtree
 import functions_template as functions
-
 
 class DouglasPeuckerTest(unittest.TestCase):
     def test1(self):
@@ -120,13 +118,48 @@ class DouglasPeuckerTest(unittest.TestCase):
             self.assertIsInstance(p, point.point)
 
 
+# not done yet
+# TODO: 
+# check if result is correct
+# check epsilon input (0<, 1?)
 
 class SlidingWindowTest(unittest.TestCase):
-    pass
+
+   
+    def testLength0(self):
+        traj = [] 
+        epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon),[])
+
+    def testLength1(self):
+        traj = [[0,0]] 
+        epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+
+    def testLength2(self):
+        traj = [[0,0],[1,1]] 
+        epsilon = 1
+        self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+
+    def testEpsilonNegativ(self):
+        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        epsilon = -1
+        self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
+
+    def testEpsilon0(self):
+        traj = [[1, 1], [2, 2], [3, 3], [4, 4]] 
+        epsilon = 0
+        self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
+    
+   # def testIfCorrect(self):
+    #    traj = [] 
+     #   epsilon = 1
+      #  self.assertEqual(functions.slidingWindow(traj, epsilon),traj)
+
 
 class solveQueryWithoutRTree(unittest.TestCase): 
     
-    def test1(self):
+    def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
         
@@ -139,6 +172,19 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
+        
+    def testEmptyTrajectoryList(self):
+        listOfTrajectories = []
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+        with self.assertRaises(TypeError):
+            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+            
+    def testMalformedRegion(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
+        with self.assertRaises(TypeError):
+            self.functions.solveQueryWithoutRTree(queryRegion, listOfTrajectories)
+
 
 class minimlaBoundingBox(unittest.TestCase):
 
@@ -164,6 +210,6 @@ class minimlaBoundingBox(unittest.TestCase):
         self.assertEqual(mbb.isPointInMbb(p4), True)
         self.assertEqual(mbb.isPointInMbb(p5), True)
         self.assertEqual(mbb.isPointInMbb(p6), False)
-
+        
 if __name__ == "__main__":
     unittest.main()
