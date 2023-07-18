@@ -148,7 +148,6 @@ class minimlaBoundingBox(unittest.TestCase):
 
         self.assertRaises(ValueError, rtree.mbb, p1, p1)
         self.assertRaises(ValueError, rtree.mbb, p2, p1)
-
         self.assertIs(type(rtree.mbb(p1, p2)), rtree.mbb)
 
     def testInclusionOfPointInMBB(self):
