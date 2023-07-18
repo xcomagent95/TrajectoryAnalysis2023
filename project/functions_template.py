@@ -154,7 +154,6 @@ def solveQueryWithRTree(r:region,trajectories:list) -> list:
     
      Returns:
      list(trajectories): List of trajectories returned by the region query
-    
     """
     return None
 # ---------------------------------------------------
@@ -169,7 +168,6 @@ def solveQueryWithoutRTree(r:region,trajectories:list) -> list:
     
      Returns:
      list(trajectories): List of trajectories returned by the region query
-    
     """
     result = []
     for t in trajectories: #iterate over trajectories

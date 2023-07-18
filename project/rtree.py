@@ -13,9 +13,6 @@ class mbb:
 		Parameters: 
 		lowerLeft (point): Point at the lower left corner of the minimal bounding box
 		upperRight (point): Point at the upper right corner of the minimal bounding box
-		
-		Returns:
-		None: 
 		"""
 		if(lowerLeft.X >= upperRight.X):
 			raise ValueError("X coordinate of upper right corner must be greater that X coordinate of the lower left corner")
@@ -35,9 +32,9 @@ class mbb:
 		bool: Boolean signifying inclusion of point in the minimal bounding box
 		"""
 		if(point.X >= self.lowerLeft.X and
-     point.X <= self.upperRight.X and
-	 point.Y >= self.lowerLeft.Y and
-	 point.Y <= self.upperRight.Y):
+           point.X <= self.upperRight.X and
+	       point.Y >= self.lowerLeft.Y and
+	       point.Y <= self.upperRight.Y):
 			return True
 		else:
 			return False
