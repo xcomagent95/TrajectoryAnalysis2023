@@ -138,7 +138,7 @@ class rTree:
 			# In this case, the current root node has to become a children node, a leaf
 			rootThatBecomesChild = self.root
 			# and a new root node gets initialized.
-			newRoot = node(value=self.calculateSmallestRegion(leaf1=rootThatBecomesChild, leaf2=newNode), children=[], root=True)
+			newRoot = node(value=calculateSmallestMBB(leafsList=[rootThatBecomesChild, newNode]), children=[], root=True)
 			# The new root node gets referenced as the tree's root.
 			self.root = newRoot
 			# Since the old root is now a children of the new root, the old root's parent is the new root.
@@ -160,28 +160,3 @@ class rTree:
 				nodeWherePointShouldBeInserted.children.append(newNode) 
 			else: 
 				self.splitNode(currentNode=nodeWherePointShouldBeInserted, point=point)
-
-			'''
-			for child in self.children:
-				currentNode = child
-				if currentNode.leaf == False:
-					if currentNode.value.pointInRegion(point):
-						return
-
-				# Loops down until the node is found which is the parent of a leaf and the region covers the new point
-				while currentNode.leaf != True:
-					if isinstance(currentNode.value, region.region):
-						if currentNode.value.pointInRegion(point):
-							break # should break while look from line 51
-					else:
-						raise ValueError("Here is a mistake, one node has a Region instance as value but is no leaf!")
-				# If a leaf is found we have to go back to the parent node
-				if currentNode.leaf == True:	
-					currentNode = currentNode.parent
-
-				if len(self.children) < 5:
-					newNode = node(value=point, parent=currentNode, root=False, leaf=True)
-					self.children.append(newNode)
-				else:
-					self.splitNode(self, currentNode, point)
-			'''
