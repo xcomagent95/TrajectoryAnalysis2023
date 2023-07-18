@@ -206,4 +206,17 @@ class rTree:
 				newNode.parent = nodeWherePointShouldBeInserted
 				nodeWherePointShouldBeInserted.children.append(newNode) 
 			else: 
-				self.splitNode(currentNode=nodeWherePointShouldBeInserted, point=point)
+				(part1, part2, total_area) = splitNodeTo2Parts(currentNode=nodeWherePointShouldBeInserted, point=point)
+				# Ff parental node got enough space for another child node:
+				if len(nodeWherePointShouldBeInserted.parent.children) < 5:
+					newNodeFor1stPart = nodeWherePointShouldBeInserted
+					newNodeFor1stPart.children = part1
+					newNodeFor1stPart.value = calculateSmallestMBB(part1)
+					for child in newNodeFor1stPart.children:
+						child.parent = newNodeFor1stPart
+						child.leaf = True
+					
+					newNodeFor2ndPart = node(value=calculateSmallestMBB(part2), parent=newNodeFor1stPart.parent, children=part2)
+					for child in newNodeFor2ndPart:
+						child.parent = newNodeFor2ndPart
+						child.leaf = True
