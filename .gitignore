@@ -1,3 +1,4 @@
 .idea/
 project/__pycache__/
 project/__MACOSX/
+.vscode
