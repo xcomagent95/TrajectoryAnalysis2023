@@ -4,6 +4,7 @@ import region
 import numpy as np 
 import utils
 import itertools as it
+import math
 import plotly.express as px # remove
 import plotly.graph_objects as go # remove
 
@@ -44,6 +45,13 @@ class mbb:
 			return True
 		else:
 			return False
+	
+	def distancePointToMbb(self, point:point.point) -> float:
+		dx = max(abs(point.X - self.lowerLeft.X) - (self.upperRight.X - self.lowerLeft.X) / 2, 0)
+		dy = max(abs(point.Y - self.lowerLeft.Y) - (self.upperRight.Y - self.lowerLeft.Y) / 2, 0)
+
+		distance = math.sqrt(dx**2 + dy**2)
+		return distance
 		
 	def getArea(self) -> float:
 		"""Function to compute the area of a minimal bounding box
@@ -180,16 +188,19 @@ class rTree:
 	def findLeaf(self, node:node, point:point.point) -> node:
 		currentNode = node
 		#print("l.70")
+		distancesFromPointToChildren = []
 		for child in currentNode.children:
-			#print("l.73")
+			pass # TO DO: The current version won't produce a height balanced tree.... !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+			'''#print("l.73")
 			if child.leaf == False:
 			#	print("l.75 child.leaf == False")
-				if child.value.isPointInMbb(point):
+				if child.value.isPointInMbb(point): # here it also has to be tested with child mbb is closest to point
 			#		print("l.77 child.value.pointInRegion == True")
 					currentNode = child
 			else: 
 			#	print("l.80 child.leaf == True")
-				return currentNode
+				return currentNode'''
 		#print("l.82 for loop left")
 		return currentNode
 
@@ -205,7 +216,6 @@ class rTree:
 
 		# If root got no children so far, this is the first child
 		if self.children is None: 
-			print('self.children is None')
 			# In this case, the current root node has to become a children node, a leaf
 			rootThatBecomesChild = self.root
 			# and a new root node gets initialized.
@@ -226,8 +236,9 @@ class rTree:
 		
 		# If the tree has already more than 1 level:
 		else:
-			print('Children list not NONE')
-			nodeWherePointShouldBeInserted = self.findLeaf(self.root, point)
+
+			print(f'Children list not NONE, but {len(self.children)}')
+			nodeWherePointShouldBeInserted = self.findLeaf(self.root, point) # mistake location
 			print('l.231',len(nodeWherePointShouldBeInserted.children))
 			print('nodeWherePointShouldBeInserted',nodeWherePointShouldBeInserted)
 			# After finding the node where the new point fits in spatially, the point can be added as a new node to the childrens list or the current node has to be splitted
