@@ -78,7 +78,7 @@ def slidingWindow(traj, epsilon):
         """
     if len(traj) <= 2:
         return traj
-    if epsilon < 0:
+    if epsilon <= 0:
         raise ValueError("Epsilon must be greater than 0")
     result_list = slidingWindow_recursive(traj, epsilon, 0, [])
     return trajectory.trajectory(-1, result_list, unique_id=f"Sliding Window for Trajectory {traj.number}")
@@ -97,6 +97,8 @@ def slidingWindow_recursive(traj, epsilon, start_index, result_list):
          trajectory: Array of points
 
         """
+    if(epsilon <= 0):
+        raise ValueError("Epsilon must be greater than 0")
     result_list.append(traj[start_index])
     if start_index == len(traj) - 1:
         return result_list
@@ -206,6 +208,10 @@ def solveQueryWithoutRTree(r:region,trajectories:list) -> list:
      list(trajectories): List of trajectories returned by the region query
     
     """
+    if not len(trajectories) > 0:
+        raise ValueError("List of trajectories is empty.")
+    elif r.radius <= 0:
+        raise ValueError("Region is malformed.")
     result = []
     for t in trajectories: #iterate over trajectories
         for p in t.points: #iterate over points

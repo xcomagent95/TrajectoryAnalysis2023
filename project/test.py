@@ -9,7 +9,6 @@ import region
 import utils
 import functions_template as functions
 
-
 class DouglasPeuckerTest(unittest.TestCase):
     def test1(self):  # add better name
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
@@ -164,10 +163,10 @@ class DynamicTimeWarpingTest(unittest.TestCase):
 class SlidingWindowTest(unittest.TestCase):
 
     def test_length0(self):   # fails as traj with 0 points is not created
-        points = []
+        points = None
         traj = trajectory.trajectory(1, points=points)
         epsilon = 1
-        self.assertEqual(functions.slidingWindow(traj, epsilon), [])
+        self.assertEqual(functions.slidingWindow(traj, epsilon).points, [])
 
     def test_length1(self):
         # build trajectory
@@ -193,12 +192,14 @@ class SlidingWindowTest(unittest.TestCase):
         self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
     def test_epsilonNegativ(self):
-        traj = [[1, 1], [2, 2], [3, 3], [4, 4]]
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        traj = listOfTrajectories[0]
         epsilon = -1
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
     def test_epsilon0(self):
-        traj = [[1, 1], [2, 2], [3, 3], [4, 4]]
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        traj = listOfTrajectories[0]
         epsilon = 0
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
@@ -220,31 +221,38 @@ class SlidingWindowTest(unittest.TestCase):
         ]
         controlTraj = trajectory.trajectory(1, points=[point.point(
             p[0], p[1], idx) for idx, p in enumerate(controlPoints)])
-
-        epsilon = 1
+        epsilon = 0
+        
+        self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
 
         self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
 
 
 class solveQueryWithoutRTree(unittest.TestCase):
-
-    def test1(self):
+    def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(
             0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
 
         foundTrajectories = functions.solveQueryWithoutRTree(
             queryRegion, listOfTrajectories)
-        self.assertEqual(len(foundTrajectories), 5)  # fails
+        self.assertEqual(len(foundTrajectories), 5)
 
         self.assertEqual(any(x.number == 43 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 45 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
-
-
-# Import the function you want to test
+        
+    def testEmptyTrajectoryList(self):
+        listOfTrajectories = []
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
+            
+    def testMalformedRegion(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
+        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
 
 
 class TestSegmentTrajectory(unittest.TestCase):
@@ -283,7 +291,6 @@ class TestSegmentTrajectory(unittest.TestCase):
         self.assertEqual(len(segmented_trajectory), 2)
         self.assertEqual(len(segmented_trajectory[0]), 3)
         self.assertEqual(len(segmented_trajectory[1]), 2)
-
 
 if __name__ == "__main__":
     unittest.main()
