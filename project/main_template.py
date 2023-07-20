@@ -3,6 +3,7 @@ import point
 import region
 import utils
 import functions_template as functions
+from datetime import datetime, time, timedelta
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
@@ -27,7 +28,7 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 # Calculate the distance between two trajectories with Closest Pair Distance
 
 dist_calc_with_closest_pair = functions.closestPairDistance(
-    listOfTrajectories[0], listOfTrajectories[1])
+    listOfTrajectories[6], listOfTrajectories[7])
 print(
     f'The minimum as calculated by applying Closest Pair Distance is {dist_calc_with_closest_pair}')
 
@@ -37,15 +38,15 @@ dist_calc_with_dynamic_time_warping = functions.dynamicTimeWarping(
 print(
     f'The minimum as calculated by applying Dynamic Time Warping is {dist_calc_with_dynamic_time_warping}')
 
-# Perform Dynamic Time Warping on pairs of trajectories
-for i in range(len(listOfTrajectories) - 1):
-    for j in range(i + 1, len(listOfTrajectories)):
-        firstTrajectory = listOfTrajectories[i]
-        secondTrajectory = listOfTrajectories[j]
-        dynamic_time_warping_distance = functions.dynamicTimeWarping(
-            firstTrajectory, secondTrajectory)
-        print(
-            f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
+# # Perform Dynamic Time Warping on pairs of trajectories
+# for i in range(len(listOfTrajectories) - 1):
+#     for j in range(i + 1, len(listOfTrajectories)):
+#         firstTrajectory = listOfTrajectories[i]
+#         secondTrajectory = listOfTrajectories[j]
+#         dynamic_time_warping_distance = functions.dynamicTimeWarping(
+#             firstTrajectory, secondTrajectory)
+#         print(
+#             f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
 
 # Build R-tree with all given 62 trajectories
 
@@ -61,3 +62,18 @@ if foundTrajectories != None:   # is not None:
         print("No trajectories match the query.")
     for t in foundTrajectories:
         print(t.number)
+
+# The following code block reads data, performs trajectory segmentation and displays the output
+
+# User specifies the time interval threshold
+time_interval_in_minutes = 1
+
+segmented_trajectory = utils.segmentTrajectory(
+    listOfTrajectories[29], time_interval_in_minutes)
+
+# Print the segments
+for idx, segment in enumerate(segmented_trajectory, start=1):
+    print(f"Segment {idx}:")
+    for point in segment:
+        print(f"X: {point.X}, Y: {point.Y}, Timestamp: {point.timestamp}")
+    print("-------")
