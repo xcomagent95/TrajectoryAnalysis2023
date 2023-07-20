@@ -210,9 +210,11 @@ class rTree:
 				return nearestChild[0]
 			
 			elif len(nodesThatAreLeafs) == 0:
+				pass
 				# to do
 		
 			else: 
+				pass
 				# to do 
 				
 
@@ -276,6 +278,7 @@ class rTree:
 				newNonLeafNode = node(value=calculateSmallestMBB([nodeToAddNewNode, newNode]), parent=nodeToAddNewNode.parent, children=[nodeToAddNewNode, newNode])
 				nodeToAddNewNode.parent = newNonLeafNode
 			else:
+				pass
 				# mbb has to be mofied or split performed
 
 			# If there are less than 5 children in this level, just add the new node here
