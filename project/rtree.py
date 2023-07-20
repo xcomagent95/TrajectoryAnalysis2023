@@ -185,10 +185,45 @@ class rTree:
 		return None
 
 	# This function iterates down to the leaf in whose region the given point falls
-	def findLeaf(self, node:node, point:point.point) -> node:
-		currentNode = node
+	def findNode(self, point:point.point) -> node:
+		foundNode = self.root
+		if foundNode.leaf:
+			return foundNode
+		elif foundNode.children < 5:
+			return foundNode
+		else:
+			nodesThatAreNotLeaf = []
+			nodesThatAreLeafs = []
+			# First check how many leafs and non-leafs are in the level
+			for child in foundNode.children:
+				if isinstance(child.value, mbb):
+					nodesThatAreNotLeaf.append(child)
+				elif isinstance(child.value, point.point):
+					nodesThatAreLeafs.append(child)
+			
+			# If ONLY LEAFS are in this level 
+			if len(nodesThatAreNotLeaf) == 0:
+				distancesFromPointToChildren = []
+				for child in foundNode.children:
+					distancesFromPointToChildren.append(child, (utils.calculateDistance(child.value, point)))
+				nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
+				return nearestChild[0]
+			
+			elif len(nodesThatAreLeafs) == 0:
+				# to do
+		
+			else: 
+				# to do 
+				
+
+			mbbPointFallsInto = []
+			distancesFromPointToChildren = []
+			for child in foundNode.children:
+				if isinstance(child.value, mbb):
+					if child.value.isPointInMbb(point):
+						mbbPointFallsInto.append(child)
+					
 		#print("l.70")
-		distancesFromPointToChildren = []
 		for child in currentNode.children:
 			pass # TO DO: The current version won't produce a height balanced tree.... !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -202,7 +237,7 @@ class rTree:
 			#	print("l.80 child.leaf == True")
 				return currentNode'''
 		#print("l.82 for loop left")
-		return currentNode
+		return foundNode
 
 	# This function inserts a given point
 	def insertPoint(self, point:point.point) -> None: # Die idee ist ein rekursiver ansatz an dieser stelle
@@ -236,9 +271,22 @@ class rTree:
 		
 		# If the tree has already more than 1 level:
 		else:
+			nodeToAddNewNode = self.findNode(point) # returned node can be leaf or non-leaf
+			if nodeToAddNewNode.leaf:
+				newNonLeafNode = node(value=calculateSmallestMBB([nodeToAddNewNode, newNode]), parent=nodeToAddNewNode.parent, children=[nodeToAddNewNode, newNode])
+				nodeToAddNewNode.parent = newNonLeafNode
+			else:
+				# mbb has to be mofied or split performed
+
+			# If there are less than 5 children in this level, just add the new node here
+			if len(self.children) < 5:
+				self.children.append(newNode)
+			# Only if this level is full, go to the next level 
+			else: 
+				self.findNode(point) # to continue
 
 			print(f'Children list not NONE, but {len(self.children)}')
-			nodeWherePointShouldBeInserted = self.findLeaf(self.root, point) # mistake location
+			nodeWherePointShouldBeInserted = self.findNode(point) # mistake location
 			print('l.231',len(nodeWherePointShouldBeInserted.children))
 			print('nodeWherePointShouldBeInserted',nodeWherePointShouldBeInserted)
 			# After finding the node where the new point fits in spatially, the point can be added as a new node to the childrens list or the current node has to be splitted
