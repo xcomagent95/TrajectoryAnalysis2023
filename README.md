@@ -11,6 +11,7 @@
    - ~~Implement the Douglas-Peucker algorithm to simplify a given trajectory (basic function)~~
    - ~~Implement the Sliding-Window-Algorithm (feature)~~ (Needs to be tested)
    - ~~Visualize one original and one simplified trajectory using the implemented methods (feature)~~
+   - ~~Additional Feature: Trajectory Segmentation based on predefined time difference input.~~
 3. Indexing
    - Distance Measures: Implement distance measures for trajectories
      - ~~Closest-Pair-Distance (basic function)~~ (needs to be tested)
