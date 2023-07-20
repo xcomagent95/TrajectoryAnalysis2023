@@ -45,6 +45,23 @@ class mbb:
 			return True
 		else:
 			return False
+		
+	def isMBBInMBB(self, mbb) -> bool:
+		"""Function to test if a MBB is inside a minimal bounding box
+
+		Parameters: 
+		mbb: minimal bounding box: point for which to test inclusion in the minimal bounding box
+
+		Returns:
+		bool: Boolean signifying inclusion of mbb in the minimal bounding box
+		"""
+		if (mbb.lowerLeft.X >= self.lowerLeft.X and 
+			mbb.lowerLeft.Y >= self.lowerLeft.Y and
+			mbb.upperRight.X <= self.upperRight.X and
+			mbb.upperRight.Y <= self.upperRight.Y):
+			return True
+		else:
+			return False
 	
 	def distancePointToMbb(self, point:point.point) -> float:
 		dx = max(abs(point.X - self.lowerLeft.X) - (self.upperRight.X - self.lowerLeft.X) / 2, 0)
