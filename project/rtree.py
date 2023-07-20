@@ -63,6 +63,10 @@ class mbb:
 		else:
 			return False
 	
+	def distanceMbbToMbb(self, theOtherMbb) -> float:
+		
+		return distance
+
 	def distancePointToMbb(self, point:point.point) -> float:
 		dx = max(abs(point.X - self.lowerLeft.X) - (self.upperRight.X - self.lowerLeft.X) / 2, 0)
 		dy = max(abs(point.Y - self.lowerLeft.Y) - (self.upperRight.Y - self.lowerLeft.Y) / 2, 0)
@@ -84,10 +88,10 @@ class mbb:
 '''
 '''
 class node:
-	# value (mbb OR point)
+	# value (mbb)
 	# children (None OR list)
 	# leaf (boolean)
-	def __init__(self, value, parent=None, children=None, root:bool=False, leaf:bool=False) -> None:
+	def __init__(self, value:mbb, parent=None, children=None, root:bool=False, leaf:bool=False) -> None:
 		self.leaf = leaf
 		self.root = root
 		self.parent = parent
@@ -99,28 +103,28 @@ class node:
 				raise ValueError("Leafs do not have any children!")
 			else: 
 				self.children = children
+			'''			
 			if type(self.value) != point.point:
 				raise ValueError("Leafs has to be Points not Minimal Bounding Boxes!")
 			else: 
 				self.value = value
+			'''
 
 	def __str__(self) -> str:
-		if self.leaf == True:
-			string = f"({self.value.X},{self.value.Y})"
-		else: 
-			string = f"({self.value})"
+		string = f"(({self.value.lowerLeftX},{self.value.lowerLeftY}),({self.value.upperRight.X},{self.value.upperRight.Y}))"
 		return string
 
-def calculateSmallestMBB(leafsList:list) -> mbb:
+def calculateSmallestMBB(nodeList:list) -> mbb:
 	# Test if leafsList contains only leaf nodes. If not, it throws an error
 	"""Function to calculate the minimal bounding box for a list of leafs
 
 	Parameters: 
-	leafsList (list(node)): List of nodes from which to compute a minimal bounding box
+	nodeList (list(mbb)): List of nodes from which to compute a minimal bounding box
 
 	Returns:
 	mbb: Minimal bounding box of a set of leafs
 	"""
+	'''
 	for leaf in leafsList:
 		if not (isinstance(leaf, node) and leaf.leaf == True):
 			raise ValueError("Here is a mistake, the calculateSmallestMBB function only takes a list of leaf nodes!")
@@ -129,6 +133,16 @@ def calculateSmallestMBB(leafsList:list) -> mbb:
 	smallestMBB_lowerLeft_Y = min([leaf.value.Y for leaf in leafsList])
 	smallestMBB_upperRight_X = max([leaf.value.X for leaf in leafsList])
 	smallestMBB_upperRight_Y = max([leaf.value.Y for leaf in leafsList])
+
+	smallestMBB_lowerLeft = point.point(x=smallestMBB_lowerLeft_X, y=smallestMBB_lowerLeft_Y, timestamp=0.0)
+	smallestMBB_upperRight = point.point(x=smallestMBB_upperRight_X, y=smallestMBB_upperRight_Y, timestamp=0.0)
+	smallestMBB = mbb(lowerLeft=smallestMBB_lowerLeft, upperRight=smallestMBB_upperRight)
+	'''
+
+	smallestMBB_lowerLeft_X = min([node.value.lowerLeft.X for node in nodeList])
+	smallestMBB_lowerLeft_Y = min([node.value.lowerLeft.Y for node in nodeList])
+	smallestMBB_upperRight_X = max([node.value.upperRight.X for node in nodeList])
+	smallestMBB_upperRight_Y = max([node.value.upperRightY for node in nodeList])
 
 	smallestMBB_lowerLeft = point.point(x=smallestMBB_lowerLeft_X, y=smallestMBB_lowerLeft_Y, timestamp=0.0)
 	smallestMBB_upperRight = point.point(x=smallestMBB_upperRight_X, y=smallestMBB_upperRight_Y, timestamp=0.0)
@@ -188,21 +202,22 @@ class rTree:
 		string = ""
 		if self.root != None:
 			if self.root.leaf == True:
-				string += f"Root: ({self.root.value.X}, {self.root.value.Y})\n"
+				string += f"Root: (({self.root.lowerLeft.X},{self.root.lowerLeft.Y}), ({self.root.upperRight.X},{self.root.upperRight.Y}))\n"
 			else:
 				string += f"Root: ({self.root.value})\n"
 			if self.children != None:
 				print('len list', len(self.children))
 				for child in self.children:
 					if child.leaf == True:
-						string += f"Children: {child.value.X}, {child.value.Y}, "
+						string += f"Children: ({child.value.lowerLeft.X},{child.value.lowerLeft.Y}), ({child.value.upperRight.X},{child.value.upperRight.Y}), "
 		return string
 
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
 
 	# This function iterates down to the leaf in whose region the given point falls
-	def findNode(self, point:point.point) -> node:
+	def findNode(self, newNode:node) -> node:
+		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
 		foundNode = self.root
 		if foundNode.leaf:
 			return foundNode
@@ -213,22 +228,25 @@ class rTree:
 			nodesThatAreLeafs = []
 			# First check how many leafs and non-leafs are in the level
 			for child in foundNode.children:
-				if isinstance(child.value, mbb):
+				if not child.leaf:
 					nodesThatAreNotLeaf.append(child)
-				elif isinstance(child.value, point.point):
+				elif child.leaf:
 					nodesThatAreLeafs.append(child)
 			
 			# If ONLY LEAFS are in this level 
 			if len(nodesThatAreNotLeaf) == 0:
 				distancesFromPointToChildren = []
 				for child in foundNode.children:
-					distancesFromPointToChildren.append(child, (utils.calculateDistance(child.value, point)))
+					distancesFromPointToChildren.append(child, (utils.calculateDistance(child.value, newNodesPoint)))
 				nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
 				return nearestChild[0]
 			
 			elif len(nodesThatAreLeafs) == 0:
+				for child in foundNode.children:
+					pass # to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
+					# than do something recursive
 				pass
-				# to do
+				# to complete
 		
 			else: 
 				pass
@@ -243,8 +261,8 @@ class rTree:
 						mbbPointFallsInto.append(child)
 					
 		#print("l.70")
-		for child in currentNode.children:
-			pass # TO DO: The current version won't produce a height balanced tree.... !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		#for child in currentNode.children:
+			#pass # TO DO: The current version won't produce a height balanced tree.... !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 			'''#print("l.73")
 			if child.leaf == False:
@@ -260,7 +278,8 @@ class rTree:
 
 	# This function inserts a given point
 	def insertPoint(self, point:point.point) -> None: # Die idee ist ein rekursiver ansatz an dieser stelle
-		newNode = node(value=point, parent=None, root=False, leaf=True)
+		pointToMbb = mbb(lowerLeft=point, upperRight=point)
+		newNode = node(value=pointToMbb, parent=None, root=False, leaf=True)
 		
 		# If the tree got no root so far, the inserted point becomes the root
 		if self.root == None:
@@ -273,7 +292,7 @@ class rTree:
 			# In this case, the current root node has to become a children node, a leaf
 			rootThatBecomesChild = self.root
 			# and a new root node gets initialized.
-			newRoot = node(value=calculateSmallestMBB(leafsList=[rootThatBecomesChild, newNode]), children=[], root=True)
+			newRoot = node(value=calculateSmallestMBB(nodeList=[rootThatBecomesChild, newNode]), children=[], root=True)
 			# The new root node gets referenced as the tree's root.
 			self.root = newRoot
 			# Since the old root is now a children of the new root, the old root's parent is the new root.
@@ -290,7 +309,7 @@ class rTree:
 		
 		# If the tree has already more than 1 level:
 		else:
-			nodeToAddNewNode = self.findNode(point) # returned node can be leaf or non-leaf
+			nodeToAddNewNode = self.findNode(newNode) # returned node can be leaf or non-leaf
 			if nodeToAddNewNode.leaf:
 				newNonLeafNode = node(value=calculateSmallestMBB([nodeToAddNewNode, newNode]), parent=nodeToAddNewNode.parent, children=[nodeToAddNewNode, newNode])
 				nodeToAddNewNode.parent = newNonLeafNode
