@@ -124,20 +124,6 @@ def calculateSmallestMBB(nodeList:list) -> mbb:
 	Returns:
 	mbb: Minimal bounding box of a set of leafs
 	"""
-	'''
-	for leaf in leafsList:
-		if not (isinstance(leaf, node) and leaf.leaf == True):
-			raise ValueError("Here is a mistake, the calculateSmallestMBB function only takes a list of leaf nodes!")
-	
-	smallestMBB_lowerLeft_X = min([leaf.value.X for leaf in leafsList])
-	smallestMBB_lowerLeft_Y = min([leaf.value.Y for leaf in leafsList])
-	smallestMBB_upperRight_X = max([leaf.value.X for leaf in leafsList])
-	smallestMBB_upperRight_Y = max([leaf.value.Y for leaf in leafsList])
-
-	smallestMBB_lowerLeft = point.point(x=smallestMBB_lowerLeft_X, y=smallestMBB_lowerLeft_Y, timestamp=0.0)
-	smallestMBB_upperRight = point.point(x=smallestMBB_upperRight_X, y=smallestMBB_upperRight_Y, timestamp=0.0)
-	smallestMBB = mbb(lowerLeft=smallestMBB_lowerLeft, upperRight=smallestMBB_upperRight)
-	'''
 
 	smallestMBB_lowerLeft_X = min([node.value.lowerLeft.X for node in nodeList])
 	smallestMBB_lowerLeft_Y = min([node.value.lowerLeft.Y for node in nodeList])
@@ -219,10 +205,13 @@ class rTree:
 	def findNode(self, newNode:node) -> node:
 		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
 		foundNode = self.root
+		# If the root is a leaf, than the newNode should be added to the root directly
 		if foundNode.leaf:
 			return foundNode
+		
 		elif foundNode.children < 5:
 			return foundNode
+		
 		else:
 			nodesThatAreNotLeaf = []
 			nodesThatAreLeafs = []
@@ -241,15 +230,20 @@ class rTree:
 				nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
 				return nearestChild[0]
 			
+			# If ONLY NON LEAFS are in this level
 			elif len(nodesThatAreLeafs) == 0:
 				enlargement = []
+				childrenThatAreNotFull = []
+				for child in foundNode.children:
+					if len(child.children) < 5:
+						childrenThatAreNotFull.append(child)
 				# Finds the child node were adding the new node produces the smallest enlargement
 				for child in foundNode.children:
 					enlargement.append((calculateSmallestMBB([child, newNode]) - child.value.getArea(), child))
 					# to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
 					# than do something recursive
 				childWithSmallestEnlargement = min(enlargement, key = lambda child: child[0])
-				pass
+				if childWithSmallestEnlargement.children[0].leaf 
 				# to complete
 		
 			else: 
@@ -313,14 +307,25 @@ class rTree:
 		
 		# If the tree has already more than 1 level:
 		else:
-			nodeToAddNewNode = self.findNode(newNode) # returned node can be leaf or non-leaf
+			nodeToAddNewNode = self.findNode(newNode) # returned node can only leaf or non-leaf
+			'''nodeToAddNewNode.children.append(newNode)
+			newNode.parent = nodeToAddNewNode
+			if len(nodeToAddNewNode.children) > 5:
+				splitNode(nodeToAddNewNode)
+			
+			# OLD:'''
 			if nodeToAddNewNode.leaf:
 				newNonLeafNode = node(value=calculateSmallestMBB([nodeToAddNewNode, newNode]), parent=nodeToAddNewNode.parent, children=[nodeToAddNewNode, newNode])
 				nodeToAddNewNode.parent = newNonLeafNode
+				newNode.parent = newNonLeafNode
 			else:
-				pass
+				nodeToAddNewNode.children.append(newNode)
+				newNode.parent = nodeToAddNewNode
+				if len(nodeToAddNewNode.children) > 5:
+					splitNode(nodeToAddNewNode)
 				# mbb has to be mofied or split performed
 
+			# OLD:
 			# If there are less than 5 children in this level, just add the new node here
 			if len(self.children) < 5:
 				self.children.append(newNode)
