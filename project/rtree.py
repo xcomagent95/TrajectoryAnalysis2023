@@ -238,11 +238,12 @@ class rTree:
 					if len(child.children) < 5:
 						childrenThatAreNotFull.append(child)
 				# Finds the child node were adding the new node produces the smallest enlargement
-				for child in foundNode.children:
-					enlargement.append((calculateSmallestMBB([child, newNode]) - child.value.getArea(), child))
-					# to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
-					# than do something recursive
-				childWithSmallestEnlargement = min(enlargement, key = lambda child: child[0])
+				if len(childrenThatAreNotFull) > 0:
+					for child in childrenThatAreNotFull.children:
+						enlargement.append((calculateSmallestMBB([child, newNode]) - child.value.getArea(), child))
+						# to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
+						# than do something recursive
+					childWithSmallestEnlargement = min(enlargement, key = lambda child: child[0])
 				if childWithSmallestEnlargement.children[0].leaf 
 				# to complete
 		
