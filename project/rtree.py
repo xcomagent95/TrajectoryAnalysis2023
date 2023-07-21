@@ -242,9 +242,13 @@ class rTree:
 				return nearestChild[0]
 			
 			elif len(nodesThatAreLeafs) == 0:
+				enlargement = []
+				# Finds the child node were adding the new node produces the smallest enlargement
 				for child in foundNode.children:
-					pass # to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
+					enlargement.append((calculateSmallestMBB([child, newNode]) - child.value.getArea(), child))
+					# to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
 					# than do something recursive
+				childWithSmallestEnlargement = min(enlargement, key = lambda child: child[0])
 				pass
 				# to complete
 		
