@@ -223,9 +223,7 @@ class SlidingWindowTest(unittest.TestCase):
             p[0], p[1], idx) for idx, p in enumerate(controlPoints)])
         epsilon = 0
         
-        self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
-
-        self.assertEqual(functions.slidingWindow(traj, epsilon), controlTraj)
+        self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
 
 class solveQueryWithoutRTree(unittest.TestCase):
