@@ -10,7 +10,7 @@ import utils
 import functions_template as functions
 
 class DouglasPeuckerTest(unittest.TestCase):
-    def test1(self):  # add better name
+    def testPointRemoval(self): 
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
         points = []
         for idx, p in enumerate(traj_points):
@@ -23,7 +23,7 @@ class DouglasPeuckerTest(unittest.TestCase):
             res_pojnts_array.append([p.X, p.Y])
         self.assertEqual(res_pojnts_array, [[1, 1], [4, 4]])
 
-    def test2(self):  # add better name
+    def testSimplifocationA(self): 
         traj_points = [
             [0.0, 0.0],
             [3.0, 8.0],
@@ -53,7 +53,7 @@ class DouglasPeuckerTest(unittest.TestCase):
                 7.0, 25.0], [11.0, 5.5], [27.8, 0.1]],
         )
 
-    def test3(self):  # add better name
+    def testSimplifocationB(self): 
         traj_points = [
             (0.0, 0.0),
             (1.0, 1.0),
@@ -80,12 +80,12 @@ class DouglasPeuckerTest(unittest.TestCase):
         )
 
     # Edgecase Testing
-    def test4(self):  # add better name
+    def testEmptyTrajectory(self): 
         t = trajectory.trajectory(1, points=[])
         d = functions.douglasPeucker(t, 1)
         self.assertEqual(d, t)
 
-    def test5(self):  # add better name
+    def test5(self): 
         traj_points = [
             (0.0, 0.0),
             (1.0, 1.0),
@@ -103,7 +103,7 @@ class DouglasPeuckerTest(unittest.TestCase):
         traj = trajectory.trajectory(1, points=points)
         self.assertRaises(ValueError, functions.douglasPeucker, traj, -1)
 
-    def test6(self):  # add better name
+    def testOutputObjectClassTraj(self):
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
         points = []
         for idx, p in enumerate(traj_points):
@@ -112,7 +112,7 @@ class DouglasPeuckerTest(unittest.TestCase):
         d = functions.douglasPeucker(traj, 0)
         self.assertIsInstance(d, trajectory.trajectory)
 
-    def test7(self):  # add better name
+    def testOutputObjectClassPoint(self): 
         traj_points = [[1, 1], [2, 2], [3, 3], [4, 4]]
         points = []
         for idx, p in enumerate(traj_points):
