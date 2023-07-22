@@ -12,20 +12,29 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 tree = rtree.rTree()
 print('l.13',tree)
 nodes = [rtree.node(pointX, root=False, leaf=True) for pointX in listOfTrajectories[0]]
+'''root = rtree.node(value=rtree.calculateSmallestMBB(nodes[0:5]), root=True, children=nodes[0:5], leaf=False)
+for i in [1,10,20,30,50]:
+    nodes[i].parent = root
+tree.root = root
+print(tree)
+print(tree.findNode2(tree.root, nodes[55]))'''
+#print(nodes[0].value.lowerLeft)
 tree.insertPoint(listOfTrajectories[0][0])
-print('l.16',tree)
+#print('l.16',tree)
 tree.insertPoint(listOfTrajectories[0][1])
-print('------------------------------------------------------')
-print('l.18',tree)
-print('------------------------------------------------------')
+#print('------------------------------------------------------')
+#print('l.18',tree)
+#print('------------------------------------------------------')
 tree.insertPoint(listOfTrajectories[0][10])
 #print('l.20',tree)
-#tree.insertPoint(listOfTrajectories[0][15])
+tree.insertPoint(listOfTrajectories[0][15])
 #print('l.22',tree)
-#tree.insertPoint(listOfTrajectories[0][20])
+tree.insertPoint(listOfTrajectories[0][20])
 #print('l.24',tree)
-#tree.insertPoint(listOfTrajectories[0][25])
+tree.insertPoint(listOfTrajectories[0][25])
 #print('l.26',tree)
+tree.insertPoint(listOfTrajectories[0][26])
+print('l.26',tree)
 '''pointA = listOfTrajectories[0][0]
 pointB = listOfTrajectories[0][20]
 pointC = listOfTrajectories[0][30]
