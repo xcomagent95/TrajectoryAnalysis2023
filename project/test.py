@@ -124,7 +124,7 @@ class DouglasPeuckerTest(unittest.TestCase):
 
 
 class DynamicTimeWarpingTest(unittest.TestCase):
-    def test_dtw_distance(self):
+    def testDTWDistance(self):
         # Define the trajectory data
         first_trajectoryTest = [
             (0.0014788576577, 0.0037183030576),
@@ -155,20 +155,15 @@ class DynamicTimeWarpingTest(unittest.TestCase):
         # Assert the result
         self.assertAlmostEqual(actual_distance, expected_distance, places=6)
 
-
-# TODo:
-# check if result is correct
-# check correct epsilon input (0<, 1?)
-#
 class SlidingWindowTest(unittest.TestCase):
 
-    def test_length0(self):   # fails as traj with 0 points is not created
+    def testLengthZero(self):   # fails as traj with 0 points is not created
         points = None
         traj = trajectory.trajectory(1, points=points)
         epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon).points, [])
 
-    def test_length1(self):
+    def testLengthOne(self):
         # build trajectory
         traj_points = [[1, 1]]
         points = []
@@ -178,7 +173,7 @@ class SlidingWindowTest(unittest.TestCase):
         epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
-    def test_length2(self):
+    def testLengthTwo(self):
         # build trajectory
         traj_points = [[1, 1], [2, 2]]
         points = []
@@ -191,19 +186,19 @@ class SlidingWindowTest(unittest.TestCase):
         # epsilon = 1
         self.assertEqual(functions.slidingWindow(traj, epsilon), traj)
 
-    def test_epsilonNegativ(self):
+    def testEpsilonNegativ(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         traj = listOfTrajectories[0]
         epsilon = -1
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
-    def test_epsilon0(self):
+    def testEpsilon0(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         traj = listOfTrajectories[0]
         epsilon = 0
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
-    def test_ifCorrect(self):
+    def testIfCorrect(self):
         points = [
             (0.0014788576577, 0.0037183030576),
             (0.0014788576577, 0.0037183030576),
@@ -255,14 +250,14 @@ class solveQueryWithoutRTree(unittest.TestCase):
 
 class TestSegmentTrajectory(unittest.TestCase):
 
-    def segment_trajectory_single_segmentTest(self):
+    def testSegmentTrajectorySingleSegment(self):
         # Test case with a single segment
         trajectory_input = [
-            point(10, 20, "2000-01-01:01:14:56"),
-            point(15, 25, "2000-01-01:01:15:52"),
-            point(18, 22, "2000-01-01:01:16:56"),
-            point(12, 28, "2000-01-01:01:19:01"),
-            point(8, 24, "2000-01-01:01:19:06")
+            point.point(10, 20, "2000-01-01:01:14:56"),
+            point.point(15, 25, "2000-01-01:01:15:52"),
+            point.point(18, 22, "2000-01-01:01:16:56"),
+            point.point(12, 28, "2000-01-01:01:19:01"),
+            point.point(8, 24, "2000-01-01:01:19:06")
         ]
         time_threshold_in_minutes = 5
 
@@ -272,14 +267,14 @@ class TestSegmentTrajectory(unittest.TestCase):
         self.assertEqual(len(segmented_trajectory), 1)
         self.assertEqual(len(segmented_trajectory[0]), len(trajectory_input))
 
-    def segment_trajectory_multiple_segmentsTest(self):
+    def testSegmentTrajectoryMultipleSegments(self):
         # Test case with multiple segments
         trajectory_input = [
-            point(10, 20, "2000-01-01:01:14:56"),
-            point(15, 25, "2000-01-01:01:15:52"),
-            point(18, 22, "2000-01-01:01:16:56"),
-            point(12, 28, "2000-01-01:01:19:01"),
-            point(8, 24, "2000-01-01:01:19:06")
+            point.point(10, 20, "2000-01-01:01:14:56"),
+            point.point(15, 25, "2000-01-01:01:15:52"),
+            point.point(18, 22, "2000-01-01:01:16:56"),
+            point.point(12, 28, "2000-01-01:01:19:01"),
+            point.point(8, 24, "2000-01-01:01:19:06")
         ]
         time_threshold_in_minutes = 2
 
