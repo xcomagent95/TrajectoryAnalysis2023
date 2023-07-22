@@ -35,7 +35,6 @@ def douglasPeucker_intern(traj, epsilon):
     
      Returns:
      trajectory: Simplified trajectory
-    
     """
     # Base case: if trajectory only has two points, return it
     if len(traj) <= 2:
@@ -61,21 +60,15 @@ def douglasPeucker_intern(traj, epsilon):
 # ---------------------------------------------------
 
 # ---------------------- 2.2) -----------------------
-#Todo: Test me!
-#Todo: Document me!
-#Todo: Verify i work correctly!
-# I implemented this on the base of me remembering the algorithm from the lecture. So it may (or may not) be totally wrong..
 def slidingWindow(traj, epsilon):
     """ Wrapper Function to execute Sliding Window simplification on a trajectory
+    Parameters:
+    traj (trajectory): Trajectory to be simplified
+    epsilon (float): Distance threshold to be applied during simplification
 
-         Parameters:
-         traj (trajectory): Trajectory to be simplified
-         epsilon (float): Distance threshold to be applied during simplification
-
-         Returns:
-         trajectory: Simplified trajectory
-
-        """
+    Returns:
+    trajectory: Simplified trajectory
+    """
     if len(traj) <= 2:
         return traj
     if epsilon <= 0:
@@ -87,16 +80,15 @@ def slidingWindow(traj, epsilon):
 def slidingWindow_recursive(traj, epsilon, start_index, result_list):
     """This function is the intern function for the sliding window algorithm. It is called recursively
 
-         Parameters:
-         traj (trajectory): Trajectory to be simplified
-         epsilon (float): Distance threshold to be applied during simplification
-         start_index (int): Index of the point where the sliding window starts
-         result_list (list): List of points that are already in the simplified trajectory
+    Parameters:
+    traj (trajectory): Trajectory to be simplified
+    epsilon (float): Distance threshold to be applied during simplification
+    start_index (int): Index of the point where the sliding window starts
+    result_list (list): List of points that are already in the simplified trajectory
 
-         Returns:
-         trajectory: Array of points
-
-        """
+    Returns:
+    trajectory: Array of points
+    """
     if(epsilon <= 0):
         raise ValueError("Epsilon must be greater than 0")
     result_list.append(traj[start_index])
@@ -121,7 +113,6 @@ def closestPairDistance(traj0,traj1) -> float:
     
      Returns:
      float: Closest pair distance between first and second trajectory of the trajectory pair
-    
     """
     min_distance = float('inf')
     for p0 in traj0:
@@ -141,8 +132,7 @@ def dynamicTimeWarping(firstTrajectory:trajectory,secondTrajectory:trajectory) -
      secondTrajectory (trajectory): Second trajectory
     
      Returns:
-     float: ?
-    
+     float: dynamic time warping distance between the two trajectories
     """
     # Compute the distance matrix
     distance_matrix = [[utils.euclideanDistance(point0, point1) for point1 in secondTrajectory] for point0 in firstTrajectory]
@@ -185,12 +175,12 @@ def dynamicTimeWarping(firstTrajectory:trajectory,secondTrajectory:trajectory) -
 def solveQueryWithRTree(r:region,trajectories:list) -> list:
     """Function to execute a region query on RTree containing trajectories
 
-     Parameters: 
-     r (region): Region for which to query trajectory 
-     trajectories (list(trajectories)): List of trajectories from which to build Rtree to answer region query
-    
-     Returns:
-     list(trajectories): List of trajectories returned by the region query
+    Parameters: 
+    r (region): Region for which to query trajectory 
+    trajectories (list(trajectories)): List of trajectories from which to build Rtree to answer region query
+
+    Returns:
+    list(trajectories): List of trajectories returned by the region query
     
     """
     return None
