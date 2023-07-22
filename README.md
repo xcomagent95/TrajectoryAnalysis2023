@@ -32,6 +32,18 @@ The Trajectory Analysis Project is a comprehensive data visualization project de
 
 ### 2.2 Preprocessing
 
+#### 2.2.1 Douglas-Peucker algorithm (basic function)
+
+#### 2.2.2 Sliding-Window-Algorithm (feature)
+
+#### 2.2.3 Visualize one original and one simplified trajectory using the implemented methods (feature)
+
+#### 2.2.4 Additional Feature: Trajectory Segmentation based on predefined time difference input
+
+The technique of segmenting a continuous trajectory into smaller pieces based on parameters like time intervals or spatial properties is known as trajectory segmentation. This segmentation improves the analysis and comprehension of complicated trajectory patterns and may be applied to a variety of tasks, such as behavior analysis, geographic data visualization, and transportation planning.
+
+The custom function segmentTrajectory considers a trajectory as input and a time threshold in minutes. It aims to divide the trajectory into smaller segments based on the time intervals between consecutive points. The idea is to split the trajectory into segments, each containing points that are within the specified time threshold from each other. To expalin, the trajectory points in the 15th minute(a span of 60 seconds) will be part of a particular trajectory segment.
+
 ### 2.3 Indexing
 
 #### 2.3.1 Distance Measures: Distance measures play a pivotal role in trajectory analysis. The project includes a basic implementation of the Closest-Pair-Distance and an advanced implementation of the Dynamic Time Warping distance measure. The two implemented distance measuring techniques will help the users to understand the extent to which the trajectories are similar or dissimilar. Additionally it provides valuable insights into trajectory relationships.
