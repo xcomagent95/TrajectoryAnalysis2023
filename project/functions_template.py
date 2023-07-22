@@ -24,9 +24,9 @@ def douglasPeucker(traj,epsilon):
         return traj
     if epsilon < 0:
         raise ValueError("Epsilon must be greater than 0")
-    return trajectory.trajectory(-1, douglasPeucker_intern(traj,epsilon), unique_id=f"Douglas Peucker for Trajectory {traj.number}")
+    return trajectory.trajectory(-1, douglasPeuckerIntern(traj,epsilon), unique_id=f"Douglas Peucker for Trajectory {traj.number}")
 
-def douglasPeucker_intern(traj, epsilon):
+def douglasPeuckerIntern(traj, epsilon):
     """Function facilitating Douglas-Peucker simplification on a trajectory
 
      Parameters:
@@ -50,8 +50,8 @@ def douglasPeucker_intern(traj, epsilon):
     # If max distance is greater than epsilon, recursively simplify
     if dmax > epsilon:
         # Recursive call
-        recResults1 = douglasPeucker_intern(traj[:index+1], epsilon)
-        recResults2 = douglasPeucker_intern(traj[index:], epsilon)
+        recResults1 = douglasPeuckerIntern(traj[:index+1], epsilon)
+        recResults2 = douglasPeuckerIntern(traj[index:], epsilon)
         # Build the result list
         resultList = recResults1[:-1] + recResults2
         return resultList
@@ -73,11 +73,11 @@ def slidingWindow(traj, epsilon):
         return traj
     if epsilon <= 0:
         raise ValueError("Epsilon must be greater than 0")
-    result_list = slidingWindow_recursive(traj, epsilon, 0, [])
+    result_list = slidingWindowRecursive(traj, epsilon, 0, [])
     return trajectory.trajectory(-1, result_list, unique_id=f"Sliding Window for Trajectory {traj.number}")
 
 
-def slidingWindow_recursive(traj, epsilon, start_index, result_list):
+def slidingWindowRecursive(traj, epsilon, start_index, result_list):
     """This function is the intern function for the sliding window algorithm. It is called recursively
 
     Parameters:
