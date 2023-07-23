@@ -7,13 +7,12 @@ import rtree
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
-#print(utils.pointDistance(listOfTrajectories[0][0], listOfTrajectories[0][2]))
 
 tree = rtree.rTree()
-#print('l.13',tree)
 #nodes = [rtree.node(pointX, root=False, leaf=True) for pointX in listOfTrajectories[0]]
-for coord in listOfTrajectories[0]:
-    tree.insertPoint(coord)
+#for coord in listOfTrajectories[0]:
+#    tree.insertPoint(coord)
+tree.fillRTree(listOfTrajectories)
 print("DONE")
 '''root = rtree.node(value=rtree.calculateSmallestMBB(nodes[0:5]), root=True, children=nodes[0:5], leaf=False)
 for i in [1,10,20,30,50]:

@@ -129,7 +129,8 @@ def calculateSmallestMBB(nodeList:list) -> mbb:
 class rTree:
 	def __init__(self, root:node=None) -> None:
 		self.root = root
-
+	
+	# This function is only working properly for a height less than 3
 	def __str__(self) -> str:
 		string = ""
 		if self.root != None:
@@ -140,7 +141,7 @@ class rTree:
 			if self.root.children != None:
 				string += f"Roots children amount: {len(self.root.children)}\n"
 				for child in self.root.children:
-					string += f"\n Child: ({child}), Parent: ({child.parent})"#, its children len: {len(child.children)}"
+					string += f"\n Child: ({child}), Parent: ({child.parent})"
 					if isinstance(child.children, list):
 						string += f", amount of childs children {len(child.children)}\n"
 						for childsChildren in child.children:
@@ -149,38 +150,30 @@ class rTree:
 							if isinstance(child.children, list):
 								string += f", amount of childs children {len(child.children)}\n"
 								for childsChildren in child.children:
-									string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n"
-					
+									string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n"			
 		return string
 
 	def fillRTree(self, listOfTrajectories:list) -> list:
-		return None
+		for trajectory in listOfTrajectories:
+			for point in trajectory:
+				self.insertPoint(point)
 
 	def findNode(self, nodeToStartFrom:node, newNode:node) -> node:
 		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
 		foundNode = nodeToStartFrom
-		print("found node ",foundNode)
-		if foundNode.children != None:
-			print("found node children len ", len(foundNode.children))
-			for child in foundNode.children:
-				print(child.value)
 		# If the root is a leaf, than the newNode should be added to the root directly
 		if foundNode.leaf:
-			print("found node is leaf")
 			return foundNode
 		# If the root nodes children are leafs and the height is 2 (root and children, that are leafs)
 		elif foundNode.children[0].leaf:
-			print("found nodes children is leaf ") # HERE IS SOME ERROR
 			return foundNode
-		# If the childrens nodes are not leafs, the child that's bbox will be the less enlarged should be found.
+		# If the children's nodes are not leafs, the child that's bbox will be the less enlarged should be found.
 		# The function calls itself recursively after identifying the closest node
 		else:
-			print("recursive search started")
 			distancesFromPointToChildren = []
 			for child in foundNode.children:
 				distancesFromPointToChildren.append((child, child.value.distancePointToMbb(newNodesPoint)))
 			nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
-			#print(distancesFromPointToChildren)
 			foundNode = nearestChild[0]
 			return self.findNode(nodeToStartFrom=foundNode, newNode=newNode)
 
@@ -188,6 +181,7 @@ class rTree:
 		if len(givenNode.children) <= 5:
 			raise ValueError("Here is a mistake!")
 		else: 
+			# Here the subpartition with the smallest area in sum will be find
 			nodesChildren = givenNode.children
 			partitionsAndAreaSizes = [] # Will contain tuples (group1, group2, total_area)
 			subpartitions = it.combinations(nodesChildren, 3)
@@ -234,7 +228,6 @@ class rTree:
 				# A new parent node gets invented
 				newParentNode = node(value=calculateSmallestMBB([givenNode, siblingNode]), children=[givenNode, siblingNode], root=False, leaf=False)
 				# And the parent links get corrected
-				givenNodesOldParent = givenNode.parent
 				givenNode.parent = newParentNode
 				siblingNode.parent = newParentNode
 				givenNode.root = False
@@ -247,14 +240,13 @@ class rTree:
 				
 				# If the given node's parent has 5 OR LESS children after adding a new one:
 				if len(givenNode.parent.children) <= 5:
-					print("len(givenNode.parent.children) <= 5:", len(givenNode.parent.children) <= 5)
 					return
 				# If the given node's parent now has MORE THAN 5 children:
 				else: 
 					self.splitNode(givenNode=givenNode.parent)
 
 	# This function inserts a given point
-	def insertPoint(self, point:point.point) -> None: # Die idee ist ein rekursiver ansatz an dieser stelle
+	def insertPoint(self, point:point.point) -> None: 
 		pointToMbb = mbb(lowerLeft=point, upperRight=point)
 		newNode = node(value=pointToMbb, parent=None, root=False, leaf=True)
 		
@@ -287,6 +279,7 @@ class rTree:
 			nodeToAddNewNode.children.append(newNode)
 			nodeToAddNewNode.value = calculateSmallestMBB(nodeToAddNewNode.children)
 			newNode.parent = nodeToAddNewNode
+			# If the node has already more than 5 children, it has to be split
 			if len(nodeToAddNewNode.children) > 5:
 				self.splitNode(nodeToAddNewNode)
 			return
