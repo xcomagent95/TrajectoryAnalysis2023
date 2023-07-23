@@ -109,12 +109,6 @@ class node:
 				raise ValueError("Leafs do not have any children!")
 			else: 
 				self.children = children
-			'''			
-			if type(self.value) != point.point:
-				raise ValueError("Leafs has to be Points not Minimal Bounding Boxes!")
-			else: 
-				self.value = value
-			'''
 
 	#def __str__(self) -> str:
 		#string = f"(({self.value.lowerLeft.X},{self.value.lowerLeft.Y}),({self.value.upperRight.X},{self.value.upperRight.Y}))"
@@ -315,21 +309,6 @@ class rTree:
 				if isinstance(child.value, mbb):
 					if child.value.isPointInMbb(point):
 						mbbPointFallsInto.append(child)
-					
-		#print("l.70")
-		#for child in currentNode.children:
-			#pass # TO DO: The current version won't produce a height balanced tree.... !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-			'''#print("l.73")
-			if child.leaf == False:
-			#	print("l.75 child.leaf == False")
-				if child.value.isPointInMbb(point): # here it also has to be tested with child mbb is closest to point
-			#		print("l.77 child.value.pointInRegion == True")
-					currentNode = child
-			else: 
-			#	print("l.80 child.leaf == True")
-				return currentNode'''
-		#print("l.82 for loop left")
 		return foundNode
 
 	def splitNode(self, givenNode:node) -> None:
@@ -365,25 +344,6 @@ class rTree:
 			)
 			fig.show()
 			'''
-			
-			'''# If the given node's parent has less than 5 children 
-			if len(givenNode.parent.children) < 5:
-				# Remove all childs from one partitions from given node
-				for elem in minPartition[0]:
-					givenNode.children.remove(elem)
-				givenNode.value = calculateSmallestMBB(givenNode.children)
-				siblingNode = node(value=calculateSmallestMBB(minPartition[1]), children=minPartition[1], root=False, leaf=False)
-				newParentNode = node(value=calculateSmallestMBB([givenNode, siblingNode]), children=[givenNode, siblingNode], root=False, leaf=False)
-				# If given node is root:
-				if givenNode.root:
-					givenNode.root = False
-					newParentNode.root = True
-					self.root = newParentNode
-			
-			# If the given node's parent node has already 5 children and we move up as far as required
-			else: 
-				pass'''
-
 			givenNode.children = minPartition[0]
 			# Just for safety: newly connected child nodes get the given node as parent linked
 			for child in givenNode.children:
@@ -411,8 +371,6 @@ class rTree:
 			else: 
 				siblingNode.parent = givenNode.parent
 				givenNode.parent.children.append(siblingNode)
-				#newParentNode.parent = givenNodesOldParent
-				#newParentNode.parent.children.append(newParentNode)
 				
 				# If the given node's parent has 5 OR LESS children after adding a new one:
 				if len(givenNode.parent.children) <= 5:
@@ -448,77 +406,14 @@ class rTree:
 			# Also new node, that will be added to the tree gets the root as its parent.
 			newNode.parent = newRoot
 			# The trees children are the old root and the newly inserted node.
-			#self.root.children = []
-			#self.root.children.append(rootThatBecomesChild)
-			#self.root.children.append(newNode)
 			return
 		
 		# If the tree has already more than 1 level:
 		else:
 			nodeToAddNewNode = self.findNode2(self.root, newNode) # returned node can only leaf or non-leaf
-			#print("+++++",self.findNode2(self.root, newNode)) # returned node can only leaf or non-leaf
-			print("####", nodeToAddNewNode)
 			nodeToAddNewNode.children.append(newNode)
 			nodeToAddNewNode.value = calculateSmallestMBB(nodeToAddNewNode.children)
 			newNode.parent = nodeToAddNewNode
 			if len(nodeToAddNewNode.children) > 5:
-				print("------------------------------------------------")
-				print("split has to be done")
-				print("------------------------------------------------")
-				#splitNodeTo2Parts(nodeToAddNewNode)
 				self.splitNode(nodeToAddNewNode)
 			return
-			# OLD:'''
-			if nodeToAddNewNode.leaf:
-				newNonLeafNode = node(value=calculateSmallestMBB([nodeToAddNewNode, newNode]), parent=nodeToAddNewNode.parent, children=[nodeToAddNewNode, newNode])
-				nodeToAddNewNode.parent = newNonLeafNode
-				newNode.parent = newNonLeafNode
-			else:
-				nodeToAddNewNode.children.append(newNode)
-				newNode.parent = nodeToAddNewNode
-				if len(nodeToAddNewNode.children) > 5:
-					pass #splitNode(nodeToAddNewNode)
-				# mbb has to be mofied or split performed
-
-			# OLD:
-			# If there are less than 5 children in this level, just add the new node here
-			if len(self.children) < 5:
-				self.children.append(newNode)
-			# Only if this level is full, go to the next level 
-			else: 
-				self.findNode(point) # to continue
-
-			print(f'Children list not NONE, but {len(self.children)}')
-			nodeWherePointShouldBeInserted = self.findNode(point) # mistake location
-			print('l.231',len(nodeWherePointShouldBeInserted.children))
-			print('nodeWherePointShouldBeInserted',nodeWherePointShouldBeInserted)
-			# After finding the node where the new point fits in spatially, the point can be added as a new node to the childrens list or the current node has to be splitted
-			if len(nodeWherePointShouldBeInserted.children) < 5:
-				print('len < 5')
-				print(newNode)
-
-				print('child list',nodeWherePointShouldBeInserted.children)
-				newNode.parent = nodeWherePointShouldBeInserted
-				nodeWherePointShouldBeInserted.children.append(newNode) 
-				nodeWherePointShouldBeInserted.value = calculateSmallestMBB(nodeWherePointShouldBeInserted.children)
-			else: 
-				print('len >= 5')
-				(part1, part2, total_area) = splitNodeTo2Parts(currentNode=nodeWherePointShouldBeInserted, point=point)
-				# If parental node got enough space for another child node:
-				if len(nodeWherePointShouldBeInserted.parent.children) < 5:
-					newNodeFor1stPart = nodeWherePointShouldBeInserted
-					newNodeFor1stPart.children = part1
-					newNodeFor1stPart.value = calculateSmallestMBB(part1)
-					for child in newNodeFor1stPart.children:
-						child.parent = newNodeFor1stPart
-						child.leaf = True
-					
-					newNodeFor2ndPart = node(value=calculateSmallestMBB(part2), parent=newNodeFor1stPart.parent, children=part2)
-					for child in newNodeFor2ndPart:
-						child.parent = newNodeFor2ndPart
-						child.leaf = True
-				
-				else:
-					# WHAT TO DO, IF PARENTAL NODE HAS NOT ENOUGH SPACE FOR ANOTHER CHILD NODE?
-					# HOW TO NOW FIND THE CORRECT PLACE?
-					pass
