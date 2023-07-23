@@ -208,13 +208,18 @@ class rTree:
 			if self.root.children != None:
 				string += f"Roots children amount: {len(self.root.children)}\n"
 				for child in self.root.children:
-					string += f"Child: ({child}), Parent: ({child.parent})"#, its children len: {len(child.children)}"
+					string += f"\n Child: ({child}), Parent: ({child.parent})"#, its children len: {len(child.children)}"
 					#print('xxxxxxx', type(child.children))
 					#print('xxxxxxx', len(child.children))
 					if isinstance(child.children, list):
-						string += f", amount of childs children {len(child.children)} \n"
+						string += f", amount of childs children {len(child.children)}\n"
 						for childsChildren in child.children:
-							string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n "
+							string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n"
+							
+							if isinstance(child.children, list):
+								string += f", amount of childs children {len(child.children)}\n"
+								for childsChildren in child.children:
+									string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n"
 					
 		return string
 
