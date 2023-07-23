@@ -18,14 +18,13 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 
 # Simplify at least one of the trajectories with Douglas Peucker and/or Sliding Window Algorithm
 douglas_peucker_simp = functions.douglasPeucker(listOfTrajectories[1], 0.00003)
-sliding_window_simp = functions.slidingWindow(listOfTrajectories[1],0.00003)
-utils.visualizeTrajectories([listOfTrajectories[1], sliding_window_simp, douglas_peucker_simp])#
+sliding_window_simp = functions.slidingWindow(listOfTrajectories[1], 0.00003)
+utils.visualizeTrajectories(
+    [listOfTrajectories[1], sliding_window_simp, douglas_peucker_simp])
 
 
 # Visualize original trajectory and its two simplifications
-
 # Calculate the distance between at least two trajectories with Closest-Pair-Distance and/or Dynamic Time Warping
-
 # Calculate the distance between two trajectories with Closest Pair Distance
 
 dist_calc_with_closest_pair = functions.closestPairDistance(
@@ -39,15 +38,15 @@ dist_calc_with_dynamic_time_warping = functions.dynamicTimeWarping(
 print(
     f'The minimum as calculated by applying Dynamic Time Warping is {dist_calc_with_dynamic_time_warping}')
 
-# # Perform Dynamic Time Warping on pairs of trajectories
-# for i in range(len(listOfTrajectories) - 1):
-#     for j in range(i + 1, len(listOfTrajectories)):
-#         firstTrajectory = listOfTrajectories[i]
-#         secondTrajectory = listOfTrajectories[j]
-#         dynamic_time_warping_distance = functions.dynamicTimeWarping(
-#             firstTrajectory, secondTrajectory)
-#         print(
-#             f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
+# Perform Dynamic Time Warping on pairs of trajectories
+for i in range(len(listOfTrajectories) - 1):
+    for j in range(i + 1, len(listOfTrajectories)):
+        firstTrajectory = listOfTrajectories[i]
+        secondTrajectory = listOfTrajectories[j]
+        dynamic_time_warping_distance = functions.dynamicTimeWarping(
+            firstTrajectory, secondTrajectory)
+        print(
+            f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
 
 # Build R-tree with all given 62 trajectories
 
