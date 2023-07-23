@@ -42,7 +42,7 @@ offer a user-friendly interface with intuitive functionalities, which will be us
 
 Primarily used is the function visualizeTrajectories which takes a list of trajectories as input and plots them
 interactively with plotly.
-As a more static backup there is the function visualizeTrajecotriesPyPlot which takes a list of trajectories as input
+As a more static backup, there is the function visualizeTrajecotriesPyPlot which takes a list of trajectories as input
 and plots them with matplotlib.
 
 ### 2.2 Preprocessing
@@ -57,7 +57,7 @@ The function begins by checking the number of points in the traj. If traj contai
 epsilon is less than 0, it returns traj without any changes.
 
 The function then calls the helper function douglasPeucker_intern which performs the actual simplification.
-This function fir searches for the largest point distance to the line segment. If the distance is greater than epsilon,
+This function searches for the largest point distance to the line segment. If the distance is greater than epsilon,
 the point is added to the simplified trajectory. If the distance is less than epsilon, the point is discarded. The
 function then calls itself recursively on the two sub-trajectories to the left and right of the discarded point. The
 function returns the simplified trajectory.
@@ -66,11 +66,11 @@ The function returns the simplified trajectory.
 #### 2.2.2 Sliding-Window-Algorithm (feature)
 
 This function implements the Sliding Window algorithm, another approach to simplify trajectories. It uses a "window" of
-three points and removes the middle point if its perpendicular distance to the line segment connecting the two other
+three points and removes the middle point if it is perpendicular distance to the line segment connecting the two other
 points is less than a certain threshold.
 
 The function starts by checking the length of traj. If traj contains less than or equal to 2 points, or if epsilon is
-less than or equal to 0, it returns traj without any changes. If traj contains more than 2 points, the function calls
+less than or equal to 0, it returns traj without any changes. If traj contains more than two points, the function calls
 the helper function slidingWindow_intern which performs the actual simplification.
 
 The helper function now actually simplifies the trajectory. It starts by checking the perpendicular distance of the
@@ -81,7 +81,7 @@ The function returns the simplified trajectory.
 
 #### 2.2.3 Visualize one original and one simplified trajectory using the implemented methods (feature)
 
-The function visualizeTrajectory takes a list of trajectorys as input. This is used to just create a array of the two
+The function visualizeTrajectory takes a list of trajectorys as input. This is used to just create an array of the two
 simplified and the on original trajectory and input it to the function.
 
 #### 2.2.4 Additional Feature: Trajectory Segmentation based on predefined time difference input
