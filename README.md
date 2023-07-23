@@ -22,7 +22,7 @@ offer a user-friendly interface with intuitive functionalities, which will be us
    - Additional Feature: Trajectory Segmentation based on predefined time difference input.
 3. Indexing
    - Distance Measures: Implement distance measures for trajectories
-     - Closest-Pair-Distance (basic function) (needs to be tested)
+     - Closest-Pair-Distance (basic function)
      - Dynamic-Time-Warping (feature)
    - R-tree: Implement a R-tree for a set of trajectories. Here each point is a single spatial object and the nodes
      should hold a minimal number of two points/MBBs and a maximal number of 5 points/MBBs.
