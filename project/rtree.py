@@ -20,12 +20,6 @@ class mbb:
 		Returns:
 		None: 
 		"""
-		''' Removed exception for the reason, that to points, that are identical in the coordinates but not in timestamps are also possible
-		if lowerLeft.X >= upperRight.X:
-			raise ValueError("X coordinate of upper right corner must be greater than X coordinate of the lower left corner!")
-		elif lowerLeft.Y >= upperRight.Y:
-			raise ValueError("Y coordinate of upper right corner must be greater than Y coordinate of the lower left corner!")
-		'''
 		self.lowerLeft = lowerLeft
 		self.upperRight = upperRight
 
@@ -110,11 +104,6 @@ class node:
 			else: 
 				self.children = children
 
-	#def __str__(self) -> str:
-		#string = f"(({self.value.lowerLeft.X},{self.value.lowerLeft.Y}),({self.value.upperRight.X},{self.value.upperRight.Y}))"
-		#string = f"{self} "
-		#return string
-
 def calculateSmallestMBB(nodeList:list) -> mbb:
 	# Test if leafsList contains only leaf nodes. If not, it throws an error
 	"""Function to calculate the minimal bounding box for a list of leafs
@@ -137,50 +126,6 @@ def calculateSmallestMBB(nodeList:list) -> mbb:
 	
 	return smallestMBB
 
-# DEPRECATED
-# This function will be called if a node has already 5 children, but another point should be added as well and therefore the node has to be splitted
-def splitNodeTo2Parts(currentNode:node, point:point.point) -> tuple:
-	#minPartition = ()
-	# In case an error occurs and the children list ist unequal to length 5
-	if len(currentNode.children) < 5:
-		raise ValueError("Here is a mistake!")
-	else: 
-		# Build node out of new point and add it to the children nodes list
-		newNode = node(value=point, leaf=True) 
-		childrensList = currentNode.children
-		childrensList.append(newNode)
-		
-		partitionsAndAreaSizes = [] # Will contain tuples (group1, group2, total_area)
-
-		subpartitions = it.combinations(childrensList, 3)
-		for partition in subpartitions:
-
-			mbb1 = calculateSmallestMBB(list(partition))
-			mbb1_size = mbb1.getArea()
-
-			remaining_points = [childNode for childNode in childrensList if childNode not in partition]
-			mbb2 = calculateSmallestMBB(list(remaining_points))
-			mbb2_size = mbb2.getArea()
-
-			total_area = mbb1_size + mbb2_size
-			partitionsAndAreaSizes.append((list(partition), remaining_points, total_area))
-
-		minPartition = min(partitionsAndAreaSizes, key = lambda partition: partition[2])
-		'''
-		# FOR VISUALIZATION
-		fig = px.scatter(x=[child.value.X for child in childrensList], y=[child.value.Y for child in childrensList])
-		bbox1 = calculateSmallestMBB(minPartition[0])
-		bbox2 = calculateSmallestMBB(minPartition[1])
-		fig.add_shape(type="rect",
-			x0=bbox1.lowerLeft.X, y0=bbox1.lowerLeft.Y, x1=bbox1.upperRight.X, y1=bbox1.upperRight.Y, 
-		)
-		fig.add_shape(type="rect",
-			x0=bbox2.lowerLeft.X, y0=bbox2.lowerLeft.Y, x1=bbox2.upperRight.X, y1=bbox2.upperRight.Y, 
-		)
-		fig.show()
-		'''
-		return minPartition
-
 class rTree:
 	def __init__(self, root:node=None) -> None:
 		self.root = root
@@ -190,21 +135,12 @@ class rTree:
 		if self.root != None:
 			if self.root.leaf == True:
 				string += f"Root: (({self.root.value.lowerLeft.X},{self.root.value.lowerLeft.Y}), ({self.root.value.upperRight.X},{self.root.value.upperRight.Y}))\n"
-				#string += f"Root: {self.root.value}"
 			else:
-				#string += f"Root: ({self.root.value})\n"
 				string += f"Root: ({self.root})\n"
-			#print("roots children len ", len(self.root.children))
-			#print("-x-x-x- ", self.root.children)
-			#for child in self.root.children: 
-			#	print(child)
-			#print("----len roots children type ", len(self.root.children))
 			if self.root.children != None:
 				string += f"Roots children amount: {len(self.root.children)}\n"
 				for child in self.root.children:
 					string += f"\n Child: ({child}), Parent: ({child.parent})"#, its children len: {len(child.children)}"
-					#print('xxxxxxx', type(child.children))
-					#print('xxxxxxx', len(child.children))
 					if isinstance(child.children, list):
 						string += f", amount of childs children {len(child.children)}\n"
 						for childsChildren in child.children:
@@ -220,7 +156,7 @@ class rTree:
 	def fillRTree(self, listOfTrajectories:list) -> list:
 		return None
 
-	def findNode2(self, nodeToStartFrom:node, newNode:node) -> node:
+	def findNode(self, nodeToStartFrom:node, newNode:node) -> node:
 		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
 		foundNode = nodeToStartFrom
 		print("found node ",foundNode)
@@ -242,74 +178,11 @@ class rTree:
 			print("recursive search started")
 			distancesFromPointToChildren = []
 			for child in foundNode.children:
-				#tmp = child.value.distancePointToMbb(newNodesPoint)
-				#print(tmp)
 				distancesFromPointToChildren.append((child, child.value.distancePointToMbb(newNodesPoint)))
 			nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
 			#print(distancesFromPointToChildren)
 			foundNode = nearestChild[0]
-			return self.findNode2(nodeToStartFrom=foundNode, newNode=newNode)
-
-	# DEPRECATED
-	# This function iterates down to the leaf in whose region the given point falls
-	def findNode(self, newNode:node) -> node:
-		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
-		foundNode = self.root
-		# If the root is a leaf, than the newNode should be added to the root directly
-		if foundNode.leaf:
-			return foundNode
-		
-		elif foundNode.children < 5:
-			return foundNode
-		
-		else:
-			nodesThatAreNotLeaf = []
-			nodesThatAreLeafs = []
-			# First check how many leafs and non-leafs are in the level
-			for child in foundNode.children:
-				if not child.leaf:
-					nodesThatAreNotLeaf.append(child)
-				elif child.leaf:
-					nodesThatAreLeafs.append(child)
-			
-			# If ONLY LEAFS are in this level 
-			if len(nodesThatAreNotLeaf) == 0:
-				distancesFromPointToChildren = []
-				for child in foundNode.children:
-					distancesFromPointToChildren.append(child, (utils.calculateDistance(child.value, newNodesPoint)))
-				nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
-				return nearestChild[0]
-			
-			# If ONLY NON LEAFS are in this level
-			elif len(nodesThatAreLeafs) == 0:
-				enlargement = []
-				childrenThatAreNotFull = []
-				for child in foundNode.children:
-					if len(child.children) < 5:
-						childrenThatAreNotFull.append(child)
-				# Finds the child node were adding the new node produces the smallest enlargement
-				if len(childrenThatAreNotFull) > 0:
-					for child in childrenThatAreNotFull.children:
-						enlargement.append((calculateSmallestMBB([child, newNode]) - child.value.getArea(), child))
-						# to do: calculate smallestMbb between child and newNode and find the one with the smallest enlargement 
-						# than do something recursive
-					childWithSmallestEnlargement = min(enlargement, key = lambda child: child[0])
-				if childWithSmallestEnlargement.children[0].leaf:
-					pass
-				# to complete
-		
-			else: 
-				pass
-				# to do 
-				
-
-			mbbPointFallsInto = []
-			distancesFromPointToChildren = []
-			for child in foundNode.children:
-				if isinstance(child.value, mbb):
-					if child.value.isPointInMbb(point):
-						mbbPointFallsInto.append(child)
-		return foundNode
+			return self.findNode(nodeToStartFrom=foundNode, newNode=newNode)
 
 	def splitNode(self, givenNode:node) -> None:
 		if len(givenNode.children) <= 5:
@@ -410,7 +283,7 @@ class rTree:
 		
 		# If the tree has already more than 1 level:
 		else:
-			nodeToAddNewNode = self.findNode2(self.root, newNode) # returned node can only leaf or non-leaf
+			nodeToAddNewNode = self.findNode(self.root, newNode) # returned node can only leaf or non-leaf
 			nodeToAddNewNode.children.append(newNode)
 			nodeToAddNewNode.value = calculateSmallestMBB(nodeToAddNewNode.children)
 			newNode.parent = nodeToAddNewNode
