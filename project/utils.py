@@ -38,8 +38,8 @@ def importTrajectory(filename:str,number:int) -> trajectory:
 def importTrajectories(foldername:str) -> list:
     listOfTrajectories = []
     for i in range(1,96):
-        filename = foldername + '/extractedTrace' + str(i) + '.txt'
-
+        #filename = foldername + '/extractedTrace' + str(i) + '.txt'
+        filename = '/Users/josefinabalzer/Desktop/SS23/TrajectoryAnalysis/TrajectoryAnalysis2023/project/' + foldername + '/extractedTrace' + str(i) + '.txt'
         if glob(filename):
             currTrajectory = importTrajectory(filename,i)
             listOfTrajectories.append(currTrajectory)

@@ -117,9 +117,9 @@ class node:
 			'''
 
 	#def __str__(self) -> str:
-	#	string = f"(({self.value.lowerLeft.X},{self.value.lowerLeft.Y}),({self.value.upperRight.X},{self.value.upperRight.Y}))"
-	#	string = f"{self} "
-	#	return string
+		#string = f"(({self.value.lowerLeft.X},{self.value.lowerLeft.Y}),({self.value.upperRight.X},{self.value.upperRight.Y}))"
+		#string = f"{self} "
+		#return string
 
 def calculateSmallestMBB(nodeList:list) -> mbb:
 	# Test if leafsList contains only leaf nodes. If not, it throws an error
@@ -202,18 +202,19 @@ class rTree:
 				string += f"Root: ({self.root})\n"
 			#print("roots children len ", len(self.root.children))
 			#print("-x-x-x- ", self.root.children)
-			for child in self.root.children: 
-				print(child)
+			#for child in self.root.children: 
+			#	print(child)
 			#print("----len roots children type ", len(self.root.children))
 			if self.root.children != None:
+				string += f"Roots children amount: {len(self.root.children)}\n"
 				for child in self.root.children:
-					string += f"Child: ({child})"#, its children len: {len(child.children)}"
+					string += f"Child: ({child}), Parent: ({child.parent})"#, its children len: {len(child.children)}"
 					#print('xxxxxxx', type(child.children))
 					#print('xxxxxxx', len(child.children))
 					if isinstance(child.children, list):
 						string += f", amount of childs children {len(child.children)} \n"
-						#for childsChildren in child.children:
-						#	string += f"Childs children len: ({childsChildren}) "
+						for childsChildren in child.children:
+							string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n "
 					
 		return string
 
@@ -223,6 +224,11 @@ class rTree:
 	def findNode2(self, nodeToStartFrom:node, newNode:node) -> node:
 		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
 		foundNode = nodeToStartFrom
+		print("found node ",foundNode)
+		if foundNode.children != None:
+			print("found node children len ", len(foundNode.children))
+			for child in foundNode.children:
+				print(child.value)
 		# If the root is a leaf, than the newNode should be added to the root directly
 		if foundNode.leaf:
 			print("found node is leaf")
@@ -237,12 +243,11 @@ class rTree:
 			print("recursive search started")
 			distancesFromPointToChildren = []
 			for child in foundNode.children:
-				#distancesFromPointToChildren.append(child, (utils.calculateDistance(child.value, newNodesPoint)))
-				tmp = child.value.distancePointToMbb(newNodesPoint)
-				print(tmp)
+				#tmp = child.value.distancePointToMbb(newNodesPoint)
+				#print(tmp)
 				distancesFromPointToChildren.append((child, child.value.distancePointToMbb(newNodesPoint)))
 			nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
-			print(distancesFromPointToChildren)
+			#print(distancesFromPointToChildren)
 			foundNode = nearestChild[0]
 			return self.findNode2(nodeToStartFrom=foundNode, newNode=newNode)
 
@@ -376,8 +381,14 @@ class rTree:
 
 			givenNode.children = minPartition[0]
 			givenNode.value = calculateSmallestMBB(givenNode.children)
+			print("l. 383, givenNode", givenNode)
+			print("l. 384, givenNode.parent", givenNode.parent)
+			print("l. 385, givenNode.root", givenNode.root)
 			siblingNode = node(value=calculateSmallestMBB(minPartition[1]), children=minPartition[1], root=False, leaf=False)
 			newParentNode = node(value=calculateSmallestMBB([givenNode, siblingNode]), children=[givenNode, siblingNode], root=False, leaf=False)
+			givenNodesOldParent = givenNode.parent
+			givenNode.parent = newParentNode
+			siblingNode.parent = newParentNode
 			# If given node is root:
 			if givenNode.root:
 				givenNode.root = False
@@ -385,9 +396,17 @@ class rTree:
 				self.root = newParentNode
 			# If given node is not the tree's node
 			else: 
-				newParentNode.parent = givenNode.parent
+				print("given node is not root")
+				print("tree root", self.root)
+				print("givenNodesOldParent", givenNodesOldParent)
+				newParentNode.parent = givenNodesOldParent
+				newParentNode.parent.children.append(newParentNode)
+				print("newParentNode.parent", newParentNode.parent)
+				print("len(newParentNode.parent.children)",len(newParentNode.parent.children))
+				print("givenNode", givenNode)
 				# If the given node's parent has 5 OR LESS children after adding a new one:
 				if len(givenNode.parent.children) <= 5:
+					print("len(givenNode.parent.children) <= 5:", len(givenNode.parent.children) <= 5)
 					return
 				# If the given node's parent now has MORE THAN 5 children:
 				else: 
@@ -430,6 +449,7 @@ class rTree:
 			#print("+++++",self.findNode2(self.root, newNode)) # returned node can only leaf or non-leaf
 			print("####", nodeToAddNewNode)
 			nodeToAddNewNode.children.append(newNode)
+			nodeToAddNewNode.value = calculateSmallestMBB(nodeToAddNewNode.children)
 			newNode.parent = nodeToAddNewNode
 			if len(nodeToAddNewNode.children) > 5:
 				print("------------------------------------------------")
