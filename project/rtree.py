@@ -5,8 +5,8 @@ import numpy as np
 import utils
 import itertools as it
 import math
-import plotly.express as px # remove
-import plotly.graph_objects as go # remove
+#import plotly.express as px # remove
+#import plotly.graph_objects as go # remove
 
 
 class mbb: 
@@ -39,23 +39,6 @@ class mbb:
 			return True
 		else:
 			return False
-		
-	'''def isMBBInMBB(self, mbb) -> bool:
-		"""Function to test if a MBB is inside a minimal bounding box
-
-		Parameters: 
-		mbb: minimal bounding box: point for which to test inclusion in the minimal bounding box
-
-		Returns:
-		bool: Boolean signifying inclusion of mbb in the minimal bounding box
-		"""
-		if (mbb.lowerLeft.X >= self.lowerLeft.X and 
-			mbb.lowerLeft.Y >= self.lowerLeft.Y and
-			mbb.upperRight.X <= self.upperRight.X and
-			mbb.upperRight.Y <= self.upperRight.Y):
-			return True
-		else:
-			return False'''
 
 	def distancePointToMbb(self, point:point.point) -> float:
 		"""Calculates the distance from a given point to a minimal bounding box object.
@@ -149,7 +132,6 @@ class rTree:
 		"""
 		self.root = root
 	
-	# This function is only working properly for a height less than 3
 	def __str__(self) -> str:
 		"""Constructs a string that prints an rtree object, 
 		but this function is not working for all kind of situations
@@ -252,7 +234,8 @@ class rTree:
 
 			minPartition = min(partitionsAndAreaSizes, key = lambda partition: partition[2])
 			'''
-			# FOR VISUALIZATION
+			# FOR VISUALIZATION 
+			# REQUIREMENTS: In the import both plotly packages have to be imported to visualize the partitions!
 			fig = px.scatter(x=[child.value.X for child in childrensList], y=[child.value.Y for child in childrensList])
 			bbox1 = calculateSmallestMBB(minPartition[0])
 			bbox2 = calculateSmallestMBB(minPartition[1])
