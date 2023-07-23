@@ -38,15 +38,15 @@ dist_calc_with_dynamic_time_warping = functions.dynamicTimeWarping(
 print(
     f'The minimum as calculated by applying Dynamic Time Warping is {dist_calc_with_dynamic_time_warping}')
 
-# # Perform Dynamic Time Warping on pairs of trajectories
-# for i in range(len(listOfTrajectories) - 1):
-#     for j in range(i + 1, len(listOfTrajectories)):
-#         firstTrajectory = listOfTrajectories[i]
-#         secondTrajectory = listOfTrajectories[j]
-#         dynamic_time_warping_distance = functions.dynamicTimeWarping(
-#             firstTrajectory, secondTrajectory)
-#         print(
-#             f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
+# Perform Dynamic Time Warping on pairs of trajectories
+for i in range(len(listOfTrajectories) - 1):
+    for j in range(i + 1, len(listOfTrajectories)):
+        firstTrajectory = listOfTrajectories[i]
+        secondTrajectory = listOfTrajectories[j]
+        dynamic_time_warping_distance = functions.dynamicTimeWarping(
+            firstTrajectory, secondTrajectory)
+        print(
+            f"DTW distance between trajectory {i} and trajectory {j} is: {dynamic_time_warping_distance}.")
 
 # Build R-tree with all given 62 trajectories
 

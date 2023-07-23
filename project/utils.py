@@ -116,10 +116,11 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
     plt.show()
 # ---------------------------------------------------
 
-# Custom function to segment a trajectory input based on a time interval passed as argument.
-# So if there are points more than the threshold difference mentioned in the variable
-# time_threshold_in_minutes; we will segment and add the point to the new segment.
-# The idea is to split the trajectory into segments of a minute or two.
+
+"""Custom function to segment a trajectory input based on a time interval passed as argument.
+So if there are points more than the threshold difference mentioned in the variable
+time_threshold_in_minutes; we will segment and add the point to the new segment.
+The idea is to split the trajectory into segments of a minute or two."""
 
 
 def segmentTrajectory(trajectory_input, time_threshold_in_minutes):
