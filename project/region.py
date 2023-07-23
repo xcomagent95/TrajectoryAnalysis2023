@@ -9,7 +9,7 @@ class region():
     
     # Checks if point lies in region
     def pointInRegion(self,queryPoint:point) -> bool:
-        #compute euclidean distance between center of region and point
+        #compute euclidean distance between center of region and point (euclidean)
         dist = math.sqrt(math.pow(queryPoint.X-self.center.X, 2)+math.pow(queryPoint.Y-self.center.Y, 2))
         return dist <= self.radius
     

@@ -11,10 +11,11 @@
    - ~~Implement the Douglas-Peucker algorithm to simplify a given trajectory (basic function)~~
    - ~~Implement the Sliding-Window-Algorithm (feature)~~ (Needs to be tested)
    - ~~Visualize one original and one simplified trajectory using the implemented methods (feature)~~
+   - ~~Additional Feature: Trajectory Segmentation based on predefined time difference input.~~
 3. Indexing
    - Distance Measures: Implement distance measures for trajectories
      - ~~Closest-Pair-Distance (basic function)~~ (needs to be tested)
-     - Dynamic-Time-Warping (feature)
+     - ~~Dynamic-Time-Warping (feature)~~
    - R-tree: Implement a R-tree for a set of trajectories. Here each point is a single spatial object and the nodes should hold a minimal number of two points/MBBs and a maximal number of 5 points/MBBs. (basic function)
 4. Querying: Regard a R-query for a set of trajectories.
    - Write a method to solve the R-query using the R-tree. When one point is identified to lie in the radius, mark all other points of the trajectory as visited to be faster and don't have to refine for too many points (for this each point should know its trajectory). (basic function)
