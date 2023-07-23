@@ -242,9 +242,9 @@ class rTree:
 				print(tmp)
 				distancesFromPointToChildren.append((child, child.value.distancePointToMbb(newNodesPoint)))
 			nearestChild = min(distancesFromPointToChildren, key = lambda child: child[1]) # nearestChild: tuple
-			print(nearestChild)
+			print(distancesFromPointToChildren)
 			foundNode = nearestChild[0]
-			self.findNode2(nodeToStartFrom=foundNode, newNode=newNode)
+			return self.findNode2(nodeToStartFrom=foundNode, newNode=newNode)
 
 	# DEPRECATED
 	# This function iterates down to the leaf in whose region the given point falls
@@ -427,6 +427,7 @@ class rTree:
 		# If the tree has already more than 1 level:
 		else:
 			nodeToAddNewNode = self.findNode2(self.root, newNode) # returned node can only leaf or non-leaf
+			#print("+++++",self.findNode2(self.root, newNode)) # returned node can only leaf or non-leaf
 			print("####", nodeToAddNewNode)
 			nodeToAddNewNode.children.append(newNode)
 			newNode.parent = nodeToAddNewNode
