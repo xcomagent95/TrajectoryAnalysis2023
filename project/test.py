@@ -1,6 +1,5 @@
 # imports
 from utils import segmentTrajectory
-import datetime
 import math
 import unittest
 import trajectory
@@ -8,6 +7,7 @@ import point
 import region
 import utils
 import functions_template as functions
+
 
 class DouglasPeuckerTest(unittest.TestCase):
     def test1(self):  # add better name
@@ -222,7 +222,7 @@ class SlidingWindowTest(unittest.TestCase):
         controlTraj = trajectory.trajectory(1, points=[point.point(
             p[0], p[1], idx) for idx, p in enumerate(controlPoints)])
         epsilon = 0
-        
+
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
 
@@ -241,16 +241,20 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertEqual(any(x.number == 50 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 71 for x in foundTrajectories), True)
         self.assertEqual(any(x.number == 83 for x in foundTrajectories), True)
-        
+
     def testEmptyTrajectoryList(self):
         listOfTrajectories = []
-        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
-        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
-            
+        queryRegion = region.region(point.point(
+            0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
+        self.assertRaises(
+            ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
+
     def testMalformedRegion(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
-        queryRegion = region.region(point.point(0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
-        self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
+        queryRegion = region.region(point.point(
+            0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
+        self.assertRaises(
+            ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
 
 
 class TestSegmentTrajectory(unittest.TestCase):
@@ -289,6 +293,7 @@ class TestSegmentTrajectory(unittest.TestCase):
         self.assertEqual(len(segmented_trajectory), 2)
         self.assertEqual(len(segmented_trajectory[0]), 3)
         self.assertEqual(len(segmented_trajectory[1]), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
