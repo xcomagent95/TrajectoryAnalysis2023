@@ -102,7 +102,7 @@ def slidingWindow_recursive(traj, epsilon, start_index, result_list):
         return result_list
 
     for end_index in range(start_index + 2, len(traj) + 1):
-        d = utils.perpendicularDistance(traj[end_index - 1], traj[start_index], traj[end_index - 2])
+        d = utils.perpendicularDistance(traj[end_index - 2], traj[start_index], traj[end_index - 1])
         if d > epsilon:
             result_list.append(traj[end_index - 2])
             return slidingWindow_recursive(traj, epsilon, end_index - 1, result_list)
