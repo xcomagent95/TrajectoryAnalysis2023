@@ -4,7 +4,6 @@ import region
 import utils
 import functions_template as functions
 from datetime import datetime, time, timedelta
-import rtree
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")
@@ -13,15 +12,14 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 #         print(point)
 
 # Visualize trajectories
-# utils.visualizeTrajectories(listOfTrajectories)
-# utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
+utils.visualizeTrajectories(listOfTrajectories)
+utils.visualizeTrajecotriesPyPlot(listOfTrajectories)
 
 # Simplify at least one of the trajectories with Douglas Peucker and/or Sliding Window Algorithm
 douglas_peucker_simp = functions.douglasPeucker(listOfTrajectories[1], 0.00003)
 sliding_window_simp = functions.slidingWindow(listOfTrajectories[1], 0.00003)
 utils.visualizeTrajectories(
     [listOfTrajectories[1], sliding_window_simp, douglas_peucker_simp])
-
 
 # Visualize original trajectory and its two simplifications
 # Calculate the distance between at least two trajectories with Closest-Pair-Distance and/or Dynamic Time Warping
@@ -59,12 +57,12 @@ queryRegion = region.region(point.point(
 # ---------------------- 4.2) -----------------------
 foundTrajectories = functions.solveQueryWithoutRTree(
     queryRegion, listOfTrajectories)
-if foundTrajectories != None:   # is not None:
+if foundTrajectories != None:  # is not None:
     if len(foundTrajectories) == 0:
         print("No trajectories match the query.")
     for t in foundTrajectories:
         print(t.number)
-
+# ---------------------------------------------------
 # The following code block reads data, performs trajectory segmentation and displays the output
 
 # User specifies the time interval threshold
