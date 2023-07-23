@@ -98,9 +98,12 @@ expalin, the trajectory points in the 15th minute(a span of 60 seconds) will be 
 
 ### 2.3 Indexing
 
-#### 2.3.1 Distance Measures: Distance measures play a pivotal role in trajectory analysis. The project includes a basic implementation of the Closest-Pair-Distance and an advanced implementation of the Dynamic Time Warping distance measure. The two implemented distance measuring techniques will help the users to understand the extent to which the trajectories are similar or dissimilar. Additionally it provides valuable insights into trajectory relationships.
+#### 2.3.1 Distance Measures
 
-1. Closest-Pair-Distance (basic function) It is a basic implementation to calculate the shortest distance between two
+Distance measures play a pivotal role in trajectory analysis. The project includes a basic implementation of the Closest-Pair-Distance and an advanced implementation of the Dynamic Time Warping distance measure. The two implemented distance measuring techniques will help the users to understand the extent to which the trajectories are similar or dissimilar. Additionally it provides valuable insights into trajectory relationships.
+
+1. Closest-Pair-Distance (basic function)
+   It is a basic implementation to calculate the shortest distance between two
    trajectories from a selected set of trajectories. Apart from trajectory analysis, this method plays an important role
    in the field of pattern recognition and spatial data mining. To calculate the distance between two trajectories,
    first the algorithm compares the position of the points within the trajectories. To achieve this step, the algorithm
