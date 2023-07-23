@@ -63,7 +63,7 @@ if foundTrajectories != None:   # is not None:
         print("No trajectories match the query.")
     for t in foundTrajectories:
         print(t.number)
-
+# ---------------------------------------------------
 # The following code block reads data, performs trajectory segmentation and displays the output
 
 # User specifies the time interval threshold
