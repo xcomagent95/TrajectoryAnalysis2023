@@ -120,7 +120,7 @@ Distance measures play a pivotal role in trajectory analysis. The project includ
    in the main_template we have also added a user coe to iteratively calculate the distance between any two possible
    pairs from the list of trajectories used. To compute the DTW distance between two sequences, let's say sequence A of length m and sequence B of length n, a 2D dynamic programming table with dimensions (m+1) x (n+1) is used. Each cell in the table stores the cumulative distance between the corresponding elements of sequences A and B up to that point. Starting from the top-left corner of the table, the algorithm iteratively fills the table until the bottom-right corner is reached.
 
-3. R-tree
+3. R-tree (feature)
 
    The R-Tree is a data structure. It is a balanced index structure and contains every point of every trajectory.
 
