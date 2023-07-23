@@ -122,7 +122,7 @@ Distance measures play a pivotal role in trajectory analysis. The project includ
 
 3. R-tree (feature)
 
-   The R-Tree is a data structure. It is a balanced index structure and contains every point of every trajectory.
+   The R-Tree is a data structure. It is a balanced index structure and contains every point of every trajectory. Every node is allowed to link to 2 - 5 child nodes. Every node contains a minimal bounding box of the point(s) that are linked with this node.
 
 ### 4.2 Region query
 
