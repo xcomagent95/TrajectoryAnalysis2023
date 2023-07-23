@@ -73,10 +73,13 @@ The function starts by checking the length of traj. If traj contains less than o
 less than or equal to 0, it returns traj without any changes. If traj contains more than two points, the function calls
 the helper function slidingWindow_intern which performs the actual simplification.
 
-The helper function now actually simplifies the trajectory. It starts by checking the perpendicular distance of the
-second point (the middle point in the window) from the line segment formed by the first and the third point. If the
-distance is less than epsilon, the second point is removed from the trajectory. If the distance is greater than epsilon,
-the second point is kept. The function then calls itself recursively on the sub-trajectory starting at the second point.
+The helper function slidingWindow_recursive now actually simplifies the trajectory. It starts by appending the first
+point of the window to the result list. Then, it slides the window along traj by increasing the end index.
+For each new end point, it calculates the perpendicular distance of the previous point (the middle point in the window)
+from the line segment connecting the start point and the new end point. If this distance is greater than epsilon, it
+appends the previous point to the result list and calls itself recursively with the new end index as the new start
+index.
+If the end index reaches the end of traj, it appends the last point to the result list and returns it.
 The function returns the simplified trajectory.
 
 #### 2.2.3 Visualize one original and one simplified trajectory using the implemented methods (feature)
