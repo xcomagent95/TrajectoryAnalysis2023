@@ -61,12 +61,7 @@ def douglasPeucker_intern(traj, epsilon):
 # ---------------------------------------------------
 
 # ---------------------- 2.2) -----------------------
-#Todo: Test me!
-#Todo: Document me!
-#Todo: Verify i work correctly!
-# I implemented this on the base of me remembering the algorithm from the lecture. So it may (or may not) be totally wrong..
 def slidingWindow(traj, epsilon):
-    #sys.setrecursionlimit(1000000000)
     """ Wrapper Function to execute Sliding Window simplification on a trajectory
 
          Parameters:
