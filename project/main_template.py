@@ -17,14 +17,13 @@ listOfTrajectories = utils.importTrajectories("Trajectories")
 
 # Simplify at least one of the trajectories with Douglas Peucker and/or Sliding Window Algorithm
 douglas_peucker_simp = functions.douglasPeucker(listOfTrajectories[1], 0.00003)
-sliding_window_simp = functions.slidingWindow(listOfTrajectories[1],0.00003)
-utils.visualizeTrajectories([listOfTrajectories[1], sliding_window_simp, douglas_peucker_simp])#
+sliding_window_simp = functions.slidingWindow(listOfTrajectories[1], 0.00003)
+utils.visualizeTrajectories(
+    [listOfTrajectories[1], sliding_window_simp, douglas_peucker_simp])
 
 
 # Visualize original trajectory and its two simplifications
-
 # Calculate the distance between at least two trajectories with Closest-Pair-Distance and/or Dynamic Time Warping
-
 # Calculate the distance between two trajectories with Closest Pair Distance
 
 dist_calc_with_closest_pair = functions.closestPairDistance(
