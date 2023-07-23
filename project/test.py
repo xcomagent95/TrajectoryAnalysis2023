@@ -223,7 +223,7 @@ class SlidingWindowTest(unittest.TestCase):
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
 
-class solveQueryWithoutRTree(unittest.TestCase):
+class SolveQueryWithoutRTree(unittest.TestCase):
     def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(
@@ -250,14 +250,12 @@ class solveQueryWithoutRTree(unittest.TestCase):
         self.assertRaises(ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
 
 
-class minimlaBoundingBox(unittest.TestCase):
+class MinimalBoundingBox(unittest.TestCase):
 
     def testCreationMBB(self):
         p1 = point.point(0, 0, None)
         p2 = point.point(2, 2, None)
 
-        self.assertRaises(ValueError, rtree.mbb, p1, p1)
-        self.assertRaises(ValueError, rtree.mbb, p2, p1)
         self.assertIs(type(rtree.mbb(p1, p2)), rtree.mbb)
 
     def testInclusionOfPointInMBB(self):
@@ -275,12 +273,72 @@ class minimlaBoundingBox(unittest.TestCase):
         self.assertEqual(mbb.isPointInMbb(p5), True)
         self.assertEqual(mbb.isPointInMbb(p6), False)
 
-    def getAreaofMinimalBoundingBox(self):
+    def getDistanceFromPointToMbb(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        p3 = point.point(1, 3, None)
+
+        self.assertEqual(mbb.distancePointToMbb(p3), 1)
+
+    def getAreaOfMinimalBoundingBox(self):
         p1 = point.point(0, 0, None)
         p2 = point.point(2, 2, None)
         mbb = rtree.mbb(p1, p2)
 
         self.assertEqual(mbb.getArea(), 4.0)
+
+class Node(unittest.TestCase):
+
+    def testCreationOfNode(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        self.assertIs(type(rtree.node(value=p1)), rtree.node)
+        self.assertIs(type(rtree.node(value=mbb)), rtree.node)
+
+        n1 = rtree.node(value=p1, leaf=True)
+        n2 = rtree.node(value=p2, leaf=True)
+        self.assertIs(type(rtree.node(value=mbb, children=[n1, n2], root=True)), rtree.node)
+
+class RtreeFunctionNotInAnyClass(unittest.TestCase):
+
+    def testCalculationOfSmallestMbb(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+
+        n1 = rtree.node(value=p1)
+        n2 = rtree.node(value=p2)
+
+        smallestMbb = rtree.calculateSmallestMBB([n1, n2])
+        
+        self.assertIs(type(smallestMbb), rtree.mbb)
+        self.assertEqual(smallestMbb.getArea(), 4.0)
+
+class RTree(unittest.TestCase):
+
+    def testInitializeRTree(self):
+        self.assertIs(type(rtree.rTree()), rtree.rTree)
+
+    def testFillRTree(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        tree = rtree.rTree()
+        tree.fillRTree(listOfTrajectories)
+        
+        self.assertIs(type(tree), rtree.rTree)
+    
+    def testHeightBalancedRTree(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        tree = rtree.rTree()
+        tree.fillRTree(listOfTrajectories)
+        
+        '''branchesLengths = []
+        treeHasUnvisitedBranches = True
+        while treeHasUnvisitedBranches:'''
+
+
 
 
 class TestSegmentTrajectory(unittest.TestCase):

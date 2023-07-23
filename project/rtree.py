@@ -40,7 +40,7 @@ class mbb:
 		else:
 			return False
 		
-	def isMBBInMBB(self, mbb) -> bool:
+	'''def isMBBInMBB(self, mbb) -> bool:
 		"""Function to test if a MBB is inside a minimal bounding box
 
 		Parameters: 
@@ -55,7 +55,7 @@ class mbb:
 			mbb.upperRight.Y <= self.upperRight.Y):
 			return True
 		else:
-			return False
+			return False'''
 
 	def distancePointToMbb(self, point:point.point) -> float:
 		"""Calculates the distance from a given point to a minimal bounding box object.
@@ -101,6 +101,9 @@ class node:
 		self.leaf = leaf
 		self.root = root
 		self.parent = parent
+		if isinstance(children, list):
+			if len(children) > 5:
+				raise ValueError("Node can have only five children max!")
 		self.children = children
 		if isinstance(value, point.point):
 			self.value = mbb(lowerLeft=value, upperRight=value)
