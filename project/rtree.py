@@ -380,30 +380,35 @@ class rTree:
 				pass'''
 
 			givenNode.children = minPartition[0]
+			# Just for safety: newly connected child nodes get the given node as parent linked
+			for child in givenNode.children:
+				child.parent = givenNode
+			# An mbb gets newly calculated
 			givenNode.value = calculateSmallestMBB(givenNode.children)
-			print("l. 383, givenNode", givenNode)
-			print("l. 384, givenNode.parent", givenNode.parent)
-			print("l. 385, givenNode.root", givenNode.root)
+			# A sibling node for the second part of nodes gets invented
 			siblingNode = node(value=calculateSmallestMBB(minPartition[1]), children=minPartition[1], root=False, leaf=False)
-			newParentNode = node(value=calculateSmallestMBB([givenNode, siblingNode]), children=[givenNode, siblingNode], root=False, leaf=False)
-			givenNodesOldParent = givenNode.parent
-			givenNode.parent = newParentNode
-			siblingNode.parent = newParentNode
+			# Its newly connected child nodes get him as new parent node
+			for child in siblingNode.children:
+				child.parent = siblingNode
+			
 			# If given node is root:
 			if givenNode.root:
+				# A new parent node gets invented
+				newParentNode = node(value=calculateSmallestMBB([givenNode, siblingNode]), children=[givenNode, siblingNode], root=False, leaf=False)
+				# And the parent links get corrected
+				givenNodesOldParent = givenNode.parent
+				givenNode.parent = newParentNode
+				siblingNode.parent = newParentNode
 				givenNode.root = False
 				newParentNode.root = True
 				self.root = newParentNode
 			# If given node is not the tree's node
 			else: 
-				print("given node is not root")
-				print("tree root", self.root)
-				print("givenNodesOldParent", givenNodesOldParent)
-				newParentNode.parent = givenNodesOldParent
-				newParentNode.parent.children.append(newParentNode)
-				print("newParentNode.parent", newParentNode.parent)
-				print("len(newParentNode.parent.children)",len(newParentNode.parent.children))
-				print("givenNode", givenNode)
+				siblingNode.parent = givenNode.parent
+				givenNode.parent.children.append(siblingNode)
+				#newParentNode.parent = givenNodesOldParent
+				#newParentNode.parent.children.append(newParentNode)
+				
 				# If the given node's parent has 5 OR LESS children after adding a new one:
 				if len(givenNode.parent.children) <= 5:
 					print("len(givenNode.parent.children) <= 5:", len(givenNode.parent.children) <= 5)
@@ -428,7 +433,7 @@ class rTree:
 			# In this case, the current root node has to become a children node, a leaf
 			rootThatBecomesChild = self.root
 			# and a new root node gets initialized.
-			newRoot = node(value=calculateSmallestMBB(nodeList=[rootThatBecomesChild, newNode]), children=[], root=True)
+			newRoot = node(value=calculateSmallestMBB(nodeList=[rootThatBecomesChild, newNode]), children=[rootThatBecomesChild, newNode], root=True)
 			# The new root node gets referenced as the tree's root.
 			self.root = newRoot
 			# Since the old root is now a children of the new root, the old root's parent is the new root.
@@ -438,9 +443,9 @@ class rTree:
 			# Also new node, that will be added to the tree gets the root as its parent.
 			newNode.parent = newRoot
 			# The trees children are the old root and the newly inserted node.
-			self.root.children = []
-			self.root.children.append(rootThatBecomesChild)
-			self.root.children.append(newNode)
+			#self.root.children = []
+			#self.root.children.append(rootThatBecomesChild)
+			#self.root.children.append(newNode)
 			return
 		
 		# If the tree has already more than 1 level:
