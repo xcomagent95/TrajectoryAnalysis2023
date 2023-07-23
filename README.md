@@ -159,3 +159,4 @@ SOFTWARE.
 
 - Soumya Ganguly <sganguly@uni-muenster.de>
 - Alexander Pilz <apilz@uni-muenster.de>
+- Emily Sterthaus <m_ster15@uni-muenster.de>
