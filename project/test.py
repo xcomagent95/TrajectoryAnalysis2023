@@ -6,6 +6,7 @@ import trajectory
 import point
 import region
 import utils
+import rtree
 import functions_template as functions
 
 
@@ -222,7 +223,7 @@ class SlidingWindowTest(unittest.TestCase):
         self.assertRaises(ValueError, functions.slidingWindow, traj, epsilon)
 
 
-class solveQueryWithoutRTree(unittest.TestCase):
+class SolveQueryWithoutRTree(unittest.TestCase):
     def testExamplaryQuery(self):
         listOfTrajectories = utils.importTrajectories("Trajectories")
         queryRegion = region.region(point.point(
@@ -251,6 +252,117 @@ class solveQueryWithoutRTree(unittest.TestCase):
             0.0012601754558545508, 0.0027251228043638775, 0.0), -1)
         self.assertRaises(
             ValueError, functions.solveQueryWithoutRTree, queryRegion, listOfTrajectories)
+
+
+class MinimalBoundingBox(unittest.TestCase):
+
+    def testCreationMBB(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+
+        self.assertIs(type(rtree.mbb(p1, p2)), rtree.mbb)
+
+    def testInclusionOfPointInMBB(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        p3 = point.point(1, 1, None)
+        p4 = point.point(0, 1, None)
+        p5 = point.point(1, 0, None)
+        p6 = point.point(3, 3, None)
+
+        self.assertEqual(mbb.isPointInMbb(p3), True)
+        self.assertEqual(mbb.isPointInMbb(p4), True)
+        self.assertEqual(mbb.isPointInMbb(p5), True)
+        self.assertEqual(mbb.isPointInMbb(p6), False)
+
+    def getDistanceFromPointToMbb(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        p3 = point.point(1, 3, None)
+
+        self.assertEqual(mbb.distancePointToMbb(p3), 1)
+
+    def getAreaOfMinimalBoundingBox(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        self.assertEqual(mbb.getArea(), 4.0)
+
+class Node(unittest.TestCase):
+
+    def testCreationOfNode(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+        mbb = rtree.mbb(p1, p2)
+
+        self.assertIs(type(rtree.node(value=p1)), rtree.node)
+        self.assertIs(type(rtree.node(value=mbb)), rtree.node)
+
+        n1 = rtree.node(value=p1, leaf=True)
+        n2 = rtree.node(value=p2, leaf=True)
+        self.assertIs(type(rtree.node(value=mbb, children=[n1, n2], root=True)), rtree.node)
+
+class RtreeFunctionNotInAnyClass(unittest.TestCase):
+
+    def testCalculationOfSmallestMbb(self):
+        p1 = point.point(0, 0, None)
+        p2 = point.point(2, 2, None)
+
+        n1 = rtree.node(value=p1)
+        n2 = rtree.node(value=p2)
+
+        smallestMbb = rtree.calculateSmallestMBB([n1, n2])
+        
+        self.assertIs(type(smallestMbb), rtree.mbb)
+        self.assertEqual(smallestMbb.getArea(), 4.0)
+
+class RTree(unittest.TestCase):
+
+    def testInitializeRTree(self):
+        self.assertIs(type(rtree.rTree()), rtree.rTree)
+
+    def testFillRTree(self):
+        # This test also rests the insert function
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        tree = rtree.rTree()
+        tree.fillRTree(listOfTrajectories)
+        
+        self.assertIs(type(tree), rtree.rTree)
+    
+    def testHeightBalancedRTree(self):
+        listOfTrajectories = utils.importTrajectories("Trajectories")
+        tree = rtree.rTree()
+        tree.fillRTree(listOfTrajectories)
+        
+        counterLeft = 0
+        child = tree.root.children[0]
+        while isinstance(child.children, list):
+            counterLeft += 1
+            child = child.children[0]
+        counterLeft += 1
+
+        counterRight = 0
+        child = tree.root.children[len(tree.root.children) - 1]
+        while isinstance(child.children, list):
+            counterRight += 1
+            child = child.children[len(child.children) - 1]
+        counterRight += 1
+
+        counterMiddle = 0
+        child = tree.root.children[int(len(tree.root.children) / 2) - 1]
+        while isinstance(child.children, list):
+            counterMiddle += 1
+            child = child.children[int(len(child.children) / 2) - 1]
+        counterMiddle += 1
+
+        self.assertEqual(counterLeft, counterRight)
+        self.assertEqual(counterLeft, counterMiddle)
+
 
 
 class TestSegmentTrajectory(unittest.TestCase):

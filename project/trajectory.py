@@ -7,6 +7,9 @@ class trajectory():
         self.unique_id = unique_id
         self.points = [] if points is None else points
 
+        for p in self.points:
+            p.trajectoryID = self.number
+
 
     def __repr__(self) -> str:
         # Nice printing of trajectory
@@ -24,9 +27,9 @@ class trajectory():
         return len(self.points)
 
     # Returns the point at the given index
-    def __getitem__(self, index: int):
+    def __getitem__(self, index: int) -> point:
         return self.points[index]
 
-    #Helper Funbction to get points if needed
-    def getPoints(self):
+    # Helper function to get points if needed 
+    def getPoints(self) -> list:
         return self.points

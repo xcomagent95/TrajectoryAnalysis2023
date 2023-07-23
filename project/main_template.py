@@ -4,6 +4,7 @@ import region
 import utils
 import functions_template as functions
 from datetime import datetime, time, timedelta
+import rtree
 
 # Import trajectories
 listOfTrajectories = utils.importTrajectories("Trajectories")

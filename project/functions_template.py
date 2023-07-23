@@ -18,7 +18,6 @@ def douglasPeucker(traj, epsilon):
 
      Returns:
      trajectory: Simplified trajectory
-
     """
     if len(traj) <= 2:
         return traj
@@ -201,8 +200,8 @@ def solveQueryWithRTree(r: region, trajectories: list) -> list:
 
     Returns:
     list(trajectories): List of trajectories returned by the region query
-
     """
+    # THIS FUNCTION WAS OPTIONAL AND NOT DONE
     return None
 # ---------------------------------------------------
 
@@ -218,7 +217,6 @@ def solveQueryWithoutRTree(r: region, trajectories: list) -> list:
 
      Returns:
      list(trajectories): List of trajectories returned by the region query
-
     """
     if not len(trajectories) > 0:
         raise ValueError("List of trajectories is empty.")

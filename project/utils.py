@@ -9,13 +9,12 @@ import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 import plotly.io as pio
 import point
+import rtree
 
 # ---------------------- GIVEN -----------------------
 """Import a single trajectory from a file with the file format 
 xCoordinate yCoordinate day hour ... (other attributes will not be imported).
 Each trajectory should hold an unique number (id)."""
-
-
 def importTrajectory(filename: str, number: int) -> trajectory:
     # Import
     data = np.loadtxt(filename, delimiter=' ', dtype=str)
@@ -31,7 +30,7 @@ def importTrajectory(filename: str, number: int) -> trajectory:
         day = entry[2]
         hour = entry[3]
         timestamp = day + ':' + hour
-        newPoint = point.point(x, y, timestamp)
+        newPoint = point.point(x,y,timestamp,trajectoryID=number)
         currTrajectory.addPoint(newPoint)
 
     # Return trajectory
@@ -39,8 +38,6 @@ def importTrajectory(filename: str, number: int) -> trajectory:
 
 
 """Import the given set of 62 with indexes between 1 and 96 trajectories"""
-
-
 def importTrajectories(foldername: str) -> list:
     listOfTrajectories = []
     for i in range(1, 96):
@@ -54,10 +51,8 @@ def importTrajectories(foldername: str) -> list:
 
 """Method to calculate the perpendicular distance between one point
 and a segment defined by two points"""
-# Modified to avoid divion by zero error.
+# Modified to avoid division by zero error.
 # Todo: Verify i work!
-
-
 def calculateDistance(point, p1, p2):
     if p2.X == p1.X:
         return abs(point.X - p1.X)
@@ -72,8 +67,6 @@ def calculateDistance(point, p1, p2):
 
 
 """Calculate euclidean distance between two given points"""
-
-
 def pointDistance(p0: point, p1: point) -> float:
     dist = math.sqrt((p0.X-p1.X)**2+(p0.Y-p1.Y)**2)
     return dist
@@ -103,8 +96,6 @@ def visualizeTrajectories(listOfTrajectories: list):
     pio.show(fig)
 
 # This function visualizes the trajectories in a pyplot graph
-
-
 def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
     for t in listOfTrajectories:
         x = []
@@ -116,12 +107,18 @@ def visualizeTrajecotriesPyPlot(listOfTrajectories: list):
     plt.show()
 # ---------------------------------------------------
 
-
-"""Custom function to segment a trajectory input based on a time interval passed as argument.
+# ---------------------- 3.2) -----------------------
+"""
+Custom function to segment a trajectory input based on a time interval passed as argument.
 So if there are points more than the threshold difference mentioned in the variable
 time_threshold_in_minutes; we will segment and add the point to the new segment.
-The idea is to split the trajectory into segments of a minute or two."""
-
+The idea is to split the trajectory into segments of a minute or two.
+"""
+def buildRTree(listOfTrajectories: list):
+    tree = rtree.rTree()
+    tree.fillRTree(listOfTrajectories)
+    return None
+# ---------------------------------------------------
 
 def segmentTrajectory(trajectory_input, time_threshold_in_minutes):
     segments = []
