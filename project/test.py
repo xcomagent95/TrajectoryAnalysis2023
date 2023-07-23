@@ -323,6 +323,7 @@ class RTree(unittest.TestCase):
         self.assertIs(type(rtree.rTree()), rtree.rTree)
 
     def testFillRTree(self):
+        # This test also rests the insert function
         listOfTrajectories = utils.importTrajectories("Trajectories")
         tree = rtree.rTree()
         tree.fillRTree(listOfTrajectories)
