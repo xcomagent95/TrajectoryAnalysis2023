@@ -185,8 +185,8 @@ def solveQueryWithRTree(r:region,trajectories:list) -> list:
 
     Returns:
     list(trajectories): List of trajectories returned by the region query
-    
     """
+    # THIS FUNCTION WAS OPTIONAL AND NOT DONE
     return None
 # ---------------------------------------------------
 
