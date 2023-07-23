@@ -131,7 +131,7 @@ class SlidingWindowTest(unittest.TestCase):
         points = []
         traj = trajectory.trajectory(1, points=points)
         epsilon = 1
-        self.assertEqual(functions.slidingWindow(traj, epsilon),[])
+        self.assertEqual(functions.slidingWindow(traj, epsilon).getPoints(),[])
 
     def test_length1(self):
         #build trajectory
