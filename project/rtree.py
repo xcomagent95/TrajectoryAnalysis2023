@@ -8,7 +8,6 @@ import math
 #import plotly.express as px # remove
 #import plotly.graph_objects as go # remove
 
-
 class mbb: 
 	def __init__(self, lowerLeft:point.point, upperRight:point.point) -> None:
 		"""Constructor for minimal bounding box (mbb)
