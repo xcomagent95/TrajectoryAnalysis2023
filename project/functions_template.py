@@ -66,6 +66,7 @@ def douglasPeucker_intern(traj, epsilon):
 #Todo: Verify i work correctly!
 # I implemented this on the base of me remembering the algorithm from the lecture. So it may (or may not) be totally wrong..
 def slidingWindow(traj, epsilon):
+    #sys.setrecursionlimit(1000000000)
     """ Wrapper Function to execute Sliding Window simplification on a trajectory
 
          Parameters:
@@ -97,16 +98,22 @@ def slidingWindow_recursive(traj, epsilon, start_index, result_list):
          trajectory: Array of points
 
         """
+    if epsilon <= 0:
+        raise ValueError("Epsilon must be greater than 0")
+
     result_list.append(traj[start_index])
+
     if start_index == len(traj) - 1:
         return result_list
-    for end_index in range(start_index + 1, len(traj)):
-        d = utils.perpendicularDistance(traj[start_index], traj[end_index - 1], traj[end_index])
+
+    for end_index in range(start_index + 2, len(traj) + 1):
+        d = utils.perpendicularDistance(traj[end_index - 1], traj[start_index], traj[end_index - 2])
         if d > epsilon:
-            return slidingWindow_recursive(traj, epsilon, end_index, result_list)
-        elif end_index == len(traj) - 1:
-            result_list.append(traj[end_index])
-            return result_list
+            result_list.append(traj[end_index - 2])
+            return slidingWindow_recursive(traj, epsilon, end_index - 1, result_list)
+
+    result_list.append(traj[-1])
+    return result_list
 # ---------------------------------------------------
 
 # ---------------------- 3.1.1) -----------------------
