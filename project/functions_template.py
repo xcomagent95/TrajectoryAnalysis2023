@@ -86,21 +86,26 @@ def slidingWindowRecursive(traj, epsilon, start_index, result_list):
     start_index (int): Index of the point where the sliding window starts
     result_list (list): List of points that are already in the simplified trajectory
 
-    Returns:
-    trajectory: Array of points
-    """
-    if(epsilon <= 0):
+         Returns:
+         trajectory: Array of points
+
+        """
+    if epsilon <= 0:
         raise ValueError("Epsilon must be greater than 0")
+
     result_list.append(traj[start_index])
+
     if start_index == len(traj) - 1:
         return result_list
-    for end_index in range(start_index + 1, len(traj)):
-        d = utils.perpendicularDistance(traj[start_index], traj[end_index - 1], traj[end_index])
+
+    for end_index in range(start_index + 2, len(traj) + 1):
+        d = utils.perpendicularDistance(traj[end_index - 2], traj[start_index], traj[end_index - 1])
         if d > epsilon:
-            return slidingWindow_recursive(traj, epsilon, end_index, result_list)
-        elif end_index == len(traj) - 1:
-            result_list.append(traj[end_index])
-            return result_list
+            result_list.append(traj[end_index - 2])
+            return slidingWindow_recursive(traj, epsilon, end_index - 1, result_list)
+
+    result_list.append(traj[-1])
+    return result_list
 # ---------------------------------------------------
 
 # ---------------------- 3.1.1) -----------------------
