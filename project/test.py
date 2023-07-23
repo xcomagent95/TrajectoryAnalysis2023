@@ -334,10 +334,29 @@ class RTree(unittest.TestCase):
         tree = rtree.rTree()
         tree.fillRTree(listOfTrajectories)
         
-        '''branchesLengths = []
-        treeHasUnvisitedBranches = True
-        while treeHasUnvisitedBranches:'''
+        counterLeft = 0
+        child = tree.root.children[0]
+        while isinstance(child.children, list):
+            counterLeft += 1
+            child = child.children[0]
+        counterLeft += 1
 
+        counterRight = 0
+        child = tree.root.children[len(tree.root.children) - 1]
+        while isinstance(child.children, list):
+            counterRight += 1
+            child = child.children[len(child.children) - 1]
+        counterRight += 1
+
+        counterMiddle = 0
+        child = tree.root.children[int(len(tree.root.children) / 2) - 1]
+        while isinstance(child.children, list):
+            counterMiddle += 1
+            child = child.children[int(len(child.children) / 2) - 1]
+        counterMiddle += 1
+
+        self.assertEqual(counterLeft, counterRight)
+        self.assertEqual(counterLeft, counterMiddle)
 
 
 
