@@ -56,9 +56,14 @@ To compute the DTW distance between two sequences, let's say sequence A of lengt
 
 2.  R-tree:
 
+### 4.2 Region query
+#### Solving region query without R-Tree Region queries are a common type of query to direct at trajectories databases or collections. A region query should return all trajectories which exhibit a relationship with the region used as an input. 
+
+The implementation presented here returns all trajectories which contain a point which is contained within a given region. Points which lie directly on the border are also regarded as contained points. The query gets handled by iteration over all trajectories in the trajectory database or collection and iterating over all points in the currently selected trajectory. Each point is checked for containment within the given region. Since regions are defined as concentric circles in this project, this computation can be facilitated using the euclidean distance between the point and the region center. If this distance is smaller or equal to the radius of the region, the point is contained within the region. If a contained point is found in a trajectory it is added to the set of results and the traversal through the remaining points is omitted.
+
 ### Copyright and License Statement
 
-Copyright [2023] [Soumya Ganguly]
+Copyright [2023] [Soumya Ganguly], [Alexander Pilz]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -81,3 +86,4 @@ SOFTWARE.
 ### Authors
 
 - Soumya Ganguly <sganguly@uni-muenster.de>
+- Alexander Pilz <apilz@uni-muenster.de>
