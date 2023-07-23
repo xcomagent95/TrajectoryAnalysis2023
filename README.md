@@ -139,7 +139,7 @@ the remaining points is omitted.
 
 ### Copyright and License Statement
 
-Copyright [2023] [Soumya Ganguly], [Alexander Pilz]
+Copyright [2023]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
