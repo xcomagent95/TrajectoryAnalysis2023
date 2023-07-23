@@ -55,6 +55,8 @@ print(
 queryRegion = region.region(point.point(
     0.0012601754558545508, 0.0027251228043638775, 0.0), 0.00003)
 # foundTrajectories = functions.solveQueryWithRTree(queryRegion, listOfTrajectories)
+
+# ---------------------- 4.2) -----------------------
 foundTrajectories = functions.solveQueryWithoutRTree(
     queryRegion, listOfTrajectories)
 if foundTrajectories != None:   # is not None:
