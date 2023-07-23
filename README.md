@@ -103,6 +103,7 @@ expalin, the trajectory points in the 15th minute(a span of 60 seconds) will be 
 Distance measures play a pivotal role in trajectory analysis. The project includes a basic implementation of the Closest-Pair-Distance and an advanced implementation of the Dynamic Time Warping distance measure. The two implemented distance measuring techniques will help the users to understand the extent to which the trajectories are similar or dissimilar. Additionally it provides valuable insights into trajectory relationships.
 
 1. Closest-Pair-Distance (basic function)
+
    It is a basic implementation to calculate the shortest distance between two
    trajectories from a selected set of trajectories. Apart from trajectory analysis, this method plays an important role
    in the field of pattern recognition and spatial data mining. To calculate the distance between two trajectories,
@@ -110,15 +111,18 @@ Distance measures play a pivotal role in trajectory analysis. The project includ
    uses Euclidean distance as the distance metric. The closest-pair-distance algorithm is efficient, with a time
    complexity of O(n^2) [where n is the number of trajectories in the set].
 
-2. Dynamic Time Warping (feature) Dynamic Time Warping (DTW) is a powerful algorithm used to compare and measure the
-   similarity between time series or temporal sequences with variations in their time axis. It handles sequences of
+2. Dynamic Time Warping (feature)
+
+   Dynamic Time Warping (DTW) is a powerful algorithm used to compare and measure the similarity between time series or temporal sequences with variations in their time axis. It handles sequences of
    different lengths or temporal distortions by optimally aligning and warping them in a nonlinear manner. DTW
    dynamically adjusts temporal shifts between corresponding elements of the sequences to minimize overall distance. In
    this project we are implementing DTW as a feature to calculate the distance measure between two trajectories. In fact
    in the main_template we have also added a user coe to iteratively calculate the distance between any two possible
    pairs from the list of trajectories used. To compute the DTW distance between two sequences, let's say sequence A of length m and sequence B of length n, a 2D dynamic programming table with dimensions (m+1) x (n+1) is used. Each cell in the table stores the cumulative distance between the corresponding elements of sequences A and B up to that point. Starting from the top-left corner of the table, the algorithm iteratively fills the table until the bottom-right corner is reached.
 
-3. R-tree:
+3. R-tree
+
+   The R-Tree is a data structure. It is a balanced index structure and contains every point of every trajectory.
 
 ### 4.2 Region query
 
@@ -157,6 +161,8 @@ SOFTWARE.
 
 ### Authors
 
+- Josefina Balzer <jbalzer@uni-muenster.de>
 - Soumya Ganguly <sganguly@uni-muenster.de>
 - Alexander Pilz <apilz@uni-muenster.de>
+- Adrian Spork <adrian.spork@uni-muenster.de>
 - Emily Sterthaus <m_ster15@uni-muenster.de>
