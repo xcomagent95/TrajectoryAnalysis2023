@@ -18,7 +18,7 @@ class mbb:
 		upperRight (point): Point at the upper right corner of the minimal bounding box
 		
 		Returns:
-		None: 
+		None
 		"""
 		self.lowerLeft = lowerLeft
 		self.upperRight = upperRight
@@ -56,15 +56,16 @@ class mbb:
 			return True
 		else:
 			return False
-	
-
-	def distanceMbbToMbb(self, theOtherMbb) -> float:
-		"""
-		Not done
-		"""	
-		return #distance
 
 	def distancePointToMbb(self, point:point.point) -> float:
+		"""Calculates the distance from a given point to a minimal bounding box object.
+
+		Parameters: 
+		point (point.point): A given point
+		
+		Returns:
+		distance (float): The distance between point and MBB object.
+		"""
 		dx = max(abs(point.X - self.lowerLeft.X) - (self.upperRight.X - self.lowerLeft.X) / 2, 0)
 		dy = max(abs(point.Y - self.lowerLeft.Y) - (self.upperRight.Y - self.lowerLeft.Y) / 2, 0)
 
@@ -75,20 +76,28 @@ class mbb:
 		"""Function to compute the area of a minimal bounding box
 
 		Returns:
-		float: area of the minimal bounding box
+		areaSize (float): area of the minimal bounding box
 		"""
 		width = self.upperRight.X - self.lowerLeft.X
 		height = self.upperRight.Y - self.lowerLeft.Y
-		return width * height
+		areaSize = width * height
+		return areaSize
 
-# Nodes have 2 - 5 children, which can be Nodes or Leafs. 
-'''
-'''
+
 class node:
-	# value (point OR mbb)
-	# children (None OR list)
-	# leaf (boolean)
 	def __init__(self, value, parent=None, children=None, root:bool=False, leaf:bool=False) -> None:
+		"""Constructor for nodes.
+
+		Parameters: 
+		value (point.point | mbb): A point or a mbb object.
+		parent (None | node): A reference to a parent node. It is None per default.
+		children (None | list[node]): A list of children nodes. It is None per default.
+		root (bool): If the node is the root of a tree it is set to True. Initially it is set to False.
+		leaf (bool): If the node is a leaf it is set to True. Initially it is set to False.
+
+		Returns:
+		None
+		"""
 		self.leaf = leaf
 		self.root = root
 		self.parent = parent
@@ -105,14 +114,13 @@ class node:
 				self.children = children
 
 def calculateSmallestMBB(nodeList:list) -> mbb:
-	# Test if leafsList contains only leaf nodes. If not, it throws an error
-	"""Function to calculate the minimal bounding box for a list of leafs
+	"""Function to calculate the minimal bounding box for a list of nodes.
 
 	Parameters: 
-	nodeList (list(mbb)): List of nodes from which to compute a minimal bounding box
+	nodeList (list[node]): List of nodes from which to compute a minimal bounding box
 
 	Returns:
-	mbb: Minimal bounding box of a set of leafs
+	smallestMBB (mbb): Minimal bounding box of a set of leafs
 	"""
 
 	smallestMBB_lowerLeft_X = min([node.value.lowerLeft.X for node in nodeList])
@@ -128,10 +136,25 @@ def calculateSmallestMBB(nodeList:list) -> mbb:
 
 class rTree:
 	def __init__(self, root:node=None) -> None:
+		"""Constructor for R-Trees.
+
+		Parameters: 
+		root (node): Contains a reference to the root node. It is initially set to None.
+
+		Returns:
+		None
+		"""
 		self.root = root
 	
 	# This function is only working properly for a height less than 3
 	def __str__(self) -> str:
+		"""Constructs a string that prints an rtree object, 
+		but this function is not working for all kind of situations
+		and was mostly used during development.
+
+		Returns:
+		string (str): A string object.
+		"""
 		string = ""
 		if self.root != None:
 			if self.root.leaf == True:
@@ -153,12 +176,29 @@ class rTree:
 									string += f"Childs children: ({childsChildren}), parent: {childsChildren.parent}\n"			
 		return string
 
-	def fillRTree(self, listOfTrajectories:list) -> list:
+	def fillRTree(self, listOfTrajectories:list) -> None:
+		"""This function fills a constructed rtree object.
+
+		Parameters: 
+		listOfTrajectories (list): A list of trajectories it gets initialized by the import trajectory function from utils.py
+
+		Returns:
+		None
+		"""
 		for trajectory in listOfTrajectories:
 			for point in trajectory:
 				self.insertPoint(point)
 
 	def findNode(self, nodeToStartFrom:node, newNode:node) -> node:
+		"""Find the node where a new node should be inserted.
+		This function works recursively and terminates if the starting node got only leafs as children.
+
+		Parameters: 
+		nodeToStartFrom (node): A node inside the tree where the search should start from.
+
+		Returns:
+		foundNode (node): Returns a node where the given new node should be added.
+		"""
 		newNodesPoint = point.point(x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
 		foundNode = nodeToStartFrom
 		# If the root is a leaf, than the newNode should be added to the root directly
@@ -178,6 +218,16 @@ class rTree:
 			return self.findNode(nodeToStartFrom=foundNode, newNode=newNode)
 
 	def splitNode(self, givenNode:node) -> None:
+		"""This function gets called, if the given node got its 6th child. 
+		Than the given node has to be split into two nodes. 
+		Therefore a separation has to be done.
+
+		Parameters: 
+		givenNode (node): A node who's children should be separated.
+
+		Returns:
+		None
+		"""
 		if len(givenNode.children) <= 5:
 			raise ValueError("Here is a mistake!")
 		else: 
@@ -247,6 +297,14 @@ class rTree:
 
 	# This function inserts a given point
 	def insertPoint(self, point:point.point) -> None: 
+		"""This function inserts a given point to the rtree object.
+
+		Parameters: 
+		point (point.point): A point that should be inserted to the rtree object.
+
+		Returns:
+		None
+		"""
 		pointToMbb = mbb(lowerLeft=point, upperRight=point)
 		newNode = node(value=pointToMbb, parent=None, root=False, leaf=True)
 		
