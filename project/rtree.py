@@ -5,9 +5,6 @@ import numpy as np
 import utils
 import itertools as it
 import math
-import plotly.express as px # remove
-import plotly.graph_objects as go # remove
-
 
 class mbb: 
 	def __init__(self, lowerLeft:point.point, upperRight:point.point) -> None:
