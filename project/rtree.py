@@ -197,6 +197,7 @@ class rTree:
         """
         newNodesPoint = point.point(
             x=newNode.value.lowerLeft.X, y=newNode.value.lowerLeft.Y, timestamp=0.0)
+        
         foundNode = nodeToStartFrom
         # If the root is a leaf, than the newNode should be added to the root directly
         if foundNode.leaf:
